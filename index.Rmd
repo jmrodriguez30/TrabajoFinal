@@ -1,7 +1,7 @@
 ---
-title: "Ejercicios de Regresión Lineal"
+title: "Análisis estadístico de la eficiencia energética en edificios"
 author: "Sergio Cuello y Juanmanuelle Rodríguez"
-date: "Octubre 2026"
+date: "Noviembre 2026"
 site: bookdown::bookdown_site
-output: bookdown::gitbook
+documentclass: book
 ---
