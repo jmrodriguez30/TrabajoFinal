@@ -1,5 +1,6 @@
 ---
 title: "Análisis estadístico de la eficiencia energética en edificios"
+subtitle: "Del análisis exploratorio a la regresión lineal múltiple"
 author: "Sergio Cuello y Juanmanuelle Rodríguez"
 date: "Noviembre 2026"
 site: bookdown::bookdown_site

@@ -1,17 +1,3 @@
----
-title: "Análisis estadístico de la eficiencia energética en edificios"
-subtitle: "Del análisis exploratorio a la regresión lineal múltiple"
-author: "Tu nombre"
-date: "`r format(Sys.Date(), '%d de %B de %Y')`"
-output:
-  html_document:
-    toc: true
-    toc_float: true
-    number_sections: true
-    theme: cosmo
-    highlight: tango
----
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
   echo = TRUE,
