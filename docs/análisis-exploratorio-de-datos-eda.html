@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 4 Análisis exploratorio de datos (EDA) | Análisis estadístico de la eficiencia energética en edificios</title>
+  <meta name="description" content="Chapter 4 Análisis exploratorio de datos (EDA) | Análisis estadístico de la eficiencia energética en edificios" />
+  <meta name="generator" content="bookdown 0.47 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 4 Análisis exploratorio de datos (EDA) | Análisis estadístico de la eficiencia energética en edificios" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 4 Análisis exploratorio de datos (EDA) | Análisis estadístico de la eficiencia energética en edificios" />
+  
+  
+  
+
+<meta name="author" content="Tu nombre" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="extracción-transformación-y-carga-etl.html"/>
+<link rel="next" href="estadística-paramétrica-y-no-paramétrica.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.12.1/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.25.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.25.2/plotly-latest.min.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="contexto-de-los-datos.html"><a href="contexto-de-los-datos.html"><i class="fa fa-check"></i><b>1</b> Contexto de los datos</a></li>
+<li class="chapter" data-level="2" data-path="librerías.html"><a href="librerías.html"><i class="fa fa-check"></i><b>2</b> Librerías</a></li>
+<li class="chapter" data-level="3" data-path="extracción-transformación-y-carga-etl.html"><a href="extracción-transformación-y-carga-etl.html"><i class="fa fa-check"></i><b>3</b> Extracción, transformación y carga (ETL)</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="extracción-transformación-y-carga-etl.html"><a href="extracción-transformación-y-carga-etl.html#valores-ausentes"><i class="fa fa-check"></i><b>3.1</b> Valores ausentes</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html"><i class="fa fa-check"></i><b>4</b> Análisis exploratorio de datos (EDA)</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#an%C3%A1lisis-de-la-variable-carga_calef-target"><i class="fa fa-check"></i><b>4.1</b> Análisis de la variable <code>carga_calef</code> (target)</a></li>
+<li class="chapter" data-level="4.2" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#an%C3%A1lisis-de-las-variables-caracter%C3%ADsticas-independientes"><i class="fa fa-check"></i><b>4.2</b> Análisis de las variables características (independientes)</a></li>
+<li class="chapter" data-level="4.3" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#variables-categ%C3%B3ricas"><i class="fa fa-check"></i><b>4.3</b> Variables categóricas</a></li>
+<li class="chapter" data-level="4.4" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#an%C3%A1lisis-exploratorio-bivariado"><i class="fa fa-check"></i><b>4.4</b> Análisis exploratorio bivariado</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="estadística-paramétrica-y-no-paramétrica.html"><a href="estadística-paramétrica-y-no-paramétrica.html"><i class="fa fa-check"></i><b>5</b> Estadística paramétrica y no paramétrica</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="estadística-paramétrica-y-no-paramétrica.html"><a href="estadística-paramétrica-y-no-paramétrica.html#comparaci%C3%B3n-de-dos-grupos-independientes-un-piso-vs.-dos-pisos"><i class="fa fa-check"></i><b>5.1</b> Comparación de dos grupos independientes: un piso vs. dos pisos</a></li>
+<li class="chapter" data-level="5.2" data-path="estadística-paramétrica-y-no-paramétrica.html"><a href="estadística-paramétrica-y-no-paramétrica.html#comparaci%C3%B3n-de-dos-grupos-pareados-calefacci%C3%B3n-vs.-refrigeraci%C3%B3n"><i class="fa fa-check"></i><b>5.2</b> Comparación de dos grupos pareados: calefacción vs. refrigeración</a></li>
+<li class="chapter" data-level="5.3" data-path="estadística-paramétrica-y-no-paramétrica.html"><a href="estadística-paramétrica-y-no-paramétrica.html#anova-cambia-la-carga-seg%C3%BAn-la-cantidad-de-ventanas"><i class="fa fa-check"></i><b>5.3</b> ANOVA: ¿cambia la carga según la cantidad de ventanas?</a></li>
+<li class="chapter" data-level="5.4" data-path="estadística-paramétrica-y-no-paramétrica.html"><a href="estadística-paramétrica-y-no-paramétrica.html#kruskal-wallis"><i class="fa fa-check"></i><b>5.4</b> Kruskal-Wallis</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="tablas-de-contingencia.html"><a href="tablas-de-contingencia.html"><i class="fa fa-check"></i><b>6</b> Tablas de contingencia</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="tablas-de-contingencia.html"><a href="tablas-de-contingencia.html#prueba-de-independencia-altura-vs.-nivel-de-carga"><i class="fa fa-check"></i><b>6.1</b> Prueba de independencia: altura vs. nivel de carga</a></li>
+<li class="chapter" data-level="6.2" data-path="tablas-de-contingencia.html"><a href="tablas-de-contingencia.html#prueba-de-homogeneidad-proporci%C3%B3n-de-carga-alta-en-cada-orientaci%C3%B3n"><i class="fa fa-check"></i><b>6.2</b> Prueba de homogeneidad: proporción de carga alta en cada orientación</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="correlación-lineal.html"><a href="correlación-lineal.html"><i class="fa fa-check"></i><b>7</b> Correlación lineal</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="correlación-lineal.html"><a href="correlación-lineal.html#correlaci%C3%B3n-de-pearson"><i class="fa fa-check"></i><b>7.1</b> Correlación de Pearson</a></li>
+<li class="chapter" data-level="7.2" data-path="correlación-lineal.html"><a href="correlación-lineal.html#correlaci%C3%B3n-de-spearman"><i class="fa fa-check"></i><b>7.2</b> Correlación de Spearman</a></li>
+<li class="chapter" data-level="7.3" data-path="correlación-lineal.html"><a href="correlación-lineal.html#correlaci%C3%B3n-de-kendall"><i class="fa fa-check"></i><b>7.3</b> Correlación de Kendall</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html"><i class="fa fa-check"></i><b>8</b> Regresión lineal simple (RLS)</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#estimaci%C3%B3n-del-modelo"><i class="fa fa-check"></i><b>8.1</b> Estimación del modelo</a></li>
+<li class="chapter" data-level="8.2" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#inferencia-sobre-los-coeficientes"><i class="fa fa-check"></i><b>8.2</b> Inferencia sobre los coeficientes</a></li>
+<li class="chapter" data-level="8.3" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#transformaciones-para-mejorar-el-ajuste"><i class="fa fa-check"></i><b>8.3</b> Transformaciones para mejorar el ajuste</a></li>
+<li class="chapter" data-level="8.4" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#an%C3%A1lisis-de-residuales-y-validaci%C3%B3n-de-supuestos"><i class="fa fa-check"></i><b>8.4</b> Análisis de residuales y validación de supuestos</a>
+<ul>
+<li class="chapter" data-level="8.4.1" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#independencia-de-los-errores"><i class="fa fa-check"></i><b>8.4.1</b> Independencia de los errores</a></li>
+<li class="chapter" data-level="8.4.2" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#normalidad-de-los-errores"><i class="fa fa-check"></i><b>8.4.2</b> Normalidad de los errores</a></li>
+<li class="chapter" data-level="8.4.3" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#media-cero-de-los-errores"><i class="fa fa-check"></i><b>8.4.3</b> Media cero de los errores</a></li>
+<li class="chapter" data-level="8.4.4" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#varianza-constante-de-los-errores"><i class="fa fa-check"></i><b>8.4.4</b> Varianza constante de los errores</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#estimaci%C3%B3n-de-la-respuesta-media-e-intervalo-de-predicci%C3%B3n"><i class="fa fa-check"></i><b>8.5</b> Estimación de la respuesta media e intervalo de predicción</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html"><i class="fa fa-check"></i><b>9</b> Regresión lineal múltiple (RLM)</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#preparaci%C3%B3n-de-los-datos-y-exploraci%C3%B3n"><i class="fa fa-check"></i><b>9.1</b> Preparación de los datos y exploración</a></li>
+<li class="chapter" data-level="9.2" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#ajuste-del-modelo-con-todas-las-variables"><i class="fa fa-check"></i><b>9.2</b> Ajuste del modelo con todas las variables</a></li>
+<li class="chapter" data-level="9.3" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#prueba-de-significancia-global"><i class="fa fa-check"></i><b>9.3</b> Prueba de significancia global</a></li>
+<li class="chapter" data-level="9.4" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#pruebas-individuales-e-intervalos-de-confianza"><i class="fa fa-check"></i><b>9.4</b> Pruebas individuales e intervalos de confianza</a></li>
+<li class="chapter" data-level="9.5" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#coeficiente-de-determinaci%C3%B3n-r%C2%B2-y-r%C2%B2-ajustado"><i class="fa fa-check"></i><b>9.5</b> Coeficiente de determinación R² y R² ajustado</a></li>
+<li class="chapter" data-level="9.6" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#inferencia-para-la-respuesta"><i class="fa fa-check"></i><b>9.6</b> Inferencia para la respuesta</a></li>
+<li class="chapter" data-level="9.7" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#an%C3%A1lisis-de-residuales-y-validaci%C3%B3n-de-supuestos-1"><i class="fa fa-check"></i><b>9.7</b> Análisis de residuales y validación de supuestos</a></li>
+<li class="chapter" data-level="9.8" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#identificaci%C3%B3n-de-outliers"><i class="fa fa-check"></i><b>9.8</b> Identificación de outliers</a></li>
+<li class="chapter" data-level="9.9" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#identificaci%C3%B3n-de-observaciones-influenciales"><i class="fa fa-check"></i><b>9.9</b> Identificación de observaciones influenciales</a></li>
+<li class="chapter" data-level="9.10" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#an%C3%A1lisis-de-multicolinealidad"><i class="fa fa-check"></i><b>9.10</b> Análisis de multicolinealidad</a></li>
+<li class="chapter" data-level="9.11" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#modelos-con-variables-cualitativas-variables-dummy"><i class="fa fa-check"></i><b>9.11</b> Modelos con variables cualitativas (variables dummy)</a></li>
+<li class="chapter" data-level="9.12" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#selecci%C3%B3n-de-variables"><i class="fa fa-check"></i><b>9.12</b> Selección de variables</a>
+<ul>
+<li class="chapter" data-level="9.12.1" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#m%C3%A9todo-de-todas-las-regresiones-posibles"><i class="fa fa-check"></i><b>9.12.1</b> Método de todas las regresiones posibles</a></li>
+<li class="chapter" data-level="9.12.2" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#selecci%C3%B3n-secuencial"><i class="fa fa-check"></i><b>9.12.2</b> Selección secuencial</a></li>
+<li class="chapter" data-level="9.12.3" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#comparaci%C3%B3n-de-modelos-con-la-prueba-f-parcial"><i class="fa fa-check"></i><b>9.12.3</b> Comparación de modelos con la prueba F parcial</a></li>
+</ul></li>
+<li class="chapter" data-level="9.13" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#modelo-final"><i class="fa fa-check"></i><b>9.13</b> Modelo final</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="conclusiones.html"><a href="conclusiones.html"><i class="fa fa-check"></i><b>10</b> Conclusiones</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Análisis estadístico de la eficiencia energética en edificios</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="análisis-exploratorio-de-datos-eda" class="section level1 hasAnchor" number="4">
+<h1><span class="header-section-number">Chapter 4</span> Análisis exploratorio de datos (EDA)<a href="análisis-exploratorio-de-datos-eda.html#an%C3%A1lisis-exploratorio-de-datos-eda" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="análisis-de-la-variable-carga_calef-target" class="section level2 hasAnchor" number="4.1">
+<h2><span class="header-section-number">4.1</span> Análisis de la variable <code>carga_calef</code> (target)<a href="análisis-exploratorio-de-datos-eda.html#an%C3%A1lisis-de-la-variable-carga_calef-target" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="análisis-exploratorio-de-datos-eda.html#cb15-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb15-2"><a href="análisis-exploratorio-de-datos-eda.html#cb15-2" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
+<span id="cb15-3"><a href="análisis-exploratorio-de-datos-eda.html#cb15-3" tabindex="-1"></a>    <span class="at">n       =</span> <span class="fu">length</span>(carga_calef),</span>
+<span id="cb15-4"><a href="análisis-exploratorio-de-datos-eda.html#cb15-4" tabindex="-1"></a>    <span class="at">media   =</span> <span class="fu">mean</span>(carga_calef),</span>
+<span id="cb15-5"><a href="análisis-exploratorio-de-datos-eda.html#cb15-5" tabindex="-1"></a>    <span class="at">ds      =</span> <span class="fu">sd</span>(carga_calef),</span>
+<span id="cb15-6"><a href="análisis-exploratorio-de-datos-eda.html#cb15-6" tabindex="-1"></a>    <span class="at">mediana =</span> <span class="fu">median</span>(carga_calef),</span>
+<span id="cb15-7"><a href="análisis-exploratorio-de-datos-eda.html#cb15-7" tabindex="-1"></a>    <span class="at">minimo  =</span> <span class="fu">min</span>(carga_calef),</span>
+<span id="cb15-8"><a href="análisis-exploratorio-de-datos-eda.html#cb15-8" tabindex="-1"></a>    <span class="at">maximo  =</span> <span class="fu">max</span>(carga_calef),</span>
+<span id="cb15-9"><a href="análisis-exploratorio-de-datos-eda.html#cb15-9" tabindex="-1"></a>    <span class="at">Q1      =</span> <span class="fu">quantile</span>(carga_calef, <span class="fl">0.25</span>),</span>
+<span id="cb15-10"><a href="análisis-exploratorio-de-datos-eda.html#cb15-10" tabindex="-1"></a>    <span class="at">Q3      =</span> <span class="fu">quantile</span>(carga_calef, <span class="fl">0.75</span>),</span>
+<span id="cb15-11"><a href="análisis-exploratorio-de-datos-eda.html#cb15-11" tabindex="-1"></a>    <span class="at">IQR     =</span> <span class="fu">IQR</span>(carga_calef)</span>
+<span id="cb15-12"><a href="análisis-exploratorio-de-datos-eda.html#cb15-12" tabindex="-1"></a>  )</span></code></pre></div>
+<pre><code>## # A tibble: 1 × 9
+##       n media    ds mediana minimo maximo    Q1    Q3   IQR
+##   &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1   768  22.3  10.1    19.0   6.01   43.1  13.0  31.7  18.7</code></pre>
+<p><strong>Interpretación:</strong> en promedio, un edificio necesita <strong>22.31 kWh/m²</strong> para calentarse, pero hay mucha variación: va desde <strong>6.01</strong> hasta <strong>43.10 kWh/m²</strong>, y la desviación estándar (10.09) es casi la mitad de la media. La media es mayor que la mediana (18.95), así que hay una cola hacia los valores altos. La mitad central de los edificios está entre 12.99 y 31.67 kWh/m², un rango bastante amplio (IQR = 18.68).</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="análisis-exploratorio-de-datos-eda.html#cb17-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb17-2"><a href="análisis-exploratorio-de-datos-eda.html#cb17-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> carga_calef)) <span class="sc">+</span></span>
+<span id="cb17-3"><a href="análisis-exploratorio-de-datos-eda.html#cb17-3" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)),</span>
+<span id="cb17-4"><a href="análisis-exploratorio-de-datos-eda.html#cb17-4" tabindex="-1"></a>                 <span class="at">binwidth =</span> <span class="dv">2</span>,</span>
+<span id="cb17-5"><a href="análisis-exploratorio-de-datos-eda.html#cb17-5" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">&quot;#2c7fb8&quot;</span>,</span>
+<span id="cb17-6"><a href="análisis-exploratorio-de-datos-eda.html#cb17-6" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">&quot;white&quot;</span>,</span>
+<span id="cb17-7"><a href="análisis-exploratorio-de-datos-eda.html#cb17-7" tabindex="-1"></a>                 <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb17-8"><a href="análisis-exploratorio-de-datos-eda.html#cb17-8" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">color =</span> <span class="st">&quot;darkblue&quot;</span>, <span class="at">linewidth =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb17-9"><a href="análisis-exploratorio-de-datos-eda.html#cb17-9" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb17-10"><a href="análisis-exploratorio-de-datos-eda.html#cb17-10" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Distribución de la carga de calefacción&quot;</span>,</span>
+<span id="cb17-11"><a href="análisis-exploratorio-de-datos-eda.html#cb17-11" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Carga de calefacción (kWh/m²)&quot;</span>,</span>
+<span id="cb17-12"><a href="análisis-exploratorio-de-datos-eda.html#cb17-12" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Densidad&quot;</span></span>
+<span id="cb17-13"><a href="análisis-exploratorio-de-datos-eda.html#cb17-13" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb17-14"><a href="análisis-exploratorio-de-datos-eda.html#cb17-14" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/hist_target-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p><strong>Interpretación:</strong> la distribución <strong>no tiene forma de campana</strong>: tiene <strong>dos picos</strong> (es bimodal), uno alrededor de 12–15 kWh/m² y otro alrededor de 28–32 kWh/m². Esto suele indicar que en los datos hay dos grupos de edificios bien distintos. Más adelante veremos que esos dos grupos son los edificios de un piso y los de dos pisos.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="análisis-exploratorio-de-datos-eda.html#cb18-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb18-2"><a href="análisis-exploratorio-de-datos-eda.html#cb18-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> carga_calef)) <span class="sc">+</span></span>
+<span id="cb18-3"><a href="análisis-exploratorio-de-datos-eda.html#cb18-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#a6cee3&quot;</span>, <span class="at">color =</span> <span class="st">&quot;#1f78b4&quot;</span>, <span class="at">outlier.color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb18-4"><a href="análisis-exploratorio-de-datos-eda.html#cb18-4" tabindex="-1"></a>  <span class="fu">stat_summary</span>(</span>
+<span id="cb18-5"><a href="análisis-exploratorio-de-datos-eda.html#cb18-5" tabindex="-1"></a>    <span class="at">fun =</span> mean,</span>
+<span id="cb18-6"><a href="análisis-exploratorio-de-datos-eda.html#cb18-6" tabindex="-1"></a>    <span class="at">geom =</span> <span class="st">&quot;point&quot;</span>,</span>
+<span id="cb18-7"><a href="análisis-exploratorio-de-datos-eda.html#cb18-7" tabindex="-1"></a>    <span class="at">shape =</span> <span class="dv">20</span>,</span>
+<span id="cb18-8"><a href="análisis-exploratorio-de-datos-eda.html#cb18-8" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">3</span>,</span>
+<span id="cb18-9"><a href="análisis-exploratorio-de-datos-eda.html#cb18-9" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">&quot;black&quot;</span></span>
+<span id="cb18-10"><a href="análisis-exploratorio-de-datos-eda.html#cb18-10" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb18-11"><a href="análisis-exploratorio-de-datos-eda.html#cb18-11" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb18-12"><a href="análisis-exploratorio-de-datos-eda.html#cb18-12" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Diagrama de cajas y bigotes de la carga de calefacción&quot;</span>,</span>
+<span id="cb18-13"><a href="análisis-exploratorio-de-datos-eda.html#cb18-13" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb18-14"><a href="análisis-exploratorio-de-datos-eda.html#cb18-14" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Carga de calefacción (kWh/m²)&quot;</span></span>
+<span id="cb18-15"><a href="análisis-exploratorio-de-datos-eda.html#cb18-15" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb18-16"><a href="análisis-exploratorio-de-datos-eda.html#cb18-16" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/box_target-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p><strong>Interpretación:</strong> la caja es ancha y la mediana está más cerca del borde inferior, lo que confirma la asimetría hacia la derecha. El punto negro (la media) queda por encima de la mediana. <strong>No aparecen valores atípicos</strong> (no hay puntos rojos): ningún edificio tiene una carga “rara” frente al resto.</p>
+</div>
+<div id="análisis-de-las-variables-características-independientes" class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> Análisis de las variables características (independientes)<a href="análisis-exploratorio-de-datos-eda.html#an%C3%A1lisis-de-las-variables-caracter%C3%ADsticas-independientes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="análisis-exploratorio-de-datos-eda.html#cb19-1" tabindex="-1"></a>resumen_numericas <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb19-2"><a href="análisis-exploratorio-de-datos-eda.html#cb19-2" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="fu">where</span>(is.numeric), <span class="sc">-</span>carga_calef) <span class="sc">%&gt;%</span></span>
+<span id="cb19-3"><a href="análisis-exploratorio-de-datos-eda.html#cb19-3" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb19-4"><a href="análisis-exploratorio-de-datos-eda.html#cb19-4" tabindex="-1"></a>    <span class="at">cols =</span> <span class="fu">everything</span>(),</span>
+<span id="cb19-5"><a href="análisis-exploratorio-de-datos-eda.html#cb19-5" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">&quot;variable&quot;</span>,</span>
+<span id="cb19-6"><a href="análisis-exploratorio-de-datos-eda.html#cb19-6" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">&quot;valor&quot;</span></span>
+<span id="cb19-7"><a href="análisis-exploratorio-de-datos-eda.html#cb19-7" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb19-8"><a href="análisis-exploratorio-de-datos-eda.html#cb19-8" tabindex="-1"></a>  <span class="fu">group_by</span>(variable) <span class="sc">%&gt;%</span></span>
+<span id="cb19-9"><a href="análisis-exploratorio-de-datos-eda.html#cb19-9" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb19-10"><a href="análisis-exploratorio-de-datos-eda.html#cb19-10" tabindex="-1"></a>    <span class="at">n       =</span> <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(valor)),</span>
+<span id="cb19-11"><a href="análisis-exploratorio-de-datos-eda.html#cb19-11" tabindex="-1"></a>    <span class="at">media   =</span> <span class="fu">mean</span>(valor, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb19-12"><a href="análisis-exploratorio-de-datos-eda.html#cb19-12" tabindex="-1"></a>    <span class="at">ds      =</span> <span class="fu">sd</span>(valor, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb19-13"><a href="análisis-exploratorio-de-datos-eda.html#cb19-13" tabindex="-1"></a>    <span class="at">mediana =</span> <span class="fu">median</span>(valor, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb19-14"><a href="análisis-exploratorio-de-datos-eda.html#cb19-14" tabindex="-1"></a>    <span class="at">minimo  =</span> <span class="fu">min</span>(valor, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb19-15"><a href="análisis-exploratorio-de-datos-eda.html#cb19-15" tabindex="-1"></a>    <span class="at">maximo  =</span> <span class="fu">max</span>(valor, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb19-16"><a href="análisis-exploratorio-de-datos-eda.html#cb19-16" tabindex="-1"></a>    <span class="at">Q1      =</span> <span class="fu">quantile</span>(valor, <span class="fl">0.25</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb19-17"><a href="análisis-exploratorio-de-datos-eda.html#cb19-17" tabindex="-1"></a>    <span class="at">Q3      =</span> <span class="fu">quantile</span>(valor, <span class="fl">0.75</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb19-18"><a href="análisis-exploratorio-de-datos-eda.html#cb19-18" tabindex="-1"></a>    <span class="at">IQR     =</span> <span class="fu">IQR</span>(valor, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb19-19"><a href="análisis-exploratorio-de-datos-eda.html#cb19-19" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span></span>
+<span id="cb19-20"><a href="análisis-exploratorio-de-datos-eda.html#cb19-20" tabindex="-1"></a>  )</span>
+<span id="cb19-21"><a href="análisis-exploratorio-de-datos-eda.html#cb19-21" tabindex="-1"></a></span>
+<span id="cb19-22"><a href="análisis-exploratorio-de-datos-eda.html#cb19-22" tabindex="-1"></a>resumen_numericas</span></code></pre></div>
+<pre><code>## # A tibble: 9 × 10
+##   variable         n   media     ds mediana minimo maximo      Q1     Q3     IQR
+##   &lt;chr&gt;        &lt;int&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
+## 1 altura         768   5.25   1.75     5.25   3.5    7      3.5     7      3.5  
+## 2 area_muros     768 318.    43.6    318.   245    416.   294     343     49    
+## 3 area_superf…   768 672.    88.1    674.   514.   808.   606.    741.   135.   
+## 4 area_techo     768 177.    45.2    184.   110.   220.   141.    220.    79.6  
+## 5 area_vidrio    768   0.234  0.133    0.25   0      0.4    0.1     0.4    0.3  
+## 6 carga_refri    768  24.6    9.51    22.1   10.9   48.0   15.6    33.1   17.5  
+## 7 compacidad     768   0.764  0.106    0.75   0.62   0.98   0.682   0.83   0.147
+## 8 dist_vidrio    768   2.81   1.55     3      0      5      1.75    4      2.25 
+## 9 orientacion    768   3.5    1.12     3.5    2      5      2.75    4.25   1.5</code></pre>
+<p><strong>Interpretación:</strong> las variables viven en escalas muy distintas. Las áreas están en cientos de m² (por ejemplo, el área de superficie va de 514.5 a 808.5 m²), mientras que la compacidad está entre 0.62 y 0.98 y el área de vidrio entre 0 y 0.40. La carga de refrigeración se parece mucho a la de calefacción (media 24.59 frente a 22.31 kWh/m²). Como cada variable tiene pocos valores posibles, sus cuartiles caen justo sobre esos valores, algo típico de un experimento diseñado.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="análisis-exploratorio-de-datos-eda.html#cb21-1" tabindex="-1"></a><span class="co"># Boxplot de compacidad</span></span>
+<span id="cb21-2"><a href="análisis-exploratorio-de-datos-eda.html#cb21-2" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb21-3"><a href="análisis-exploratorio-de-datos-eda.html#cb21-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> compacidad)) <span class="sc">+</span></span>
+<span id="cb21-4"><a href="análisis-exploratorio-de-datos-eda.html#cb21-4" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#1f77b4&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb21-5"><a href="análisis-exploratorio-de-datos-eda.html#cb21-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Compacidad relativa&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Compacidad&quot;</span>, <span class="at">x =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb21-6"><a href="análisis-exploratorio-de-datos-eda.html#cb21-6" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb21-7"><a href="análisis-exploratorio-de-datos-eda.html#cb21-7" tabindex="-1"></a></span>
+<span id="cb21-8"><a href="análisis-exploratorio-de-datos-eda.html#cb21-8" tabindex="-1"></a><span class="co"># Boxplot de area_superficie</span></span>
+<span id="cb21-9"><a href="análisis-exploratorio-de-datos-eda.html#cb21-9" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb21-10"><a href="análisis-exploratorio-de-datos-eda.html#cb21-10" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> area_superficie)) <span class="sc">+</span></span>
+<span id="cb21-11"><a href="análisis-exploratorio-de-datos-eda.html#cb21-11" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#2ca02c&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb21-12"><a href="análisis-exploratorio-de-datos-eda.html#cb21-12" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Área de superficie&quot;</span>, <span class="at">y =</span> <span class="st">&quot;m²&quot;</span>, <span class="at">x =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb21-13"><a href="análisis-exploratorio-de-datos-eda.html#cb21-13" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb21-14"><a href="análisis-exploratorio-de-datos-eda.html#cb21-14" tabindex="-1"></a></span>
+<span id="cb21-15"><a href="análisis-exploratorio-de-datos-eda.html#cb21-15" tabindex="-1"></a><span class="co"># Boxplot de area_muros</span></span>
+<span id="cb21-16"><a href="análisis-exploratorio-de-datos-eda.html#cb21-16" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb21-17"><a href="análisis-exploratorio-de-datos-eda.html#cb21-17" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> area_muros)) <span class="sc">+</span></span>
+<span id="cb21-18"><a href="análisis-exploratorio-de-datos-eda.html#cb21-18" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#d62728&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb21-19"><a href="análisis-exploratorio-de-datos-eda.html#cb21-19" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Área de muros&quot;</span>, <span class="at">y =</span> <span class="st">&quot;m²&quot;</span>, <span class="at">x =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb21-20"><a href="análisis-exploratorio-de-datos-eda.html#cb21-20" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb21-21"><a href="análisis-exploratorio-de-datos-eda.html#cb21-21" tabindex="-1"></a></span>
+<span id="cb21-22"><a href="análisis-exploratorio-de-datos-eda.html#cb21-22" tabindex="-1"></a><span class="co"># Primera fila</span></span>
+<span id="cb21-23"><a href="análisis-exploratorio-de-datos-eda.html#cb21-23" tabindex="-1"></a>p1 <span class="sc">+</span> p2 <span class="sc">+</span> p3</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/boxplots_fila1-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="análisis-exploratorio-de-datos-eda.html#cb22-1" tabindex="-1"></a><span class="co"># Boxplot de area_techo</span></span>
+<span id="cb22-2"><a href="análisis-exploratorio-de-datos-eda.html#cb22-2" tabindex="-1"></a>p4 <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb22-3"><a href="análisis-exploratorio-de-datos-eda.html#cb22-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> area_techo)) <span class="sc">+</span></span>
+<span id="cb22-4"><a href="análisis-exploratorio-de-datos-eda.html#cb22-4" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#9467bd&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb22-5"><a href="análisis-exploratorio-de-datos-eda.html#cb22-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Área de techo&quot;</span>, <span class="at">y =</span> <span class="st">&quot;m²&quot;</span>, <span class="at">x =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb22-6"><a href="análisis-exploratorio-de-datos-eda.html#cb22-6" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb22-7"><a href="análisis-exploratorio-de-datos-eda.html#cb22-7" tabindex="-1"></a></span>
+<span id="cb22-8"><a href="análisis-exploratorio-de-datos-eda.html#cb22-8" tabindex="-1"></a><span class="co"># Boxplot de area_vidrio</span></span>
+<span id="cb22-9"><a href="análisis-exploratorio-de-datos-eda.html#cb22-9" tabindex="-1"></a>p5 <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb22-10"><a href="análisis-exploratorio-de-datos-eda.html#cb22-10" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> area_vidrio)) <span class="sc">+</span></span>
+<span id="cb22-11"><a href="análisis-exploratorio-de-datos-eda.html#cb22-11" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#ff7f0e&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb22-12"><a href="análisis-exploratorio-de-datos-eda.html#cb22-12" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Área acristalada&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Proporción&quot;</span>, <span class="at">x =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb22-13"><a href="análisis-exploratorio-de-datos-eda.html#cb22-13" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb22-14"><a href="análisis-exploratorio-de-datos-eda.html#cb22-14" tabindex="-1"></a></span>
+<span id="cb22-15"><a href="análisis-exploratorio-de-datos-eda.html#cb22-15" tabindex="-1"></a><span class="co"># Boxplot de carga_refri</span></span>
+<span id="cb22-16"><a href="análisis-exploratorio-de-datos-eda.html#cb22-16" tabindex="-1"></a>p6 <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb22-17"><a href="análisis-exploratorio-de-datos-eda.html#cb22-17" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> carga_refri)) <span class="sc">+</span></span>
+<span id="cb22-18"><a href="análisis-exploratorio-de-datos-eda.html#cb22-18" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;#8c564b&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb22-19"><a href="análisis-exploratorio-de-datos-eda.html#cb22-19" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Carga de refrigeración&quot;</span>, <span class="at">y =</span> <span class="st">&quot;kWh/m²&quot;</span>, <span class="at">x =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb22-20"><a href="análisis-exploratorio-de-datos-eda.html#cb22-20" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb22-21"><a href="análisis-exploratorio-de-datos-eda.html#cb22-21" tabindex="-1"></a></span>
+<span id="cb22-22"><a href="análisis-exploratorio-de-datos-eda.html#cb22-22" tabindex="-1"></a><span class="co"># Segunda fila</span></span>
+<span id="cb22-23"><a href="análisis-exploratorio-de-datos-eda.html#cb22-23" tabindex="-1"></a>p4 <span class="sc">+</span> p5 <span class="sc">+</span> p6</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/boxplots_fila2-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p><strong>Interpretación:</strong> <strong>ninguna variable tiene valores atípicos</strong>. El área de techo llama la atención: su caja está “aplastada” arriba porque la mitad de los edificios tiene exactamente 220.5 m² de techo (son los de un piso, que ocupan más terreno). La carga de refrigeración tiene una forma muy parecida a la de calefacción, lo que anticipa que ambas están muy relacionadas.</p>
+</div>
+<div id="variables-categóricas" class="section level2 hasAnchor" number="4.3">
+<h2><span class="header-section-number">4.3</span> Variables categóricas<a href="análisis-exploratorio-de-datos-eda.html#variables-categ%C3%B3ricas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="análisis-exploratorio-de-datos-eda.html#cb23-1" tabindex="-1"></a><span class="co"># Tabla de frecuencias para orientacion</span></span>
+<span id="cb23-2"><a href="análisis-exploratorio-de-datos-eda.html#cb23-2" tabindex="-1"></a>tabla_orient <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb23-3"><a href="análisis-exploratorio-de-datos-eda.html#cb23-3" tabindex="-1"></a>  <span class="fu">count</span>(orientacion, <span class="at">name =</span> <span class="st">&quot;Frecuencia&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb23-4"><a href="análisis-exploratorio-de-datos-eda.html#cb23-4" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb23-5"><a href="análisis-exploratorio-de-datos-eda.html#cb23-5" tabindex="-1"></a>    <span class="at">Porcentaje =</span> <span class="fu">round</span>(Frecuencia <span class="sc">/</span> <span class="fu">sum</span>(Frecuencia) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>),</span>
+<span id="cb23-6"><a href="análisis-exploratorio-de-datos-eda.html#cb23-6" tabindex="-1"></a>    <span class="at">Variable =</span> <span class="st">&quot;orientacion&quot;</span>,</span>
+<span id="cb23-7"><a href="análisis-exploratorio-de-datos-eda.html#cb23-7" tabindex="-1"></a>    <span class="at">Categoria =</span> <span class="fu">as.character</span>(orientacion)</span>
+<span id="cb23-8"><a href="análisis-exploratorio-de-datos-eda.html#cb23-8" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb23-9"><a href="análisis-exploratorio-de-datos-eda.html#cb23-9" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(Variable, Categoria, Frecuencia, Porcentaje)</span>
+<span id="cb23-10"><a href="análisis-exploratorio-de-datos-eda.html#cb23-10" tabindex="-1"></a></span>
+<span id="cb23-11"><a href="análisis-exploratorio-de-datos-eda.html#cb23-11" tabindex="-1"></a>tabla_orient</span></code></pre></div>
+<pre><code>## # A tibble: 4 × 4
+##   Variable    Categoria Frecuencia Porcentaje
+##   &lt;chr&gt;       &lt;chr&gt;          &lt;int&gt;      &lt;dbl&gt;
+## 1 orientacion 2                192         25
+## 2 orientacion 3                192         25
+## 3 orientacion 4                192         25
+## 4 orientacion 5                192         25</code></pre>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="análisis-exploratorio-de-datos-eda.html#cb25-1" tabindex="-1"></a><span class="co"># Tabla de frecuencias para dist_vidrio</span></span>
+<span id="cb25-2"><a href="análisis-exploratorio-de-datos-eda.html#cb25-2" tabindex="-1"></a>tabla_dist <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb25-3"><a href="análisis-exploratorio-de-datos-eda.html#cb25-3" tabindex="-1"></a>  <span class="fu">count</span>(dist_vidrio, <span class="at">name =</span> <span class="st">&quot;Frecuencia&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb25-4"><a href="análisis-exploratorio-de-datos-eda.html#cb25-4" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb25-5"><a href="análisis-exploratorio-de-datos-eda.html#cb25-5" tabindex="-1"></a>    <span class="at">Porcentaje =</span> <span class="fu">round</span>(Frecuencia <span class="sc">/</span> <span class="fu">sum</span>(Frecuencia) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>),</span>
+<span id="cb25-6"><a href="análisis-exploratorio-de-datos-eda.html#cb25-6" tabindex="-1"></a>    <span class="at">Variable =</span> <span class="st">&quot;dist_vidrio&quot;</span>,</span>
+<span id="cb25-7"><a href="análisis-exploratorio-de-datos-eda.html#cb25-7" tabindex="-1"></a>    <span class="at">Categoria =</span> <span class="fu">as.character</span>(dist_vidrio)</span>
+<span id="cb25-8"><a href="análisis-exploratorio-de-datos-eda.html#cb25-8" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb25-9"><a href="análisis-exploratorio-de-datos-eda.html#cb25-9" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(Variable, Categoria, Frecuencia, Porcentaje)</span>
+<span id="cb25-10"><a href="análisis-exploratorio-de-datos-eda.html#cb25-10" tabindex="-1"></a></span>
+<span id="cb25-11"><a href="análisis-exploratorio-de-datos-eda.html#cb25-11" tabindex="-1"></a>tabla_dist</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 4
+##   Variable    Categoria Frecuencia Porcentaje
+##   &lt;chr&gt;       &lt;chr&gt;          &lt;int&gt;      &lt;dbl&gt;
+## 1 dist_vidrio 0                 48       6.25
+## 2 dist_vidrio 1                144      18.8 
+## 3 dist_vidrio 2                144      18.8 
+## 4 dist_vidrio 3                144      18.8 
+## 5 dist_vidrio 4                144      18.8 
+## 6 dist_vidrio 5                144      18.8</code></pre>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="análisis-exploratorio-de-datos-eda.html#cb27-1" tabindex="-1"></a><span class="co"># Tablas de frecuencias para altura y area_vidrio</span></span>
+<span id="cb27-2"><a href="análisis-exploratorio-de-datos-eda.html#cb27-2" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb27-3"><a href="análisis-exploratorio-de-datos-eda.html#cb27-3" tabindex="-1"></a>  <span class="fu">count</span>(altura, <span class="at">name =</span> <span class="st">&quot;Frecuencia&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb27-4"><a href="análisis-exploratorio-de-datos-eda.html#cb27-4" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Porcentaje =</span> <span class="fu">round</span>(Frecuencia <span class="sc">/</span> <span class="fu">sum</span>(Frecuencia) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>))</span></code></pre></div>
+<pre><code>## # A tibble: 2 × 3
+##   altura Frecuencia Porcentaje
+##    &lt;dbl&gt;      &lt;int&gt;      &lt;dbl&gt;
+## 1    3.5        384         50
+## 2    7          384         50</code></pre>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="análisis-exploratorio-de-datos-eda.html#cb29-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb29-2"><a href="análisis-exploratorio-de-datos-eda.html#cb29-2" tabindex="-1"></a>  <span class="fu">count</span>(area_vidrio, <span class="at">name =</span> <span class="st">&quot;Frecuencia&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb29-3"><a href="análisis-exploratorio-de-datos-eda.html#cb29-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Porcentaje =</span> <span class="fu">round</span>(Frecuencia <span class="sc">/</span> <span class="fu">sum</span>(Frecuencia) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>))</span></code></pre></div>
+<pre><code>## # A tibble: 4 × 3
+##   area_vidrio Frecuencia Porcentaje
+##         &lt;dbl&gt;      &lt;int&gt;      &lt;dbl&gt;
+## 1        0            48       6.25
+## 2        0.1         240      31.2 
+## 3        0.25        240      31.2 
+## 4        0.4         240      31.2</code></pre>
+<p><strong>Interpretación:</strong> a diferencia de los datos reales, aquí las categorías están <strong>perfectamente balanceadas</strong>, porque es un diseño experimental. Cada orientación tiene 192 edificios (25 %), y hay 384 edificios de cada altura (50 % y 50 %). Solo <code>dist_vidrio = 0</code> y <code>area_vidrio = 0</code> tienen menos casos (48, el 6.25 %). Esos son los mismos 48 edificios: los que <strong>no tienen ventanas</strong>. Tiene sentido, porque si no hay vidrio no hay cómo distribuirlo.</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="análisis-exploratorio-de-datos-eda.html#cb31-1" tabindex="-1"></a>tabla_dist_b <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb31-2"><a href="análisis-exploratorio-de-datos-eda.html#cb31-2" tabindex="-1"></a>  <span class="fu">count</span>(dist_vidrio, <span class="at">name =</span> <span class="st">&quot;Frecuencia&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb31-3"><a href="análisis-exploratorio-de-datos-eda.html#cb31-3" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb31-4"><a href="análisis-exploratorio-de-datos-eda.html#cb31-4" tabindex="-1"></a>    <span class="at">Porcentaje =</span> <span class="fu">round</span>(Frecuencia <span class="sc">/</span> <span class="fu">sum</span>(Frecuencia) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>),</span>
+<span id="cb31-5"><a href="análisis-exploratorio-de-datos-eda.html#cb31-5" tabindex="-1"></a>    <span class="at">Etiqueta =</span> <span class="fu">paste0</span>(Frecuencia, <span class="st">&quot; (&quot;</span>, Porcentaje, <span class="st">&quot;%)&quot;</span>)</span>
+<span id="cb31-6"><a href="análisis-exploratorio-de-datos-eda.html#cb31-6" tabindex="-1"></a>  )</span>
+<span id="cb31-7"><a href="análisis-exploratorio-de-datos-eda.html#cb31-7" tabindex="-1"></a></span>
+<span id="cb31-8"><a href="análisis-exploratorio-de-datos-eda.html#cb31-8" tabindex="-1"></a><span class="fu">ggplot</span>(tabla_dist_b, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(dist_vidrio), <span class="at">y =</span> Frecuencia)) <span class="sc">+</span></span>
+<span id="cb31-9"><a href="análisis-exploratorio-de-datos-eda.html#cb31-9" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">&quot;#008B8B&quot;</span>, <span class="at">width =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb31-10"><a href="análisis-exploratorio-de-datos-eda.html#cb31-10" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> Etiqueta), <span class="at">vjust =</span> <span class="sc">-</span><span class="fl">0.5</span>, <span class="at">size =</span> <span class="fl">4.5</span>) <span class="sc">+</span></span>
+<span id="cb31-11"><a href="análisis-exploratorio-de-datos-eda.html#cb31-11" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> <span class="st">&quot;Distribución de la variable dist_vidrio&quot;</span>) <span class="sc">+</span></span>
+<span id="cb31-12"><a href="análisis-exploratorio-de-datos-eda.html#cb31-12" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">mult =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.15</span>))) <span class="sc">+</span></span>
+<span id="cb31-13"><a href="análisis-exploratorio-de-datos-eda.html#cb31-13" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb31-14"><a href="análisis-exploratorio-de-datos-eda.html#cb31-14" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Distribución del área acristalada&quot;</span>,</span>
+<span id="cb31-15"><a href="análisis-exploratorio-de-datos-eda.html#cb31-15" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Frecuencia (Porcentaje)&quot;</span></span>
+<span id="cb31-16"><a href="análisis-exploratorio-de-datos-eda.html#cb31-16" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb31-17"><a href="análisis-exploratorio-de-datos-eda.html#cb31-17" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
+<span id="cb31-18"><a href="análisis-exploratorio-de-datos-eda.html#cb31-18" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb31-19"><a href="análisis-exploratorio-de-datos-eda.html#cb31-19" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb31-20"><a href="análisis-exploratorio-de-datos-eda.html#cb31-20" tabindex="-1"></a>    <span class="at">strip.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">&quot;gray80&quot;</span>, <span class="at">color =</span> <span class="cn">NA</span>),</span>
+<span id="cb31-21"><a href="análisis-exploratorio-de-datos-eda.html#cb31-21" tabindex="-1"></a>    <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
+<span id="cb31-22"><a href="análisis-exploratorio-de-datos-eda.html#cb31-22" tabindex="-1"></a>    <span class="at">panel.grid.major.x =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb31-23"><a href="análisis-exploratorio-de-datos-eda.html#cb31-23" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/barras_dist_vidrio-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p><strong>Interpretación:</strong> el gráfico confirma lo de la tabla: las categorías 1 a 5 tienen 144 edificios cada una (18.8 %), y la categoría 0 (sin vidrio) es la minoritaria.</p>
+</div>
+<div id="análisis-exploratorio-bivariado" class="section level2 hasAnchor" number="4.4">
+<h2><span class="header-section-number">4.4</span> Análisis exploratorio bivariado<a href="análisis-exploratorio-de-datos-eda.html#an%C3%A1lisis-exploratorio-bivariado" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="análisis-exploratorio-de-datos-eda.html#cb32-1" tabindex="-1"></a><span class="co"># Diagrama de dispersión: carga_calef vs area_techo</span></span>
+<span id="cb32-2"><a href="análisis-exploratorio-de-datos-eda.html#cb32-2" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb32-3"><a href="análisis-exploratorio-de-datos-eda.html#cb32-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> area_techo, <span class="at">y =</span> carga_calef)) <span class="sc">+</span></span>
+<span id="cb32-4"><a href="análisis-exploratorio-de-datos-eda.html#cb32-4" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>, <span class="at">color =</span> <span class="st">&quot;#1E90FF&quot;</span>) <span class="sc">+</span></span>
+<span id="cb32-5"><a href="análisis-exploratorio-de-datos-eda.html#cb32-5" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">formula =</span> y <span class="sc">~</span> x, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb32-6"><a href="análisis-exploratorio-de-datos-eda.html#cb32-6" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb32-7"><a href="análisis-exploratorio-de-datos-eda.html#cb32-7" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Área de techo (m²)&quot;</span>,</span>
+<span id="cb32-8"><a href="análisis-exploratorio-de-datos-eda.html#cb32-8" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Carga de calefacción (kWh/m²)&quot;</span></span>
+<span id="cb32-9"><a href="análisis-exploratorio-de-datos-eda.html#cb32-9" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb32-10"><a href="análisis-exploratorio-de-datos-eda.html#cb32-10" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb32-11"><a href="análisis-exploratorio-de-datos-eda.html#cb32-11" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> <span class="st">&quot;Dispersión entre el área de techo y la carga de calefacción&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/disp_techo-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p><strong>Interpretación:</strong> se ve una relación <strong>negativa</strong>: los edificios con más techo necesitan menos calefacción. Los puntos forman columnas verticales porque el área de techo solo toma cuatro valores. Los edificios con 220.5 m² de techo (los de un piso) tienen cargas claramente más bajas que el resto.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="análisis-exploratorio-de-datos-eda.html#cb33-1" tabindex="-1"></a><span class="co"># Diagrama de dispersión: carga_calef vs compacidad</span></span>
+<span id="cb33-2"><a href="análisis-exploratorio-de-datos-eda.html#cb33-2" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb33-3"><a href="análisis-exploratorio-de-datos-eda.html#cb33-3" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> compacidad, <span class="at">y =</span> carga_calef)) <span class="sc">+</span></span>
+<span id="cb33-4"><a href="análisis-exploratorio-de-datos-eda.html#cb33-4" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>, <span class="at">color =</span> <span class="st">&quot;#1E90FF&quot;</span>) <span class="sc">+</span></span>
+<span id="cb33-5"><a href="análisis-exploratorio-de-datos-eda.html#cb33-5" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">formula =</span> y <span class="sc">~</span> x, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb33-6"><a href="análisis-exploratorio-de-datos-eda.html#cb33-6" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb33-7"><a href="análisis-exploratorio-de-datos-eda.html#cb33-7" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Compacidad relativa&quot;</span>,</span>
+<span id="cb33-8"><a href="análisis-exploratorio-de-datos-eda.html#cb33-8" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Carga de calefacción (kWh/m²)&quot;</span></span>
+<span id="cb33-9"><a href="análisis-exploratorio-de-datos-eda.html#cb33-9" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb33-10"><a href="análisis-exploratorio-de-datos-eda.html#cb33-10" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb33-11"><a href="análisis-exploratorio-de-datos-eda.html#cb33-11" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> <span class="st">&quot;Dispersión entre la compacidad y la carga de calefacción&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/disp_compacidad-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p><strong>Interpretación:</strong> aquí la relación es <strong>positiva</strong>: a mayor compacidad, mayor carga de calefacción. Pero la nube no es una línea limpia. Hay un salto, porque los edificios más compactos de estos datos son también los de dos pisos.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="análisis-exploratorio-de-datos-eda.html#cb34-1" tabindex="-1"></a><span class="co"># Resumen de carga_calef por altura</span></span>
+<span id="cb34-2"><a href="análisis-exploratorio-de-datos-eda.html#cb34-2" tabindex="-1"></a>altura_calef <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb34-3"><a href="análisis-exploratorio-de-datos-eda.html#cb34-3" tabindex="-1"></a>  <span class="fu">group_by</span>(altura) <span class="sc">%&gt;%</span></span>
+<span id="cb34-4"><a href="análisis-exploratorio-de-datos-eda.html#cb34-4" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb34-5"><a href="análisis-exploratorio-de-datos-eda.html#cb34-5" tabindex="-1"></a>    <span class="at">n       =</span> <span class="fu">length</span>(carga_calef),</span>
+<span id="cb34-6"><a href="análisis-exploratorio-de-datos-eda.html#cb34-6" tabindex="-1"></a>    <span class="at">media   =</span> <span class="fu">mean</span>(carga_calef),</span>
+<span id="cb34-7"><a href="análisis-exploratorio-de-datos-eda.html#cb34-7" tabindex="-1"></a>    <span class="at">ds      =</span> <span class="fu">sd</span>(carga_calef),</span>
+<span id="cb34-8"><a href="análisis-exploratorio-de-datos-eda.html#cb34-8" tabindex="-1"></a>    <span class="at">mediana =</span> <span class="fu">median</span>(carga_calef),</span>
+<span id="cb34-9"><a href="análisis-exploratorio-de-datos-eda.html#cb34-9" tabindex="-1"></a>    <span class="at">minimo  =</span> <span class="fu">min</span>(carga_calef),</span>
+<span id="cb34-10"><a href="análisis-exploratorio-de-datos-eda.html#cb34-10" tabindex="-1"></a>    <span class="at">maximo  =</span> <span class="fu">max</span>(carga_calef),</span>
+<span id="cb34-11"><a href="análisis-exploratorio-de-datos-eda.html#cb34-11" tabindex="-1"></a>    <span class="at">Q1      =</span> <span class="fu">quantile</span>(carga_calef, <span class="fl">0.25</span>),</span>
+<span id="cb34-12"><a href="análisis-exploratorio-de-datos-eda.html#cb34-12" tabindex="-1"></a>    <span class="at">Q3      =</span> <span class="fu">quantile</span>(carga_calef, <span class="fl">0.75</span>),</span>
+<span id="cb34-13"><a href="análisis-exploratorio-de-datos-eda.html#cb34-13" tabindex="-1"></a>    <span class="at">IQR     =</span> <span class="fu">IQR</span>(carga_calef),</span>
+<span id="cb34-14"><a href="análisis-exploratorio-de-datos-eda.html#cb34-14" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span></span>
+<span id="cb34-15"><a href="análisis-exploratorio-de-datos-eda.html#cb34-15" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb34-16"><a href="análisis-exploratorio-de-datos-eda.html#cb34-16" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb34-17"><a href="análisis-exploratorio-de-datos-eda.html#cb34-17" tabindex="-1"></a>    <span class="at">variable =</span> <span class="st">&quot;altura&quot;</span>,</span>
+<span id="cb34-18"><a href="análisis-exploratorio-de-datos-eda.html#cb34-18" tabindex="-1"></a>    <span class="at">niveles =</span> <span class="fu">as.character</span>(altura)</span>
+<span id="cb34-19"><a href="análisis-exploratorio-de-datos-eda.html#cb34-19" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb34-20"><a href="análisis-exploratorio-de-datos-eda.html#cb34-20" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(variable, niveles, <span class="fu">everything</span>(), <span class="sc">-</span>altura)</span>
+<span id="cb34-21"><a href="análisis-exploratorio-de-datos-eda.html#cb34-21" tabindex="-1"></a></span>
+<span id="cb34-22"><a href="análisis-exploratorio-de-datos-eda.html#cb34-22" tabindex="-1"></a>altura_calef</span></code></pre></div>
+<pre><code>## # A tibble: 2 × 11
+##   variable niveles     n media    ds mediana minimo maximo    Q1    Q3   IQR
+##   &lt;chr&gt;    &lt;chr&gt;   &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 altura   3.5       384  13.3  2.67    13.0   6.01   19.5  11.6  15.1  3.52
+## 2 altura   7         384  31.3  5.95    31.7  15.6    43.1  27.0  36    8.99</code></pre>
+<p><strong>Interpretación:</strong> aquí aparecen los dos picos del histograma. Los edificios de <strong>un piso (3.5 m)</strong> tienen una carga media de <strong>13.34 kWh/m²</strong>, y los de <strong>dos pisos (7 m)</strong> de <strong>31.28 kWh/m²</strong>, más del doble. Los rangos casi no se cruzan: el máximo de los de un piso (19.52) apenas supera el mínimo de los de dos pisos (15.55). La altura es, por ahora, la variable que más separa a los edificios.</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="análisis-exploratorio-de-datos-eda.html#cb36-1" tabindex="-1"></a>df <span class="sc">%&gt;%</span></span>
+<span id="cb36-2"><a href="análisis-exploratorio-de-datos-eda.html#cb36-2" tabindex="-1"></a>  <span class="fu">ggpairs</span>()</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/ggpairs_eda-1.png" alt="" width="1056" style="display: block; margin: auto;" /></p>
+<p><strong>Interpretación:</strong> esta red de gráficos resume todo en una sola imagen. Se notan tres cosas importantes:</p>
+<ol style="list-style-type: decimal">
+<li><code>carga_calef</code> y <code>carga_refri</code> van casi en línea recta (correlación cercana a 0.98): un edificio que gasta mucho en calefacción también gasta mucho en refrigeración.</li>
+<li>Varias predictoras están <strong>muy relacionadas entre sí</strong>. Por ejemplo, <code>compacidad</code> con <code>area_superficie</code> (casi −0.99) y <code>altura</code> con <code>area_techo</code> (casi −0.97). Esto anticipa problemas de <strong>multicolinealidad</strong> en la regresión múltiple.</li>
+<li><code>orientacion</code> no muestra relación con nada: su correlación con la carga es prácticamente cero.</li>
+</ol>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="extracción-transformación-y-carga-etl.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="estadística-paramétrica-y-no-paramétrica.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/rstudio/bookdown-demo/edit/master/01-Trabajo.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

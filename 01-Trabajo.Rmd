@@ -1,0 +1,1440 @@
+---
+title: "Análisis estadístico de la eficiencia energética en edificios"
+subtitle: "Del análisis exploratorio a la regresión lineal múltiple"
+author: "Tu nombre"
+date: "`r format(Sys.Date(), '%d de %B de %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+    theme: cosmo
+    highlight: tango
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  message = FALSE,
+  warning = FALSE,
+  fig.align = "center",
+  fig.width = 8,
+  fig.height = 5
+)
+set.seed(2026) # para que la prueba de Durbin-Watson (que usa bootstrap) dé siempre lo mismo
+```
+
+# Contexto de los datos
+
+Este conjunto de datos (*Energy Efficiency*, Tsanas y Xifara, 2012) contiene **768 edificios residenciales simulados** en el software Ecotect. Cada edificio cambia en su forma, el área de sus muros y techo, su altura, la orientación y la cantidad y ubicación de las ventanas. Para cada uno se registró cuánta energía necesita para calentarse y para enfriarse.
+
+La pregunta que guía todo el trabajo es sencilla: **¿qué características de un edificio explican su carga de calefacción, y qué tan bien podemos predecirla?**
+
+| Variable original | Nombre en el análisis | Descripción | Unidad |
+|---|---|---|---|
+| X1 | `compacidad` | Compacidad relativa del edificio | — |
+| X2 | `area_superficie` | Área total de la superficie | m² |
+| X3 | `area_muros` | Área de los muros | m² |
+| X4 | `area_techo` | Área del techo | m² |
+| X5 | `altura` | Altura total (3.5 m = un piso, 7 m = dos pisos) | m |
+| X6 | `orientacion` | Orientación (2 = norte, 3 = este, 4 = sur, 5 = oeste) | categórica |
+| X7 | `area_vidrio` | Proporción del área acristalada (ventanas) | 0, 0.10, 0.25, 0.40 |
+| X8 | `dist_vidrio` | Distribución del vidrio (0 = sin vidrio, 1 = uniforme, 2 = norte, 3 = este, 4 = sur, 5 = oeste) | categórica |
+| Y1 | `carga_calef` | **Carga de calefacción (variable respuesta)** | kWh/m² |
+| Y2 | `carga_refri` | Carga de refrigeración | kWh/m² |
+
+La variable respuesta de los modelos de regresión es la **carga de calefacción** (`carga_calef`). La carga de refrigeración se usa en el análisis exploratorio y en la comparación pareada, pero **no entra como predictora**: es otro resultado del mismo edificio, no una característica de diseño.
+
+# Librerías
+
+Si falta alguna librería, se instala una sola vez con este bloque (está con `eval = FALSE` para que no se ejecute al tejer). El paquete `coin` lo necesita `rstatix` para calcular el tamaño del efecto de Wilcoxon.
+
+```{r instalar, eval=FALSE}
+install.packages(c("readxl", "tidyverse", "Amelia", "patchwork", "GGally",
+                   "effsize", "car", "rstatix", "coin", "lmtest",
+                   "scatterplot3d", "plotly", "knitr", "mctest", "olsrr", "MASS"))
+```
+
+```{r librerias}
+library(readxl)
+library(tidyverse)
+library(Amelia)
+library(patchwork)
+library(GGally)
+library(effsize)
+library(car)
+library(rstatix)
+library(lmtest)
+library(scatterplot3d)
+library(plotly)
+library(knitr)
+library(mctest)
+library(olsrr)
+library(MASS) # ojo: MASS tapa a dplyr::select, por eso siempre escribimos dplyr::select()
+```
+
+# Extracción, transformación y carga (ETL)
+
+El archivo `ENB2012_data.xlsx` debe estar en la misma carpeta que este R Markdown. El Excel trae celdas vacías con formato después de la fila 769, por eso se lee solo el rango con datos.
+
+```{r lectura}
+datos <- read_excel("ENB2012_data.xlsx", sheet = 1, range = "A1:J769")
+
+head(datos, n = 5)
+```
+
+```{r renombrar}
+# Renombrar columnas con nombres que se entiendan
+df <- datos %>%
+  rename(
+    compacidad      = X1,
+    area_superficie = X2,
+    area_muros      = X3,
+    area_techo      = X4,
+    altura          = X5,
+    orientacion     = X6,
+    area_vidrio     = X7,
+    dist_vidrio     = X8,
+    carga_calef     = Y1,
+    carga_refri     = Y2
+  )
+```
+
+```{r dimensiones}
+dim(df)
+colnames(df)
+str(df)
+```
+
+**Interpretación:** la base quedó con **768 edificios y 10 variables**, todas numéricas. Ojo con algo que no se ve a simple vista: aunque R las lea como números, `orientacion` y `dist_vidrio` son en realidad **códigos de categorías** (el 3 no es "más" que el 2, solo es otra dirección). Además, `altura` solo toma dos valores y `area_vidrio` cuatro, así que en varios análisis las trataremos como grupos.
+
+## Valores ausentes
+
+```{r na_conteo}
+df %>%
+  dplyr::summarise(across(everything(), ~ sum(is.na(.)), .names = "NA_{.col}"))
+```
+
+```{r na_mapa}
+missmap(df)
+```
+
+**Interpretación:** no hay ni un solo dato faltante (todo el mapa sale "observado"). Esto es lógico porque los datos vienen de una simulación por computador y no de encuestas o mediciones en campo. Por tanto, **no hace falta imputar nada**.
+
+# Análisis exploratorio de datos (EDA)
+
+## Análisis de la variable `carga_calef` (target)
+
+```{r resumen_target}
+df %>%
+  dplyr::summarise(
+    n       = length(carga_calef),
+    media   = mean(carga_calef),
+    ds      = sd(carga_calef),
+    mediana = median(carga_calef),
+    minimo  = min(carga_calef),
+    maximo  = max(carga_calef),
+    Q1      = quantile(carga_calef, 0.25),
+    Q3      = quantile(carga_calef, 0.75),
+    IQR     = IQR(carga_calef)
+  )
+```
+
+**Interpretación:** en promedio, un edificio necesita **22.31 kWh/m²** para calentarse, pero hay mucha variación: va desde **6.01** hasta **43.10 kWh/m²**, y la desviación estándar (10.09) es casi la mitad de la media. La media es mayor que la mediana (18.95), así que hay una cola hacia los valores altos. La mitad central de los edificios está entre 12.99 y 31.67 kWh/m², un rango bastante amplio (IQR = 18.68).
+
+```{r hist_target}
+df %>%
+  ggplot(aes(x = carga_calef)) +
+  geom_histogram(aes(y = after_stat(density)),
+                 binwidth = 2,
+                 fill = "#2c7fb8",
+                 color = "white",
+                 alpha = 0.6) +
+  geom_density(color = "darkblue", linewidth = 1.2) +
+  labs(
+    title = "Distribución de la carga de calefacción",
+    x = "Carga de calefacción (kWh/m²)",
+    y = "Densidad"
+  ) +
+  theme_bw()
+```
+
+**Interpretación:** la distribución **no tiene forma de campana**: tiene **dos picos** (es bimodal), uno alrededor de 12–15 kWh/m² y otro alrededor de 28–32 kWh/m². Esto suele indicar que en los datos hay dos grupos de edificios bien distintos. Más adelante veremos que esos dos grupos son los edificios de un piso y los de dos pisos.
+
+```{r box_target}
+df %>%
+  ggplot(aes(x = "", y = carga_calef)) +
+  geom_boxplot(fill = "#a6cee3", color = "#1f78b4", outlier.color = "red") +
+  stat_summary(
+    fun = mean,
+    geom = "point",
+    shape = 20,
+    size = 3,
+    color = "black"
+  ) +
+  labs(
+    title = "Diagrama de cajas y bigotes de la carga de calefacción",
+    x = "",
+    y = "Carga de calefacción (kWh/m²)"
+  ) +
+  theme_bw()
+```
+
+**Interpretación:** la caja es ancha y la mediana está más cerca del borde inferior, lo que confirma la asimetría hacia la derecha. El punto negro (la media) queda por encima de la mediana. **No aparecen valores atípicos** (no hay puntos rojos): ningún edificio tiene una carga "rara" frente al resto.
+
+## Análisis de las variables características (independientes)
+
+```{r resumen_numericas}
+resumen_numericas <- df %>%
+  dplyr::select(where(is.numeric), -carga_calef) %>%
+  pivot_longer(
+    cols = everything(),
+    names_to = "variable",
+    values_to = "valor"
+  ) %>%
+  group_by(variable) %>%
+  summarise(
+    n       = sum(!is.na(valor)),
+    media   = mean(valor, na.rm = TRUE),
+    ds      = sd(valor, na.rm = TRUE),
+    mediana = median(valor, na.rm = TRUE),
+    minimo  = min(valor, na.rm = TRUE),
+    maximo  = max(valor, na.rm = TRUE),
+    Q1      = quantile(valor, 0.25, na.rm = TRUE),
+    Q3      = quantile(valor, 0.75, na.rm = TRUE),
+    IQR     = IQR(valor, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+resumen_numericas
+```
+
+**Interpretación:** las variables viven en escalas muy distintas. Las áreas están en cientos de m² (por ejemplo, el área de superficie va de 514.5 a 808.5 m²), mientras que la compacidad está entre 0.62 y 0.98 y el área de vidrio entre 0 y 0.40. La carga de refrigeración se parece mucho a la de calefacción (media 24.59 frente a 22.31 kWh/m²). Como cada variable tiene pocos valores posibles, sus cuartiles caen justo sobre esos valores, algo típico de un experimento diseñado.
+
+```{r boxplots_fila1, fig.height=4}
+# Boxplot de compacidad
+p1 <- df %>%
+  ggplot(aes(x = "", y = compacidad)) +
+  geom_boxplot(fill = "#1f77b4", alpha = 0.7) +
+  labs(title = "Compacidad relativa", y = "Compacidad", x = "") +
+  theme_bw()
+
+# Boxplot de area_superficie
+p2 <- df %>%
+  ggplot(aes(x = "", y = area_superficie)) +
+  geom_boxplot(fill = "#2ca02c", alpha = 0.7) +
+  labs(title = "Área de superficie", y = "m²", x = "") +
+  theme_bw()
+
+# Boxplot de area_muros
+p3 <- df %>%
+  ggplot(aes(x = "", y = area_muros)) +
+  geom_boxplot(fill = "#d62728", alpha = 0.7) +
+  labs(title = "Área de muros", y = "m²", x = "") +
+  theme_bw()
+
+# Primera fila
+p1 + p2 + p3
+```
+
+```{r boxplots_fila2, fig.height=4}
+# Boxplot de area_techo
+p4 <- df %>%
+  ggplot(aes(x = "", y = area_techo)) +
+  geom_boxplot(fill = "#9467bd", alpha = 0.7) +
+  labs(title = "Área de techo", y = "m²", x = "") +
+  theme_bw()
+
+# Boxplot de area_vidrio
+p5 <- df %>%
+  ggplot(aes(x = "", y = area_vidrio)) +
+  geom_boxplot(fill = "#ff7f0e", alpha = 0.7) +
+  labs(title = "Área acristalada", y = "Proporción", x = "") +
+  theme_bw()
+
+# Boxplot de carga_refri
+p6 <- df %>%
+  ggplot(aes(x = "", y = carga_refri)) +
+  geom_boxplot(fill = "#8c564b", alpha = 0.7) +
+  labs(title = "Carga de refrigeración", y = "kWh/m²", x = "") +
+  theme_bw()
+
+# Segunda fila
+p4 + p5 + p6
+```
+
+**Interpretación:** **ninguna variable tiene valores atípicos**. El área de techo llama la atención: su caja está "aplastada" arriba porque la mitad de los edificios tiene exactamente 220.5 m² de techo (son los de un piso, que ocupan más terreno). La carga de refrigeración tiene una forma muy parecida a la de calefacción, lo que anticipa que ambas están muy relacionadas.
+
+## Variables categóricas
+
+```{r tabla_orientacion}
+# Tabla de frecuencias para orientacion
+tabla_orient <- df %>%
+  count(orientacion, name = "Frecuencia") %>%
+  mutate(
+    Porcentaje = round(Frecuencia / sum(Frecuencia) * 100, 2),
+    Variable = "orientacion",
+    Categoria = as.character(orientacion)
+  ) %>%
+  dplyr::select(Variable, Categoria, Frecuencia, Porcentaje)
+
+tabla_orient
+```
+
+```{r tabla_dist_vidrio}
+# Tabla de frecuencias para dist_vidrio
+tabla_dist <- df %>%
+  count(dist_vidrio, name = "Frecuencia") %>%
+  mutate(
+    Porcentaje = round(Frecuencia / sum(Frecuencia) * 100, 2),
+    Variable = "dist_vidrio",
+    Categoria = as.character(dist_vidrio)
+  ) %>%
+  dplyr::select(Variable, Categoria, Frecuencia, Porcentaje)
+
+tabla_dist
+```
+
+```{r tabla_altura_vidrio}
+# Tablas de frecuencias para altura y area_vidrio
+df %>%
+  count(altura, name = "Frecuencia") %>%
+  mutate(Porcentaje = round(Frecuencia / sum(Frecuencia) * 100, 2))
+
+df %>%
+  count(area_vidrio, name = "Frecuencia") %>%
+  mutate(Porcentaje = round(Frecuencia / sum(Frecuencia) * 100, 2))
+```
+
+**Interpretación:** a diferencia de los datos reales, aquí las categorías están **perfectamente balanceadas**, porque es un diseño experimental. Cada orientación tiene 192 edificios (25 %), y hay 384 edificios de cada altura (50 % y 50 %). Solo `dist_vidrio = 0` y `area_vidrio = 0` tienen menos casos (48, el 6.25 %). Esos son los mismos 48 edificios: los que **no tienen ventanas**. Tiene sentido, porque si no hay vidrio no hay cómo distribuirlo.
+
+```{r barras_dist_vidrio}
+tabla_dist_b <- df %>%
+  count(dist_vidrio, name = "Frecuencia") %>%
+  mutate(
+    Porcentaje = round(Frecuencia / sum(Frecuencia) * 100, 1),
+    Etiqueta = paste0(Frecuencia, " (", Porcentaje, "%)")
+  )
+
+ggplot(tabla_dist_b, aes(x = factor(dist_vidrio), y = Frecuencia)) +
+  geom_col(fill = "#008B8B", width = 0.6) +
+  geom_text(aes(label = Etiqueta), vjust = -0.5, size = 4.5) +
+  facet_wrap(~ "Distribución de la variable dist_vidrio") +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
+  labs(
+    x = "Distribución del área acristalada",
+    y = "Frecuencia (Porcentaje)"
+  ) +
+  theme_bw(base_size = 12) +
+  theme(
+    plot.title = element_blank(),
+    strip.background = element_rect(fill = "gray80", color = NA),
+    strip.text = element_text(face = "bold"),
+    panel.grid.major.x = element_blank()
+  )
+```
+
+**Interpretación:** el gráfico confirma lo de la tabla: las categorías 1 a 5 tienen 144 edificios cada una (18.8 %), y la categoría 0 (sin vidrio) es la minoritaria.
+
+## Análisis exploratorio bivariado
+
+```{r disp_techo}
+# Diagrama de dispersión: carga_calef vs area_techo
+df %>%
+  ggplot(aes(x = area_techo, y = carga_calef)) +
+  geom_point(alpha = 0.4, color = "#1E90FF") +
+  geom_smooth(method = "lm", formula = y ~ x, se = FALSE, color = "red") +
+  labs(
+    x = "Área de techo (m²)",
+    y = "Carga de calefacción (kWh/m²)"
+  ) +
+  theme_bw() +
+  facet_grid(. ~ "Dispersión entre el área de techo y la carga de calefacción")
+```
+
+**Interpretación:** se ve una relación **negativa**: los edificios con más techo necesitan menos calefacción. Los puntos forman columnas verticales porque el área de techo solo toma cuatro valores. Los edificios con 220.5 m² de techo (los de un piso) tienen cargas claramente más bajas que el resto.
+
+```{r disp_compacidad}
+# Diagrama de dispersión: carga_calef vs compacidad
+df %>%
+  ggplot(aes(x = compacidad, y = carga_calef)) +
+  geom_point(alpha = 0.4, color = "#1E90FF") +
+  geom_smooth(method = "lm", formula = y ~ x, se = FALSE, color = "red") +
+  labs(
+    x = "Compacidad relativa",
+    y = "Carga de calefacción (kWh/m²)"
+  ) +
+  theme_bw() +
+  facet_grid(. ~ "Dispersión entre la compacidad y la carga de calefacción")
+```
+
+**Interpretación:** aquí la relación es **positiva**: a mayor compacidad, mayor carga de calefacción. Pero la nube no es una línea limpia. Hay un salto, porque los edificios más compactos de estos datos son también los de dos pisos.
+
+```{r resumen_por_altura}
+# Resumen de carga_calef por altura
+altura_calef <- df %>%
+  group_by(altura) %>%
+  summarise(
+    n       = length(carga_calef),
+    media   = mean(carga_calef),
+    ds      = sd(carga_calef),
+    mediana = median(carga_calef),
+    minimo  = min(carga_calef),
+    maximo  = max(carga_calef),
+    Q1      = quantile(carga_calef, 0.25),
+    Q3      = quantile(carga_calef, 0.75),
+    IQR     = IQR(carga_calef),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    variable = "altura",
+    niveles = as.character(altura)
+  ) %>%
+  dplyr::select(variable, niveles, everything(), -altura)
+
+altura_calef
+```
+
+**Interpretación:** aquí aparecen los dos picos del histograma. Los edificios de **un piso (3.5 m)** tienen una carga media de **13.34 kWh/m²**, y los de **dos pisos (7 m)** de **31.28 kWh/m²**, más del doble. Los rangos casi no se cruzan: el máximo de los de un piso (19.52) apenas supera el mínimo de los de dos pisos (15.55). La altura es, por ahora, la variable que más separa a los edificios.
+
+```{r ggpairs_eda, fig.width=11, fig.height=10}
+df %>%
+  ggpairs()
+```
+
+**Interpretación:** esta red de gráficos resume todo en una sola imagen. Se notan tres cosas importantes:
+
+1. `carga_calef` y `carga_refri` van casi en línea recta (correlación cercana a 0.98): un edificio que gasta mucho en calefacción también gasta mucho en refrigeración.
+2. Varias predictoras están **muy relacionadas entre sí**. Por ejemplo, `compacidad` con `area_superficie` (casi −0.99) y `altura` con `area_techo` (casi −0.97). Esto anticipa problemas de **multicolinealidad** en la regresión múltiple.
+3. `orientacion` no muestra relación con nada: su correlación con la carga es prácticamente cero.
+
+# Estadística paramétrica y no paramétrica
+
+## Comparación de dos grupos independientes: un piso vs. dos pisos
+
+Queremos saber si la carga de calefacción media es distinta según la altura del edificio.
+
+- $H_0$: la carga media de calefacción es igual en edificios de 3.5 m y de 7 m.
+- $H_1$: las cargas medias son diferentes.
+
+```{r box_altura}
+df_alt <- df %>% mutate(altura = factor(altura))
+
+df_alt %>%
+  ggplot(aes(x = altura, y = carga_calef, fill = altura)) +
+  geom_boxplot(alpha = 0.7) +
+  labs(x = "Altura (m)", y = "Carga de calefacción (kWh/m²)",
+       title = "Carga de calefacción según la altura del edificio") +
+  theme_bw() +
+  theme(legend.position = "none")
+```
+
+**Supuesto de normalidad por grupo**
+
+```{r sw_altura}
+df_alt %>%
+  group_by(altura) %>%
+  summarise(estadistico = shapiro.test(carga_calef)$statistic,
+            p_valor = shapiro.test(carga_calef)$p.value)
+```
+
+**Interpretación:** en ambos grupos el p-valor es menor que 0.05, así que **los datos no siguen una distribución normal**. Con 384 edificios por grupo, la prueba t sigue siendo bastante confiable (por el teorema del límite central), pero conviene confirmar con la prueba no paramétrica.
+
+**Supuesto de igualdad de varianzas**
+
+```{r levene_altura}
+leveneTest(carga_calef ~ altura, data = df_alt, center = "median")
+```
+
+**Interpretación:** el p-valor es prácticamente cero, así que **las varianzas no son iguales**. Basta ver el boxplot: los edificios de dos pisos tienen una dispersión mucho mayor (ds = 5.95) que los de un piso (ds = 2.67). Por eso usamos la versión de Welch (`var.equal = FALSE`).
+
+```{r t_altura}
+un_piso   <- df$carga_calef[df$altura == 3.5]
+dos_pisos <- df$carga_calef[df$altura == 7]
+
+t.test(un_piso,
+       dos_pisos,
+       var.equal = FALSE,
+       paired = FALSE)
+```
+
+**Interpretación:** con t = −53.86 y un p-valor prácticamente cero, **se rechaza $H_0$**. Los edificios de dos pisos necesitan, en promedio, unos **17.94 kWh/m² más** de calefacción que los de un piso.
+
+```{r cohen_altura}
+d_alt <- cohen.d(un_piso,
+                 dos_pisos,
+                 paired = FALSE)
+d_alt
+```
+
+**Interpretación:** el tamaño del efecto es enorme (d ≈ `r round(d_alt$estimate, 2)`, magnitud *`r as.character(d_alt$magnitude)`*). Las medias están separadas por casi cuatro desviaciones estándar, así que la diferencia no solo es estadísticamente significativa, sino que **en la práctica es gigantesca**.
+
+**Confirmación no paramétrica (Wilcoxon / Mann-Whitney)**
+
+```{r wilcox_altura}
+df_alt %>%
+  wilcox_test(carga_calef ~ altura,
+              paired = FALSE)
+
+ef_alt <- df_alt %>%
+  wilcox_effsize(carga_calef ~ altura, paired = FALSE)
+ef_alt
+```
+
+**Interpretación:** la prueba de rangos llega a la misma conclusión (p-valor prácticamente cero), con un tamaño del efecto r = `r round(ef_alt$effsize, 2)`, que se considera **grande**. La conclusión no depende del supuesto de normalidad: **la altura cambia muchísimo la carga de calefacción**.
+
+## Comparación de dos grupos pareados: calefacción vs. refrigeración
+
+Cada edificio tiene dos mediciones: su carga de calefacción y su carga de refrigeración. Como son del mismo edificio, son **datos pareados**.
+
+- $H_0$: la diferencia media entre carga de refrigeración y de calefacción es cero.
+- $H_1$: la diferencia media es distinta de cero.
+
+```{r sw_pareado}
+shapiro.test(df$carga_calef)
+shapiro.test(df$carga_refri)
+```
+
+**Interpretación:** ninguna de las dos cargas es normal (p < 0.001), lo cual cuadra con la forma bimodal que vimos en el EDA.
+
+```{r t_pareado}
+t.test(x = df$carga_refri,
+       y = df$carga_calef,
+       paired = TRUE)
+```
+
+**Interpretación:** con t = 28.36 y p-valor prácticamente cero, **se rechaza $H_0$**. En promedio, un edificio necesita **2.28 kWh/m² más para enfriarse que para calentarse**. El intervalo de confianza no incluye el cero, lo que refuerza la conclusión.
+
+```{r cohen_pareado}
+d_par <- cohen.d(d = df$carga_refri,
+                 f = df$carga_calef,
+                 paired = TRUE)
+d_par
+```
+
+**Interpretación:** el tamaño del efecto es d ≈ `r round(d_par$estimate, 2)` (magnitud *`r as.character(d_par$magnitude)`*). La diferencia de 2.28 kWh/m² parece modesta al lado de lo mucho que varían las cargas entre edificios. Lo que la hace tan clara es que **casi todos los edificios muestran el mismo patrón** (refrigeración algo mayor que calefacción), y por eso la prueba pareada la detecta con mucha seguridad.
+
+```{r wilcox_pareado}
+df_par <- df %>%
+  mutate(id = row_number()) %>%
+  dplyr::select(id, carga_calef, carga_refri) %>%
+  pivot_longer(cols = c(carga_calef, carga_refri),
+               names_to = "tipo_carga",
+               values_to = "carga")
+
+df_par %>%
+  rstatix::wilcox_test(carga ~ tipo_carga, paired = TRUE)
+
+ef_par <- df_par %>%
+  rstatix::wilcox_effsize(carga ~ tipo_carga, paired = TRUE)
+ef_par
+```
+
+**Interpretación:** la prueba de rangos con signo confirma la diferencia (p-valor prácticamente cero), con un tamaño del efecto r = `r round(ef_par$effsize, 2)`. Es decir, **la refrigeración supera a la calefacción en la gran mayoría de edificios**, de forma consistente.
+
+## ANOVA: ¿cambia la carga según la cantidad de ventanas?
+
+La variable `area_vidrio` tiene cuatro niveles (0 %, 10 %, 25 % y 40 % del área acristalada).
+
+- $H_0$: la carga media de calefacción es igual en los cuatro niveles de área acristalada.
+- $H_1$: al menos un nivel tiene una media diferente.
+
+```{r resumen_vidrio}
+df_vid <- df %>% mutate(area_vidrio = factor(area_vidrio))
+
+df_vid %>%
+  group_by(area_vidrio) %>%
+  summarise(n = length(carga_calef),
+            media = mean(carga_calef),
+            ds = sd(carga_calef))
+```
+
+```{r box_vidrio}
+df_vid %>%
+  ggplot(aes(x = area_vidrio, y = carga_calef, fill = area_vidrio)) +
+  geom_boxplot(alpha = 0.7) +
+  labs(x = "Proporción de área acristalada", y = "Carga de calefacción (kWh/m²)",
+       title = "Carga de calefacción según el área acristalada") +
+  theme_bw() +
+  theme(legend.position = "none")
+```
+
+**Interpretación:** la carga media sube de forma escalonada a medida que hay más vidrio: **14.29** sin ventanas, **20.36** con 10 %, **22.76** con 25 % y **25.41 kWh/m²** con 40 %. Tiene sentido físico, porque el vidrio aísla peor que un muro y por las ventanas se escapa más calor.
+
+```{r anova_vidrio}
+modelo_aov <- aov(carga_calef ~ area_vidrio, data = df_vid)
+summary(modelo_aov)
+```
+
+**Interpretación:** con F = 22.59 y p-valor ≈ 5 × 10⁻¹⁴, **se rechaza $H_0$**: la cantidad de ventanas sí cambia la carga de calefacción media. Ahora hay que revisar los supuestos y ver qué grupos difieren entre sí.
+
+```{r supuestos_anova}
+df_vid %>%
+  group_by(area_vidrio) %>%
+  summarise(n = length(carga_calef),
+            estsw = shapiro.test(carga_calef)$statistic,
+            p_sw = shapiro.test(carga_calef)$p.value)
+
+leveneTest(carga_calef ~ area_vidrio, data = df_vid)
+```
+
+**Interpretación:** ningún grupo es normal (todos los p-valores de Shapiro-Wilk son menores que 0.001), y la prueba de Levene también rechaza la igualdad de varianzas (p < 0.001). **Los supuestos del ANOVA no se cumplen**, así que el resultado del ANOVA se toma como orientativo y la conclusión firme la dará Kruskal-Wallis.
+
+```{r tukey_vidrio}
+resultado_tukey <- TukeyHSD(modelo_aov)
+resultado_tukey
+```
+
+**Interpretación:** **todas las parejas de niveles son significativamente diferentes** (p ajustado < 0.05). Las diferencias más grandes son contra los edificios sin ventanas: pasar de 0 % a 40 % de vidrio aumenta la carga media en unos **11.1 kWh/m²**. Incluso los saltos más pequeños (de 10 % a 25 % y de 25 % a 40 %, de unos 2.4 a 2.7 kWh/m²) alcanzan a ser significativos.
+
+## Kruskal-Wallis
+
+Como no se cumplen normalidad ni homogeneidad de varianzas, usamos la alternativa no paramétrica.
+
+- $H_0$: las distribuciones de la carga de calefacción son iguales en los cuatro niveles de vidrio.
+- $H_1$: al menos un nivel difiere.
+
+```{r kruskal_vidrio}
+kruskal.test(carga_calef ~ area_vidrio, data = df_vid)
+```
+
+**Interpretación:** con χ² = 83.34 y p-valor prácticamente cero, **se rechaza $H_0$**. La conclusión del ANOVA se mantiene: el área acristalada influye en la carga de calefacción.
+
+```{r posthoc_vidrio}
+pairwise.wilcox.test(x = df_vid$carga_calef,
+                     g = df_vid$area_vidrio,
+                     exact = FALSE,
+                     p.adjust.method = "bonferroni")
+```
+
+**Interpretación:** con la corrección de Bonferroni, **todas las comparaciones por pares siguen siendo significativas**. Cada aumento en la proporción de vidrio se traduce en una carga de calefacción mayor.
+
+**¿Y la orientación?** Hagamos la misma pregunta con la orientación del edificio:
+
+```{r kruskal_orientacion}
+kruskal.test(carga_calef ~ factor(orientacion), data = df)
+```
+
+**Interpretación:** aquí ocurre lo contrario: con p = 0.994 **no hay ninguna evidencia** de que la orientación cambie la carga de calefacción. Da igual que el edificio mire al norte, al sur, al este o al oeste. Lo tendremos en cuenta en la regresión.
+
+# Tablas de contingencia
+
+Para usar tablas de contingencia necesitamos variables categóricas. Clasificamos cada edificio según su carga de calefacción: **"Alta"** si está por encima de la mediana (18.95 kWh/m²) y **"Baja"** si no.
+
+```{r crear_nivel}
+df_cont <- df %>%
+  mutate(nivel_carga = ifelse(carga_calef > median(carga_calef), "Alta", "Baja"))
+```
+
+## Prueba de independencia: altura vs. nivel de carga
+
+- $H_0$: la altura del edificio y el nivel de carga son independientes.
+- $H_1$: la altura y el nivel de carga están asociados.
+
+```{r tabla_ind}
+tabla_altura <- xtabs(~ altura + nivel_carga, data = df_cont)
+tabla_altura
+
+# Frecuencias esperadas si fueran independientes
+observados <- tabla_altura
+esperados <- outer(rowSums(observados), colSums(observados)) / sum(observados)
+esperados
+
+chisq.test(tabla_altura)
+```
+
+**Interpretación:** si la altura no tuviera nada que ver con la carga, esperaríamos 192 edificios en cada casilla. Lo que se observa es muy distinto: de los 384 edificios de un piso, **375 tienen carga baja**, y de los 384 de dos pisos, **375 tienen carga alta**. Con χ² = 693.88 y p-valor prácticamente cero, **se rechaza la independencia**: la altura y el nivel de carga están fuertemente asociados.
+
+## Prueba de homogeneidad: proporción de carga alta en cada orientación
+
+Ahora tomamos cada orientación como una "población" y preguntamos si la proporción de edificios con carga alta es la misma en todas.
+
+- $H_0$: la proporción de edificios con carga alta es igual en las cuatro orientaciones.
+- $H_1$: al menos una orientación tiene una proporción distinta.
+
+```{r tabla_hom}
+tabla_orient_carga <- xtabs(~ orientacion + nivel_carga, data = df_cont)
+tabla_orient_carga
+
+chisq.test(tabla_orient_carga)
+```
+
+**Interpretación:** las cuatro orientaciones tienen prácticamente la misma mitad de edificios con carga alta (entre 95 y 97 de 192). Con χ² = 0.04 y p = 0.998, **no se rechaza la homogeneidad**. Esto concuerda con Kruskal-Wallis: la orientación no influye en la carga de calefacción.
+
+# Correlación lineal
+
+Para interpretar la fuerza de la correlación usamos la escala del curso:
+
+| Rango | Interpretación |
+|---|---|
+| −1.00 a −0.75 | Negativa muy fuerte |
+| −0.75 a −0.50 | Negativa moderada |
+| −0.50 a −0.25 | Negativa débil |
+| −0.25 a 0.25 | Sin correlación o muy débil |
+| 0.25 a 0.50 | Positiva débil |
+| 0.50 a 0.75 | Positiva moderada |
+| 0.75 a 1.00 | Positiva muy fuerte |
+
+```{r matriz_cor}
+round(cor(df, method = "pearson"), 3)
+```
+
+**Interpretación:** frente a la carga de calefacción, las correlaciones más fuertes son con la **altura (0.889, positiva muy fuerte)** y el **área de techo (−0.862, negativa muy fuerte)**. Les siguen el área de superficie (−0.658, negativa moderada), la compacidad (0.622, positiva moderada), el área de muros (0.456, positiva débil) y el área de vidrio (0.270, positiva débil). La distribución del vidrio (0.087) y la orientación (−0.003) **prácticamente no se correlacionan** con la carga.
+
+Elegimos el **área de techo** para estudiar la relación con más detalle, porque es la variable continua con la correlación más fuerte. La altura solo toma dos valores, así que funciona más como un grupo que como una medida continua.
+
+```{r disp_cor}
+df %>%
+  ggplot(aes(x = area_techo, y = carga_calef)) +
+  geom_point(color = "blue", size = 3, alpha = 0.4) +
+  geom_smooth(formula = 'y~x', method = "lm", se = TRUE, color = "red") +
+  labs(
+    title = "Relación entre la carga de calefacción y el área de techo",
+    x = "Área de techo (m²)",
+    y = "Carga de calefacción (kWh/m²)"
+  ) +
+  theme_bw()
+```
+
+```{r sw_cor}
+shapiro.test(df$carga_calef)
+shapiro.test(df$area_techo)
+```
+
+**Interpretación:** ninguna de las dos variables es normal (p < 0.001), así que el coeficiente más adecuado es el de **Spearman** (o el de Kendall). De todas formas calculamos los tres para compararlos.
+
+## Correlación de Pearson
+
+```{r pearson}
+cor.test(df$area_techo, df$carga_calef, method = "pearson")
+```
+
+**Interpretación:** r = −0.862, una correlación **negativa muy fuerte** y significativa (p-valor prácticamente cero). Con un 95 % de confianza, la correlación poblacional está entre −0.88 y −0.84. Como no hay normalidad, este resultado se toma como referencia y no como el definitivo.
+
+## Correlación de Spearman
+
+```{r spearman}
+cor.test(df$area_techo, df$carga_calef, method = "spearman", exact = FALSE)
+```
+
+**Interpretación:** ρ = −0.804, una correlación **negativa muy fuerte** y significativa. Como Spearman trabaja con rangos y no exige normalidad, es la medida más confiable aquí. Confirma que **a más área de techo, menos carga de calefacción**, y que esa tendencia es muy marcada.
+
+## Correlación de Kendall
+
+```{r kendall}
+cor.test(df$area_techo, df$carga_calef, method = "kendall")
+```
+
+**Interpretación:** τ = −0.610, también negativa y significativa. Kendall siempre da valores más bajos que Pearson y Spearman porque cuenta pares concordantes y discordantes, y aquí hay muchos empates (el área de techo solo tiene cuatro valores). Aun así, la conclusión es la misma: **asociación negativa fuerte**.
+
+# Regresión lineal simple (RLS)
+
+Ajustamos un modelo que explique la carga de calefacción usando solo el área de techo:
+
+$$\text{Carga} = \beta_0 + \beta_1 \cdot \text{Techo} + \varepsilon$$
+
+```{r rls_disp}
+df %>%
+  ggplot(aes(x = area_techo, y = carga_calef)) +
+  geom_point(alpha = 0.4) +
+  labs(x = "Área de techo (m²)", y = "Carga de calefacción (kWh/m²)") +
+  theme_bw()
+
+with(df, cor(area_techo, carga_calef))
+```
+
+## Estimación del modelo
+
+```{r rls_ajuste}
+modelo_rls <- lm(carga_calef ~ area_techo, data = df)
+summary(modelo_rls)
+```
+
+**Interpretación:** el modelo ajustado es:
+
+$$\widehat{\text{Carga}} = 56.31 - 0.1925 \cdot \text{Techo}$$
+
+- **Pendiente (−0.1925):** por cada metro cuadrado adicional de techo, la carga de calefacción esperada **baja en 0.19 kWh/m²**. Dicho de forma más intuitiva, **10 m² más de techo significan unos 1.93 kWh/m² menos de calefacción**. Esto pasa porque los edificios con más techo son los de un piso, que en estos datos necesitan menos energía.
+- **Intercepto (56.31):** sería la carga esperada para un techo de 0 m². No tiene sentido práctico (ningún edificio tiene techo cero); solo sirve para ubicar la recta.
+
+```{r rls_sigma_r2}
+summary(modelo_rls)$sigma
+summary(modelo_rls)$r.squared
+```
+
+**Interpretación:** el error estándar residual es **5.12 kWh/m²**: en promedio, las predicciones del modelo se alejan unos 5 kWh/m² de la carga real. El **R² = 0.743** indica que el área de techo, por sí sola, explica cerca del **74 % de la variación** en la carga de calefacción. Es bastante para una sola variable, pero aún queda un 26 % sin explicar.
+
+## Inferencia sobre los coeficientes
+
+```{r rls_inferencia}
+coefficients(summary(modelo_rls))
+confint.default(modelo_rls)
+```
+
+**Interpretación:** ambos coeficientes son significativos al 5 % (p-valores prácticamente cero). Con un 95 % de confianza, por cada m² adicional de techo la carga baja **entre 0.184 y 0.201 kWh/m²**. El intervalo no incluye el cero, así que la relación es real y no producto del azar.
+
+```{r rls_anova}
+anova(modelo_rls)
+```
+
+**Interpretación:** la tabla ANOVA da F = 2211.6 con un p-valor prácticamente cero. **El modelo es globalmente significativo**: usar el área de techo para predecir la carga es mucho mejor que simplemente usar el promedio.
+
+## Transformaciones para mejorar el ajuste
+
+Probamos si alguna transformación sencilla mejora el R².
+
+```{r rls_transf}
+mod_sqrt_y <- lm(sqrt(carga_calef) ~ area_techo, data = df)
+mod_log_y  <- lm(log(carga_calef) ~ area_techo, data = df)
+mod_sqrt_x <- lm(carga_calef ~ sqrt(area_techo), data = df)
+
+data.frame(
+  Modelo = c("carga ~ techo", "sqrt(carga) ~ techo",
+             "log(carga) ~ techo", "carga ~ sqrt(techo)"),
+  R2 = c(summary(modelo_rls)$r.squared,
+         summary(mod_sqrt_y)$r.squared,
+         summary(mod_log_y)$r.squared,
+         summary(mod_sqrt_x)$r.squared)
+)
+```
+
+```{r rls_transf_graf}
+df %>%
+  ggplot(aes(x = area_techo, y = sqrt(carga_calef))) +
+  geom_point(alpha = 0.4) +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(x = "Área de techo (m²)", y = "Raíz cuadrada de la carga de calefacción") +
+  theme_bw()
+```
+
+**Interpretación:** transformar la respuesta con raíz cuadrada (R² = 0.763) o logaritmo (R² = 0.760) mejora el ajuste **solo un poco** frente al modelo original (0.743). Transformar el área de techo lo empeora (0.728). Como la ganancia es pequeña y el modelo original se interpreta directamente en kWh/m², **nos quedamos con el modelo sin transformar** para la RLS.
+
+## Análisis de residuales y validación de supuestos
+
+### Independencia de los errores
+
+```{r rls_res_orden}
+res_df <- data.frame(Orden = 1:nrow(df), Residuales = residuals(modelo_rls))
+
+ggplot(res_df, aes(x = Orden, y = Residuales)) +
+  geom_point(color = "red", size = 1.5, alpha = 0.6) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "blue") +
+  labs(title = "Residuales según el orden de las observaciones",
+       x = "Orden", y = "Residuales") +
+  theme_bw()
+```
+
+```{r rls_dw}
+car:::durbinWatsonTest(modelo_rls)
+```
+
+```{r rls_acf}
+r <- residuals(modelo_rls)
+
+acf(
+  r,
+  main = "Función de Autocorrelación (ACF) de los residuales",
+  ylab = "Autocorrelación",
+  xlab = "Rezago (Lag)",
+  col = "black",
+  las = 1
+)
+```
+
+**Interpretación:** el estadístico de Durbin-Watson es **0.31** (muy lejos de 2) y el p-valor es prácticamente cero, así que **se rechaza la independencia**: hay autocorrelación positiva fuerte. El ACF lo confirma, con barras que se salen de las bandas en muchos rezagos.
+
+Aquí vale la pena entender el porqué. Estos datos **no son una serie de tiempo**: el archivo está ordenado de forma que **cada edificio aparece cuatro veces seguidas, una por orientación**. Como la orientación casi no cambia la carga, las filas vecinas son casi idénticas y sus residuos se parecen. La "dependencia" viene de cómo está ordenado el archivo más que de un problema real de los edificios, pero hay que reportarla.
+
+### Normalidad de los errores
+
+```{r rls_normalidad}
+shapiro.test(r)
+
+car:::qqPlot(r, las = 1)
+```
+
+**Interpretación:** con W = 0.956 y p < 0.001, **se rechaza la normalidad de los residuos**. En el Q-Q plot, los puntos de los extremos se salen de las bandas. Con 768 datos, la inferencia sobre los coeficientes sigue siendo razonable, pero los intervalos de predicción hay que tomarlos con cautela.
+
+### Media cero de los errores
+
+```{r rls_media_cero}
+mean(r)
+t.test(r, mu = 0)
+```
+
+**Interpretación:** la media de los residuos es prácticamente cero y la prueba da p = 1, así que **se cumple el supuesto de media cero**. Era de esperarse: cuando el modelo tiene intercepto, los residuos siempre promedian cero.
+
+### Varianza constante de los errores
+
+```{r rls_homocedasticidad}
+diag_df <- data.frame(
+  Ajustados  = fitted(modelo_rls),
+  Residuales = resid(modelo_rls)
+)
+
+ggplot(diag_df, aes(x = Ajustados, y = Residuales)) +
+  geom_point(size = 2, alpha = 0.5) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  geom_smooth(method = "loess", se = FALSE, span = 0.9) +
+  labs(
+    title = "Chequeo de homocedasticidad: Residuales vs Valores ajustados",
+    x = "Valores ajustados (ŷ)",
+    y = "Residuales (εᵢ)"
+  ) +
+  theme_bw(base_size = 14)
+```
+
+```{r rls_bp}
+lmtest:::bptest(modelo_rls)
+ncvTest(modelo_rls)
+```
+
+**Interpretación:** en el gráfico, los residuos de la columna de la izquierda (edificios de un piso, con predicción baja) están mucho más apretados que los de la derecha. Las pruebas de Breusch-Pagan (BP = 101.5) y `ncvTest` (χ² = 186) dan p-valores prácticamente cero, así que **se rechaza la varianza constante: hay heterocedasticidad**. El modelo se equivoca más en los edificios de dos pisos, que es justo donde hay más variabilidad.
+
+## Estimación de la respuesta media e intervalo de predicción
+
+Calculamos la carga para tres áreas de techo: la media (176.6 m²), 147 m² y 220.5 m².
+
+```{r rls_predict}
+xbar <- mean(df$area_techo)
+
+predict(modelo_rls, newdata = data.frame(area_techo = c(xbar, 147, 220.5)),
+        interval = "confidence")
+
+predict(modelo_rls, newdata = data.frame(area_techo = c(xbar, 147, 220.5)),
+        interval = "prediction")
+```
+
+```{r rls_anchos}
+x_nuevo <- data.frame(area_techo = c(xbar, 147, 220.5))
+ic <- predict(modelo_rls, newdata = x_nuevo, interval = "confidence")
+ip <- predict(modelo_rls, newdata = x_nuevo, interval = "prediction")
+
+data.frame(area_techo = x_nuevo$area_techo,
+           fit = ic[, "fit"],
+           ancho_IC = ic[, "upr"] - ic[, "lwr"],
+           ancho_IP = ip[, "upr"] - ip[, "lwr"])
+```
+
+**Interpretación:** para los edificios con **147 m² de techo**:
+
+- **Intervalo de confianza:** con un 95 % de confianza, la carga *media* de todos los edificios con ese techo está entre **27.57 y 28.44 kWh/m²**.
+- **Intervalo de predicción:** si construimos *un* edificio nuevo con 147 m² de techo, su carga estará entre **17.94 y 38.07 kWh/m²**.
+
+El intervalo de predicción es mucho más ancho (unos 20 kWh/m² frente a menos de 1) porque, además de la incertidumbre en la recta, incluye la variación natural de cada edificio. Predecir el promedio es fácil; **predecir un edificio individual con una sola variable es bastante impreciso**.
+
+```{r rls_bandas}
+techo_g <- data.frame(area_techo = seq(min(df$area_techo), max(df$area_techo), length.out = 100))
+ic_g <- predict(modelo_rls, newdata = techo_g, interval = "confidence")
+ip_g <- predict(modelo_rls, newdata = techo_g, interval = "prediction")
+
+bandas <- data.frame(area_techo = techo_g$area_techo,
+                     fit    = ic_g[, "fit"],
+                     ic_lwr = ic_g[, "lwr"], ic_upr = ic_g[, "upr"],
+                     ip_lwr = ip_g[, "lwr"], ip_upr = ip_g[, "upr"])
+
+ggplot() +
+  geom_ribbon(data = bandas,
+              aes(x = area_techo, ymin = ip_lwr, ymax = ip_upr, fill = "IP 95% (nueva obs.)"),
+              alpha = 0.25) +
+  geom_ribbon(data = bandas,
+              aes(x = area_techo, ymin = ic_lwr, ymax = ic_upr, fill = "IC 95% (media)"),
+              alpha = 0.50) +
+  geom_line(data = bandas, aes(x = area_techo, y = fit), linewidth = 1) +
+  geom_point(data = df, aes(x = area_techo, y = carga_calef),
+             color = "gray40", alpha = 0.5) +
+  scale_fill_manual(values = c("IC 95% (media)" = "blue",
+                               "IP 95% (nueva obs.)" = "red")) +
+  labs(x = "Área de techo (m²)", y = "Carga de calefacción (kWh/m²)", fill = NULL) +
+  theme_minimal() +
+  theme(legend.position = "top")
+```
+
+**Interpretación:** la banda azul (respuesta media) es muy angosta alrededor de la recta, mientras que la roja (nuevo edificio) es ancha y cubre casi todos los puntos. Se nota que la recta no capta del todo los datos: en 122.5 m² los edificios tienen cargas mayores que en 110.25 m², y la recta no puede reflejarlo. **Una sola variable se queda corta**, y eso nos lleva a la regresión múltiple.
+
+# Regresión lineal múltiple (RLM)
+
+## Preparación de los datos y exploración
+
+Para la RLM, `orientacion` y `dist_vidrio` se convierten en **factores**, porque son categorías y no cantidades. La carga de refrigeración se deja por fuera.
+
+```{r rlm_datos}
+df_rlm <- df %>%
+  dplyr::select(-carga_refri) %>%
+  mutate(orientacion = factor(orientacion),
+         dist_vidrio = factor(dist_vidrio))
+
+str(df_rlm)
+```
+
+```{r rlm_ggpairs, fig.width=11, fig.height=10}
+# Etiquetas para ejes/paneles
+labs_cols <- c("compacidad"      = "Compacidad",
+               "area_superficie" = "Á. superficie",
+               "area_muros"      = "Á. muros",
+               "area_techo"      = "Á. techo",
+               "altura"          = "Altura",
+               "area_vidrio"     = "Á. vidrio",
+               "carga_calef"     = "Carga calef.")
+
+df_rlm %>%
+  ggpairs(
+    columns = names(labs_cols),
+    columnLabels = labs_cols,
+    diag  = list(continuous = "densityDiag"),
+    upper = list(continuous = GGally::wrap("cor", method = "pearson", stars = TRUE, size = 3.5)),
+    lower = list(continuous = GGally::wrap("smooth", method = "lm", se = FALSE))
+  ) +
+  theme_bw() +
+  labs(title = "Relaciones entre la carga de calefacción y las variables del edificio",
+       subtitle = "Diagonal: densidades • Superior: correlación (★ p-valor) • Inferior: ajuste lineal")
+```
+
+**Interpretación:** la carga de calefacción se relaciona con casi todas las variables de forma del edificio. El problema es que **esas variables también están muy relacionadas entre sí** (compacidad con superficie −0.99, techo con altura −0.97), así que en el modelo múltiple tendrán que "repartirse" el efecto. El área de vidrio, en cambio, casi no se relaciona con las demás predictoras, lo que la hace muy útil para el modelo.
+
+```{r rlm_3d}
+scatterplot3d(
+  x = df_rlm$compacidad,
+  y = df_rlm$area_vidrio,
+  z = df_rlm$carga_calef,
+  pch = 16,
+  color = "steelblue",
+  type = "h",
+  highlight.3d = TRUE,
+  angle = 55,
+  xlab = "Compacidad relativa",
+  ylab = "Área acristalada",
+  zlab = "Carga de calefacción (kWh/m²)",
+  cex.lab = 1.1
+)
+```
+
+```{r rlm_3d_interactivo}
+plot_ly(
+  data = df_rlm,
+  x = ~compacidad,
+  y = ~area_vidrio,
+  z = ~carga_calef,
+  type = "scatter3d",
+  mode = "markers",
+  marker = list(size = 3, color = ~carga_calef, colorscale = "Reds", showscale = TRUE)
+) %>%
+  layout(
+    scene = list(
+      xaxis = list(title = "Compacidad"),
+      yaxis = list(title = "Área acristalada"),
+      zaxis = list(title = "Carga de calefacción")
+    ),
+    title = "Gráfico 3D interactivo: compacidad, vidrio y carga de calefacción"
+  )
+```
+
+**Interpretación:** en el espacio tridimensional se ve que la carga sube con la compacidad y también, aunque menos, con la proporción de vidrio. Los puntos más rojos (cargas altas) se concentran donde la compacidad y el vidrio son altos a la vez.
+
+## Ajuste del modelo con todas las variables
+
+```{r rlm_todas}
+modelo_todo <- lm(carga_calef ~ compacidad + area_superficie + area_muros + area_techo +
+                    altura + orientacion + area_vidrio + dist_vidrio,
+                  data = df_rlm)
+summary(modelo_todo)
+```
+
+**Interpretación:** el resumen avisa *"1 not defined because of singularities"*, y el coeficiente de `area_techo` sale como `NA`. Esto pasa porque **el área de superficie es exactamente la suma del área de muros más dos veces el área del techo** (piso + techo):
+
+```{r rlm_singular}
+with(df_rlm, all.equal(area_superficie, area_muros + 2 * area_techo))
+```
+
+Si una variable es una combinación exacta de otras, no aporta información nueva y R no puede separar su efecto. Por eso **quitamos `area_superficie`**: su información ya está contenida en los muros y el techo.
+
+```{r rlm_ajuste}
+modelo_rlm <- lm(carga_calef ~ compacidad + area_muros + area_techo + altura +
+                   orientacion + area_vidrio + dist_vidrio,
+                 data = df_rlm)
+summary(modelo_rlm)
+```
+
+**Interpretación de los coeficientes** (cada efecto se lee *manteniendo constantes las demás variables*):
+
+- **Altura (4.17):** cada metro adicional de altura aumenta la carga en 4.17 kWh/m². Pasar de un piso (3.5 m) a dos pisos (7 m) suma unos **14.6 kWh/m²**. Es uno de los efectos más fuertes (t = 12.9).
+- **Área de vidrio (16.85):** como la variable es una proporción, conviene leerla en pasos de 10 puntos porcentuales: cada **10 % más de fachada en vidrio suma unos 1.68 kWh/m²** de calefacción. Es el efecto con el estadístico t más alto (19.7).
+- **Distribución del vidrio (≈ 4.2 a 4.5):** frente a la categoría 0 (sin vidrio), cualquier distribución de ventanas suma entre 4.18 y 4.53 kWh/m², y las cinco categorías se parecen mucho. Como la categoría 0 coincide con los edificios sin ventanas, este coeficiente mide sobre todo el efecto de **tener o no tener ventanas**, más allá de cuánta área ocupan.
+- **Compacidad (−64.77):** con lo demás fijo, un aumento de 0.1 en la compacidad **reduce** la carga en unos 6.5 kWh/m².
+- **Área de techo (−0.175):** cada m² más de techo reduce la carga en 0.17 kWh/m².
+- **Área de muros (−0.026):** su efecto es pequeño y apenas significativo (p = 0.03). Su signo es **negativo**, aunque su correlación con la carga era positiva (0.456). Ese cambio de signo es una señal típica de **multicolinealidad**: al estar tan ligada a la compacidad y al techo, su coeficiente pierde una lectura física clara.
+- **Orientación (3, 4 y 5 frente a 2):** ningún coeficiente es significativo (p > 0.8). Como ya vimos en Kruskal-Wallis y en la tabla de contingencia, **la orientación no influye**.
+
+## Prueba de significancia global
+
+- $H_0$: $\beta_1 = \beta_2 = \dots = \beta_k = 0$ (ninguna variable sirve para explicar la carga).
+- $H_1$: al menos un $\beta_j \neq 0$.
+
+```{r rlm_global}
+summary(modelo_rlm)$fstatistic
+```
+
+**Interpretación:** con F = 706 (13 y 754 grados de libertad) y un p-valor prácticamente cero, **se rechaza $H_0$**. El modelo, en conjunto, explica la carga de calefacción mucho mejor que el promedio.
+
+## Pruebas individuales e intervalos de confianza
+
+```{r rlm_coef}
+summary(modelo_rlm)$coefficients
+```
+
+```{r rlm_ic}
+confint.default(modelo_rlm)
+```
+
+**Interpretación:** todas las variables tienen intervalos que **no contienen el cero** (son significativas), excepto los tres coeficientes de orientación, cuyos intervalos van de valores negativos a positivos (por ejemplo, de −0.49 a 0.63 para la orientación 3). Algunos ejemplos en palabras:
+
+- Con un 95 % de confianza, cada metro más de altura aumenta la carga **entre 3.54 y 4.80 kWh/m²**.
+- El efecto del área de vidrio está **entre 15.18 y 18.52**, es decir, **entre 1.5 y 1.9 kWh/m² por cada 10 %** de vidrio adicional.
+- El área de muros tiene un intervalo muy cercano a cero (−0.050 a −0.003): su efecto es real, pero pequeño.
+
+## Coeficiente de determinación R² y R² ajustado
+
+```{r rlm_r2}
+summary(modelo_rlm)$r.squared
+summary(modelo_rlm)$adj.r.squared
+summary(modelo_rlm)$sigma
+```
+
+**Interpretación:** el modelo explica el **92.4 % de la variación** en la carga de calefacción (R² ajustado = 0.923). Es un salto enorme frente al 74 % de la regresión simple. Además, el error típico de predicción bajó de 5.12 a **2.80 kWh/m²**, casi la mitad. Que el R² y el R² ajustado sean casi iguales indica que el modelo no está "inflado" por meter variables de más.
+
+## Inferencia para la respuesta
+
+Tomemos un edificio con las características de uno real de la base: compacidad 0.76, 416.5 m² de muros, 122.5 m² de techo, dos pisos (7 m), orientación norte (2), 25 % de vidrio distribuido hacia el este (3).
+
+```{r rlm_predict}
+dato_nuevo <- data.frame(
+  compacidad  = 0.76,
+  area_muros  = 416.5,
+  area_techo  = 122.5,
+  altura      = 7,
+  orientacion = factor(2, levels = levels(df_rlm$orientacion)),
+  area_vidrio = 0.25,
+  dist_vidrio = factor(3, levels = levels(df_rlm$dist_vidrio))
+)
+
+predict(modelo_rlm, newdata = dato_nuevo)
+predict(modelo_rlm, newdata = dato_nuevo, interval = "confidence")
+predict(modelo_rlm, newdata = dato_nuevo, interval = "prediction")
+```
+
+**Interpretación:** para un edificio con estas características, el modelo estima una carga de calefacción de **37.11 kWh/m²**.
+
+- Con un 95 % de confianza, la carga **media** de todos los edificios con este diseño está entre **36.27 y 37.94 kWh/m²**.
+- Si construimos **un** edificio así, su carga estará entre **31.54 y 42.67 kWh/m²**.
+
+En la base, el edificio real con estas características (orientación norte) tiene una carga de **35.99 kWh/m²**. Cae dentro del intervalo de predicción, aunque el modelo lo sobreestima en poco más de 1 kWh/m². Comparado con la RLS, el intervalo de predicción pasó de unos 20 a unos 11 kWh/m² de ancho: **el modelo múltiple predice mucho mejor**.
+
+## Análisis de residuales y validación de supuestos
+
+```{r rlm_dw}
+# Independencia
+car:::durbinWatsonTest(modelo_rlm)
+
+r <- residuals(modelo_rlm)
+acf(r, las = 1, main = "", lag.max = 80)
+```
+
+**Interpretación:** el estadístico de Durbin-Watson mejoró (de 0.31 a **0.72**), pero sigue lejos de 2 y el p-valor es prácticamente cero: **persiste la autocorrelación**. Como en la RLS, se debe sobre todo al orden del archivo: las cuatro orientaciones de un mismo edificio van en filas seguidas y tienen residuos casi iguales, porque la orientación no cambia la carga.
+
+```{r rlm_normalidad}
+# Normalidad
+shapiro.test(r)
+car:::qqPlot(r, las = 1)
+```
+
+**Interpretación:** con W = 0.948 y p < 0.001, **los residuos no son normales**. El Q-Q plot muestra que las colas se separan de la recta. Con 768 observaciones, las pruebas sobre los coeficientes siguen siendo bastante confiables, pero esto es una limitación que hay que reportar.
+
+```{r rlm_media}
+# Media cero
+t.test(r, mu = 0)
+```
+
+**Interpretación:** p = 1, así que **la media de los errores es cero**. Este supuesto se cumple.
+
+```{r rlm_bp}
+# Varianza constante
+lmtest:::bptest(modelo_rlm)
+```
+
+**Interpretación:** con BP = 377.6 y p-valor prácticamente cero, **hay heterocedasticidad**: el tamaño de los errores cambia según el tipo de edificio.
+
+```{r rlm_graficos_diag, fig.height=7}
+par(mfrow = c(2, 2))
+plot(modelo_rlm, las = 1, col = 'darkseagreen', which = 1:3)
+par(mfrow = c(1, 1))
+```
+
+**Interpretación:** en *Residuals vs Fitted* los residuos no forman una nube pareja: hay grupos de puntos y la línea roja no es completamente plana, lo que sugiere que alguna relación no es del todo lineal. En el Q-Q se ve la falta de normalidad en las colas. *Scale-Location* confirma que la dispersión cambia a lo largo de los valores ajustados. **El modelo predice muy bien, pero no cumple todos los supuestos clásicos.**
+
+## Identificación de outliers
+
+```{r rlm_outliers}
+r_est <- rstudent(modelo_rlm)
+which(r_est < -3 | r_est > 3)
+```
+
+```{r rlm_bonferroni}
+outlierTest(modelo_rlm, n.max = 5)
+influenceIndexPlot(modelo_rlm, vars = "Bonf", las = 1)
+```
+
+**Interpretación:** **ningún residuo estudentizado supera ±3** (el más grande ronda 2.7), y la prueba de Bonferroni no encuentra ningún outlier significativo. R lo dice con el mensaje *"No Studentized residuals with Bonferroni p < 0.05"*, y el p de Bonferroni del residuo más grande sale como `NA` porque supera 1. En la gráfica de índices, todos los p-valores están arriba, cerca de 1. **No hay edificios atípicos** que el modelo explique mal de forma exagerada.
+
+## Identificación de observaciones influenciales
+
+```{r rlm_cook}
+# 1) Distancia de Cook
+Di <- cooks.distance(modelo_rlm)
+
+# 2) Umbral
+n <- nobs(modelo_rlm)
+p <- length(coef(modelo_rlm))
+umbral <- 4/(n - p - 2)
+
+# 3) Índices por encima del umbral
+infl_idx <- which(Di > umbral)
+length(infl_idx)
+
+# 4) Tabla ordenada
+ord <- order(Di, decreasing = TRUE)
+tab <- data.frame(
+  idx = ord,
+  cooks_distance = Di[ord],
+  supera_umbral  = Di[ord] > umbral
+)
+head(tab, 10)
+```
+
+```{r rlm_cook_graf}
+plot(Di, type = "h",
+     ylab = "Cook's distance (D_i)", xlab = "Índice",
+     main = "Distancia de Cook (línea = umbral)")
+abline(h = umbral, lty = 2)
+
+influenceIndexPlot(modelo_rlm, vars = "Cook")
+```
+
+**Interpretación:** con el umbral 4/(n − p − 2) ≈ 0.0053, unas **70 observaciones** quedan marcadas como influyentes, entre ellas las 13 a 16 y la 22. Sin embargo, la distancia de Cook más grande ronda apenas **0.014**, muy lejos de 1. Con 768 datos el umbral es tan bajo que marca muchas observaciones, pero **ninguna tiene por sí sola el peso suficiente para cambiar el modelo**. No hay razones para eliminar edificios.
+
+## Análisis de multicolinealidad
+
+```{r rlm_kappa}
+kappa(modelo_rlm)
+```
+
+**Interpretación:** el número de condición es κ ≈ `r format(round(kappa(modelo_rlm)), big.mark = " ")`, **muchísimo mayor que 30**. Hay multicolinealidad severa.
+
+```{r rlm_vif}
+car:::vif(modelo_rlm)
+```
+
+**Interpretación:** como hay factores, R muestra el **GVIF** (la versión generalizada del VIF). Los valores problemáticos son el **área de techo (≈ 212)**, la **compacidad (≈ 106)**, la **altura (≈ 31)** y el **área de muros (≈ 28)**, todos muy por encima de 10. La orientación, el área de vidrio y su distribución tienen valores cercanos a 1, sin problema. En palabras simples: las cuatro variables de forma del edificio **cuentan casi la misma historia**. Un edificio de un piso tiene, a la vez, más techo, menos altura y otra compacidad. Por eso sus coeficientes individuales son inestables (como el cambio de signo del área de muros), aunque **el modelo en conjunto predice muy bien**.
+
+```{r rlm_mctest}
+mctest(modelo_rlm, type = "b")
+```
+
+**Interpretación:** las pruebas globales e individuales de `mctest` confirman lo anterior: **se detecta colinealidad**. En la parte individual, las variables marcadas con 1 son las de forma del edificio (compacidad, muros, techo y altura), las mismas que tenían VIF altos.
+
+## Modelos con variables cualitativas (variables dummy)
+
+`orientacion` y `dist_vidrio` entraron al modelo como factores. R las convierte en variables dummy (0/1) y toma la primera categoría como referencia. Veamos cómo queda la matriz de diseño para la orientación:
+
+```{r rlm_dummy}
+matriz <- model.matrix(~ orientacion, data = df_rlm)
+head(matriz)
+```
+
+**Interpretación:** la orientación 2 (norte) es la **categoría de referencia** (filas con ceros en las tres dummies). Cada coeficiente de orientación en el modelo mide cuánto cambia la carga frente al norte.
+
+```{r rlm_dummy_mod}
+mdl_orient <- lm(carga_calef ~ orientacion, data = df_rlm)
+summary(mdl_orient)
+```
+
+**Interpretación:** el intercepto (22.31) es la carga media de los edificios orientados al norte, y las otras orientaciones difieren de ella en menos de 0.07 kWh/m². Ningún coeficiente es significativo, el R² es prácticamente **0** y la prueba F global da p = 0.999. **La orientación sola no explica nada de la carga de calefacción.** En cambio, las dummies de `dist_vidrio` sí resultaron significativas en el modelo múltiple: tener ventanas (con cualquier distribución) suma unos 4.2 a 4.5 kWh/m² frente a no tenerlas.
+
+## Selección de variables
+
+### Método de todas las regresiones posibles
+
+```{r rlm_todas_posibles}
+k <- ols_step_all_possible(modelo_rlm)
+results <- k$result
+nrow(results)
+```
+
+**Interpretación:** con 7 variables candidatas, se evaluaron **`r nrow(results)` modelos posibles**.
+
+```{r rlm_mejor_adjr}
+# mejor modelo basado en el R^2_{adj}
+results[which.max(results$adjr), ]
+```
+
+```{r rlm_mejor_cp}
+# mejor modelo basado en el Cp
+results[which.min(with(results, (cp - n)^2)), ]
+```
+
+```{r rlm_mejor_aic}
+# mejor modelo basado en el AIC
+results[which.min(results$aic), ]
+```
+
+```{r rlm_resumen_criterios, include=FALSE}
+m_adjr <- results$predictors[which.max(results$adjr)]
+m_cp   <- results$predictors[which.min(with(results, (cp - n)^2))]
+m_aic  <- results$predictors[which.min(results$aic)]
+```
+
+**Interpretación:** con el R² ajustado y con el AIC, el modelo elegido es el mismo: **`r m_aic`**. Es decir, **el mejor modelo es el que deja por fuera la orientación**: tiene el R² ajustado más alto (≈ 0.923) y el AIC más bajo (≈ 3773). Con el criterio de Cp, el modelo elegido es **`r m_cp`**, que `r ifelse(m_cp == m_aic, "coincide con los dos anteriores", "difiere un poco de los anteriores, pero tiene un ajuste prácticamente igual")`.
+
+```{r rlm_graf_seleccion}
+ggplot(results, aes(x = adjr, y = aic)) +
+  geom_point() +
+  theme_minimal() +
+  xlab(expression(R^2 * " ajustado")) +
+  ylab("AIC")
+```
+
+```{r rlm_competitivos}
+# selección de modelos competitivos
+subset(results, aic < 3800 & adjr > 0.92, select = n:aic)
+```
+
+**Interpretación:** en la esquina inferior derecha del gráfico (R² ajustado alto y AIC bajo) quedan pocos modelos competitivos. Todos incluyen **compacidad, altura, área de vidrio y distribución del vidrio**, que son las variables que no pueden faltar. Los que agregan la orientación nunca mejoran al que no la tiene.
+
+### Selección secuencial
+
+```{r rlm_forward}
+# método forward
+modelo_null <- lm(carga_calef ~ 1, data = df_rlm)
+modelo_full <- lm(carga_calef ~ compacidad + area_muros + area_techo + altura +
+                    orientacion + area_vidrio + dist_vidrio, data = df_rlm)
+
+sel_forward <- stepAIC(modelo_null,
+                       scope = list(lower = modelo_null,
+                                    upper = modelo_full),
+                       direction = "forward", trace = FALSE)
+summary(sel_forward)
+```
+
+```{r rlm_backward}
+# método backward
+sel_backward <- stepAIC(modelo_full, direction = "backward",
+                        trace = FALSE)
+summary(sel_backward)
+```
+
+```{r rlm_both}
+# método stepwise (ambas direcciones)
+sel_both <- stepAIC(modelo_null, scope = list(lower = modelo_null,
+                                              upper = modelo_full),
+                    direction = "both", trace = FALSE)
+summary(sel_both)
+```
+
+**Interpretación:** los tres métodos secuenciales **llegan al mismo modelo**. *Forward* va agregando variables en este orden de importancia: altura, área de vidrio, área de muros, distribución del vidrio, compacidad y área de techo. *Backward* parte del modelo completo y solo saca la orientación. *Stepwise* coincide con forward. Que todos los métodos coincidan, incluido el de todas las regresiones posibles, da **mucha confianza** en que este es el modelo adecuado.
+
+### Comparación de modelos con la prueba F parcial
+
+¿Perdemos algo al quitar la orientación?
+
+- $H_0$: los coeficientes de la orientación son todos cero (el modelo reducido es suficiente).
+- $H_1$: al menos uno es distinto de cero.
+
+```{r rlm_f_parcial}
+modelo_final <- lm(carga_calef ~ compacidad + area_muros + area_techo + altura +
+                     area_vidrio + dist_vidrio, data = df_rlm)
+
+anova(modelo_rlm, modelo_final)
+```
+
+**Interpretación:** con F = 0.07 y p = 0.976, **no se rechaza $H_0$**: quitar la orientación no empeora el modelo en nada. Es preferible el modelo más sencillo.
+
+¿Y si también quitamos el área de muros, que era la menos significativa?
+
+```{r rlm_f_parcial_muros}
+modelo_sin_muros <- lm(carga_calef ~ compacidad + area_techo + altura +
+                         area_vidrio + dist_vidrio, data = df_rlm)
+
+anova(modelo_final, modelo_sin_muros)
+```
+
+**Interpretación:** aquí el p-valor es 0.030 (< 0.05), así que **el área de muros sí aporta** y conviene dejarla. Quitarla empeoraría el ajuste de forma significativa, aunque leve.
+
+## Modelo final
+
+```{r rlm_final}
+summary(modelo_final)
+```
+
+**Interpretación:** el modelo final es:
+
+$$
+\begin{aligned}
+\widehat{\text{Carga}} = \; & 81.16 - 64.77\,\text{Compacidad} - 0.026\,\text{Muros} - 0.175\,\text{Techo} \\
+& + 4.17\,\text{Altura} + 16.85\,\text{Vidrio} \\
+& + 4.53\,D_1 + 4.44\,D_2 + 4.18\,D_3 + 4.39\,D_4 + 4.18\,D_5
+\end{aligned}
+$$
+
+donde $D_1, \dots, D_5$ son las dummies de la distribución del vidrio (la referencia es 0 = sin vidrio).
+
+- Todas las variables son significativas al 5 %.
+- Explica el **92.4 % de la variabilidad** (R² ajustado = 0.9231, ligeramente mayor que el del modelo con orientación).
+- El error estándar residual es de **2.80 kWh/m²**.
+- Es globalmente significativo (F = 921.2 con 10 y 757 g.l., p-valor prácticamente cero).
+
+Los coeficientes son los mismos del modelo anterior (la orientación no estaba "robando" efecto a nadie), solo cambia ligeramente el intercepto.
+
+```{r final_predict}
+dato_nuevo_final <- data.frame(
+  compacidad  = 0.76,
+  area_muros  = 416.5,
+  area_techo  = 122.5,
+  altura      = 7,
+  area_vidrio = 0.25,
+  dist_vidrio = factor(3, levels = levels(df_rlm$dist_vidrio))
+)
+
+predict(modelo_final, newdata = dato_nuevo_final, interval = "confidence")
+predict(modelo_final, newdata = dato_nuevo_final, interval = "prediction")
+```
+
+**Interpretación:** para el mismo edificio de antes, el modelo final estima **37.10 kWh/m²**, con un intervalo de confianza para la media de **(36.34, 37.86)** y un intervalo de predicción de **(31.55, 42.65)**. Ahora la predicción ya no depende de la orientación, lo cual es coherente: en la base, las cuatro versiones de este edificio (una por orientación) tienen cargas reales entre 35.64 y 36.59 kWh/m², todas dentro del intervalo de predicción.
+
+```{r final_supuestos}
+car:::durbinWatsonTest(modelo_final)
+shapiro.test(residuals(modelo_final))
+lmtest:::bptest(modelo_final)
+car:::vif(modelo_final)
+```
+
+**Interpretación:** el modelo final hereda las mismas limitaciones del modelo completo. Hay autocorrelación por el orden del archivo (DW ≈ 0.72), los residuos no son normales (p < 0.001), hay heterocedasticidad (p < 0.001) y hay multicolinealidad fuerte entre las variables de forma (GVIF de techo ≈ 212 y de compacidad ≈ 106). Ninguna de estas fallas afecta la **capacidad predictiva** del modelo, que es muy buena. Lo que sí afectan es la **precisión de los errores estándar** y, por tanto, de los intervalos.
+
+**Una alternativa para tener en cuenta:** igual que en la RLS, probamos transformar la respuesta.
+
+```{r final_log}
+modelo_final_log <- lm(log(carga_calef) ~ compacidad + area_muros + area_techo + altura +
+                         area_vidrio + dist_vidrio, data = df_rlm)
+summary(modelo_final_log)$r.squared
+shapiro.test(residuals(modelo_final_log))
+```
+
+**Interpretación:** con el logaritmo de la carga, el R² sube a **0.955** y los residuos se acercan más a la normalidad (W pasa de 0.948 a 0.974), aunque todavía no la cumplen. Si el objetivo fuera únicamente predecir, esta versión sería una buena candidata. Para interpretar los efectos en kWh/m², el modelo sin transformar es más directo.
+
+# Conclusiones
+
+1. **La altura del edificio es lo que más pesa.** Los edificios de dos pisos necesitan, en promedio, más del doble de calefacción que los de un piso (31.3 frente a 13.3 kWh/m²). La diferencia es enorme tanto en significancia como en tamaño del efecto. Esto explica la forma de "dos picos" de la carga de calefacción.
+2. **Las ventanas aumentan el gasto en calefacción.** Cada nivel adicional de área acristalada sube la carga media de forma significativa, y el solo hecho de tener ventanas suma unos 4 kWh/m².
+3. **La orientación no importa.** El ANOVA, Kruskal-Wallis, la prueba de homogeneidad, la regresión con dummies y todos los métodos de selección coinciden: hacia dónde mire el edificio no cambia su carga de calefacción.
+4. **La refrigeración es levemente mayor que la calefacción** (2.28 kWh/m² en promedio), y ambas están casi perfectamente correlacionadas.
+5. **La regresión simple con el área de techo explica el 74 %** de la variación, pero predice de forma imprecisa los edificios individuales.
+6. **El modelo múltiple final** (compacidad, área de muros, área de techo, altura, área de vidrio y distribución del vidrio) **explica el 92.4 %** de la variación, con un error típico de 2.8 kWh/m². El R² ajustado, el AIC y los métodos forward, backward y stepwise llegan a este mismo modelo.
+7. **Limitaciones:** los residuos no son normales, hay heterocedasticidad y hay multicolinealidad fuerte entre las variables de forma. Por eso los coeficientes de compacidad, muros y techo **no deben interpretarse de forma aislada**: funcionan bien en conjunto para predecir, pero sus efectos individuales están entrelazados. La autocorrelación detectada se debe principalmente al orden del archivo, en el que cada edificio aparece cuatro veces seguidas.

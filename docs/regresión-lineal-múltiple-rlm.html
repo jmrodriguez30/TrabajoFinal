@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 9 Regresión lineal múltiple (RLM) | Análisis estadístico de la eficiencia energética en edificios</title>
+  <meta name="description" content="Chapter 9 Regresión lineal múltiple (RLM) | Análisis estadístico de la eficiencia energética en edificios" />
+  <meta name="generator" content="bookdown 0.47 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 9 Regresión lineal múltiple (RLM) | Análisis estadístico de la eficiencia energética en edificios" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 9 Regresión lineal múltiple (RLM) | Análisis estadístico de la eficiencia energética en edificios" />
+  
+  
+  
+
+<meta name="author" content="Tu nombre" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="regresión-lineal-simple-rls.html"/>
+<link rel="next" href="conclusiones.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.12.1/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.25.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.25.2/plotly-latest.min.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="contexto-de-los-datos.html"><a href="contexto-de-los-datos.html"><i class="fa fa-check"></i><b>1</b> Contexto de los datos</a></li>
+<li class="chapter" data-level="2" data-path="librerías.html"><a href="librerías.html"><i class="fa fa-check"></i><b>2</b> Librerías</a></li>
+<li class="chapter" data-level="3" data-path="extracción-transformación-y-carga-etl.html"><a href="extracción-transformación-y-carga-etl.html"><i class="fa fa-check"></i><b>3</b> Extracción, transformación y carga (ETL)</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="extracción-transformación-y-carga-etl.html"><a href="extracción-transformación-y-carga-etl.html#valores-ausentes"><i class="fa fa-check"></i><b>3.1</b> Valores ausentes</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html"><i class="fa fa-check"></i><b>4</b> Análisis exploratorio de datos (EDA)</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#an%C3%A1lisis-de-la-variable-carga_calef-target"><i class="fa fa-check"></i><b>4.1</b> Análisis de la variable <code>carga_calef</code> (target)</a></li>
+<li class="chapter" data-level="4.2" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#an%C3%A1lisis-de-las-variables-caracter%C3%ADsticas-independientes"><i class="fa fa-check"></i><b>4.2</b> Análisis de las variables características (independientes)</a></li>
+<li class="chapter" data-level="4.3" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#variables-categ%C3%B3ricas"><i class="fa fa-check"></i><b>4.3</b> Variables categóricas</a></li>
+<li class="chapter" data-level="4.4" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#an%C3%A1lisis-exploratorio-bivariado"><i class="fa fa-check"></i><b>4.4</b> Análisis exploratorio bivariado</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="estadística-paramétrica-y-no-paramétrica.html"><a href="estadística-paramétrica-y-no-paramétrica.html"><i class="fa fa-check"></i><b>5</b> Estadística paramétrica y no paramétrica</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="estadística-paramétrica-y-no-paramétrica.html"><a href="estadística-paramétrica-y-no-paramétrica.html#comparaci%C3%B3n-de-dos-grupos-independientes-un-piso-vs.-dos-pisos"><i class="fa fa-check"></i><b>5.1</b> Comparación de dos grupos independientes: un piso vs. dos pisos</a></li>
+<li class="chapter" data-level="5.2" data-path="estadística-paramétrica-y-no-paramétrica.html"><a href="estadística-paramétrica-y-no-paramétrica.html#comparaci%C3%B3n-de-dos-grupos-pareados-calefacci%C3%B3n-vs.-refrigeraci%C3%B3n"><i class="fa fa-check"></i><b>5.2</b> Comparación de dos grupos pareados: calefacción vs. refrigeración</a></li>
+<li class="chapter" data-level="5.3" data-path="estadística-paramétrica-y-no-paramétrica.html"><a href="estadística-paramétrica-y-no-paramétrica.html#anova-cambia-la-carga-seg%C3%BAn-la-cantidad-de-ventanas"><i class="fa fa-check"></i><b>5.3</b> ANOVA: ¿cambia la carga según la cantidad de ventanas?</a></li>
+<li class="chapter" data-level="5.4" data-path="estadística-paramétrica-y-no-paramétrica.html"><a href="estadística-paramétrica-y-no-paramétrica.html#kruskal-wallis"><i class="fa fa-check"></i><b>5.4</b> Kruskal-Wallis</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="tablas-de-contingencia.html"><a href="tablas-de-contingencia.html"><i class="fa fa-check"></i><b>6</b> Tablas de contingencia</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="tablas-de-contingencia.html"><a href="tablas-de-contingencia.html#prueba-de-independencia-altura-vs.-nivel-de-carga"><i class="fa fa-check"></i><b>6.1</b> Prueba de independencia: altura vs. nivel de carga</a></li>
+<li class="chapter" data-level="6.2" data-path="tablas-de-contingencia.html"><a href="tablas-de-contingencia.html#prueba-de-homogeneidad-proporci%C3%B3n-de-carga-alta-en-cada-orientaci%C3%B3n"><i class="fa fa-check"></i><b>6.2</b> Prueba de homogeneidad: proporción de carga alta en cada orientación</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="correlación-lineal.html"><a href="correlación-lineal.html"><i class="fa fa-check"></i><b>7</b> Correlación lineal</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="correlación-lineal.html"><a href="correlación-lineal.html#correlaci%C3%B3n-de-pearson"><i class="fa fa-check"></i><b>7.1</b> Correlación de Pearson</a></li>
+<li class="chapter" data-level="7.2" data-path="correlación-lineal.html"><a href="correlación-lineal.html#correlaci%C3%B3n-de-spearman"><i class="fa fa-check"></i><b>7.2</b> Correlación de Spearman</a></li>
+<li class="chapter" data-level="7.3" data-path="correlación-lineal.html"><a href="correlación-lineal.html#correlaci%C3%B3n-de-kendall"><i class="fa fa-check"></i><b>7.3</b> Correlación de Kendall</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html"><i class="fa fa-check"></i><b>8</b> Regresión lineal simple (RLS)</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#estimaci%C3%B3n-del-modelo"><i class="fa fa-check"></i><b>8.1</b> Estimación del modelo</a></li>
+<li class="chapter" data-level="8.2" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#inferencia-sobre-los-coeficientes"><i class="fa fa-check"></i><b>8.2</b> Inferencia sobre los coeficientes</a></li>
+<li class="chapter" data-level="8.3" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#transformaciones-para-mejorar-el-ajuste"><i class="fa fa-check"></i><b>8.3</b> Transformaciones para mejorar el ajuste</a></li>
+<li class="chapter" data-level="8.4" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#an%C3%A1lisis-de-residuales-y-validaci%C3%B3n-de-supuestos"><i class="fa fa-check"></i><b>8.4</b> Análisis de residuales y validación de supuestos</a>
+<ul>
+<li class="chapter" data-level="8.4.1" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#independencia-de-los-errores"><i class="fa fa-check"></i><b>8.4.1</b> Independencia de los errores</a></li>
+<li class="chapter" data-level="8.4.2" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#normalidad-de-los-errores"><i class="fa fa-check"></i><b>8.4.2</b> Normalidad de los errores</a></li>
+<li class="chapter" data-level="8.4.3" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#media-cero-de-los-errores"><i class="fa fa-check"></i><b>8.4.3</b> Media cero de los errores</a></li>
+<li class="chapter" data-level="8.4.4" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#varianza-constante-de-los-errores"><i class="fa fa-check"></i><b>8.4.4</b> Varianza constante de los errores</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#estimaci%C3%B3n-de-la-respuesta-media-e-intervalo-de-predicci%C3%B3n"><i class="fa fa-check"></i><b>8.5</b> Estimación de la respuesta media e intervalo de predicción</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html"><i class="fa fa-check"></i><b>9</b> Regresión lineal múltiple (RLM)</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#preparaci%C3%B3n-de-los-datos-y-exploraci%C3%B3n"><i class="fa fa-check"></i><b>9.1</b> Preparación de los datos y exploración</a></li>
+<li class="chapter" data-level="9.2" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#ajuste-del-modelo-con-todas-las-variables"><i class="fa fa-check"></i><b>9.2</b> Ajuste del modelo con todas las variables</a></li>
+<li class="chapter" data-level="9.3" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#prueba-de-significancia-global"><i class="fa fa-check"></i><b>9.3</b> Prueba de significancia global</a></li>
+<li class="chapter" data-level="9.4" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#pruebas-individuales-e-intervalos-de-confianza"><i class="fa fa-check"></i><b>9.4</b> Pruebas individuales e intervalos de confianza</a></li>
+<li class="chapter" data-level="9.5" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#coeficiente-de-determinaci%C3%B3n-r%C2%B2-y-r%C2%B2-ajustado"><i class="fa fa-check"></i><b>9.5</b> Coeficiente de determinación R² y R² ajustado</a></li>
+<li class="chapter" data-level="9.6" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#inferencia-para-la-respuesta"><i class="fa fa-check"></i><b>9.6</b> Inferencia para la respuesta</a></li>
+<li class="chapter" data-level="9.7" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#an%C3%A1lisis-de-residuales-y-validaci%C3%B3n-de-supuestos-1"><i class="fa fa-check"></i><b>9.7</b> Análisis de residuales y validación de supuestos</a></li>
+<li class="chapter" data-level="9.8" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#identificaci%C3%B3n-de-outliers"><i class="fa fa-check"></i><b>9.8</b> Identificación de outliers</a></li>
+<li class="chapter" data-level="9.9" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#identificaci%C3%B3n-de-observaciones-influenciales"><i class="fa fa-check"></i><b>9.9</b> Identificación de observaciones influenciales</a></li>
+<li class="chapter" data-level="9.10" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#an%C3%A1lisis-de-multicolinealidad"><i class="fa fa-check"></i><b>9.10</b> Análisis de multicolinealidad</a></li>
+<li class="chapter" data-level="9.11" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#modelos-con-variables-cualitativas-variables-dummy"><i class="fa fa-check"></i><b>9.11</b> Modelos con variables cualitativas (variables dummy)</a></li>
+<li class="chapter" data-level="9.12" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#selecci%C3%B3n-de-variables"><i class="fa fa-check"></i><b>9.12</b> Selección de variables</a>
+<ul>
+<li class="chapter" data-level="9.12.1" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#m%C3%A9todo-de-todas-las-regresiones-posibles"><i class="fa fa-check"></i><b>9.12.1</b> Método de todas las regresiones posibles</a></li>
+<li class="chapter" data-level="9.12.2" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#selecci%C3%B3n-secuencial"><i class="fa fa-check"></i><b>9.12.2</b> Selección secuencial</a></li>
+<li class="chapter" data-level="9.12.3" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#comparaci%C3%B3n-de-modelos-con-la-prueba-f-parcial"><i class="fa fa-check"></i><b>9.12.3</b> Comparación de modelos con la prueba F parcial</a></li>
+</ul></li>
+<li class="chapter" data-level="9.13" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#modelo-final"><i class="fa fa-check"></i><b>9.13</b> Modelo final</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="conclusiones.html"><a href="conclusiones.html"><i class="fa fa-check"></i><b>10</b> Conclusiones</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Análisis estadístico de la eficiencia energética en edificios</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="regresión-lineal-múltiple-rlm" class="section level1 hasAnchor" number="9">
+<h1><span class="header-section-number">Chapter 9</span> Regresión lineal múltiple (RLM)<a href="regresión-lineal-múltiple-rlm.html#regresi%C3%B3n-lineal-m%C3%BAltiple-rlm" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="preparación-de-los-datos-y-exploración" class="section level2 hasAnchor" number="9.1">
+<h2><span class="header-section-number">9.1</span> Preparación de los datos y exploración<a href="regresión-lineal-múltiple-rlm.html#preparaci%C3%B3n-de-los-datos-y-exploraci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Para la RLM, <code>orientacion</code> y <code>dist_vidrio</code> se convierten en <strong>factores</strong>, porque son categorías y no cantidades. La carga de refrigeración se deja por fuera.</p>
+<div class="sourceCode" id="cb145"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb145-1"><a href="regresión-lineal-múltiple-rlm.html#cb145-1" tabindex="-1"></a>df_rlm <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb145-2"><a href="regresión-lineal-múltiple-rlm.html#cb145-2" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>carga_refri) <span class="sc">%&gt;%</span></span>
+<span id="cb145-3"><a href="regresión-lineal-múltiple-rlm.html#cb145-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">orientacion =</span> <span class="fu">factor</span>(orientacion),</span>
+<span id="cb145-4"><a href="regresión-lineal-múltiple-rlm.html#cb145-4" tabindex="-1"></a>         <span class="at">dist_vidrio =</span> <span class="fu">factor</span>(dist_vidrio))</span>
+<span id="cb145-5"><a href="regresión-lineal-múltiple-rlm.html#cb145-5" tabindex="-1"></a></span>
+<span id="cb145-6"><a href="regresión-lineal-múltiple-rlm.html#cb145-6" tabindex="-1"></a><span class="fu">str</span>(df_rlm)</span></code></pre></div>
+<pre><code>## tibble [768 × 9] (S3: tbl_df/tbl/data.frame)
+##  $ compacidad     : num [1:768] 0.98 0.98 0.98 0.98 0.9 0.9 0.9 0.9 0.86 0.86 ...
+##  $ area_superficie: num [1:768] 514 514 514 514 564 ...
+##  $ area_muros     : num [1:768] 294 294 294 294 318 ...
+##  $ area_techo     : num [1:768] 110 110 110 110 122 ...
+##  $ altura         : num [1:768] 7 7 7 7 7 7 7 7 7 7 ...
+##  $ orientacion    : Factor w/ 4 levels &quot;2&quot;,&quot;3&quot;,&quot;4&quot;,&quot;5&quot;: 1 2 3 4 1 2 3 4 1 2 ...
+##  $ area_vidrio    : num [1:768] 0 0 0 0 0 0 0 0 0 0 ...
+##  $ dist_vidrio    : Factor w/ 6 levels &quot;0&quot;,&quot;1&quot;,&quot;2&quot;,&quot;3&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ carga_calef    : num [1:768] 15.6 15.6 15.6 15.6 20.8 ...</code></pre>
+<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb147-1"><a href="regresión-lineal-múltiple-rlm.html#cb147-1" tabindex="-1"></a><span class="co"># Etiquetas para ejes/paneles</span></span>
+<span id="cb147-2"><a href="regresión-lineal-múltiple-rlm.html#cb147-2" tabindex="-1"></a>labs_cols <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;compacidad&quot;</span>      <span class="ot">=</span> <span class="st">&quot;Compacidad&quot;</span>,</span>
+<span id="cb147-3"><a href="regresión-lineal-múltiple-rlm.html#cb147-3" tabindex="-1"></a>               <span class="st">&quot;area_superficie&quot;</span> <span class="ot">=</span> <span class="st">&quot;Á. superficie&quot;</span>,</span>
+<span id="cb147-4"><a href="regresión-lineal-múltiple-rlm.html#cb147-4" tabindex="-1"></a>               <span class="st">&quot;area_muros&quot;</span>      <span class="ot">=</span> <span class="st">&quot;Á. muros&quot;</span>,</span>
+<span id="cb147-5"><a href="regresión-lineal-múltiple-rlm.html#cb147-5" tabindex="-1"></a>               <span class="st">&quot;area_techo&quot;</span>      <span class="ot">=</span> <span class="st">&quot;Á. techo&quot;</span>,</span>
+<span id="cb147-6"><a href="regresión-lineal-múltiple-rlm.html#cb147-6" tabindex="-1"></a>               <span class="st">&quot;altura&quot;</span>          <span class="ot">=</span> <span class="st">&quot;Altura&quot;</span>,</span>
+<span id="cb147-7"><a href="regresión-lineal-múltiple-rlm.html#cb147-7" tabindex="-1"></a>               <span class="st">&quot;area_vidrio&quot;</span>     <span class="ot">=</span> <span class="st">&quot;Á. vidrio&quot;</span>,</span>
+<span id="cb147-8"><a href="regresión-lineal-múltiple-rlm.html#cb147-8" tabindex="-1"></a>               <span class="st">&quot;carga_calef&quot;</span>     <span class="ot">=</span> <span class="st">&quot;Carga calef.&quot;</span>)</span>
+<span id="cb147-9"><a href="regresión-lineal-múltiple-rlm.html#cb147-9" tabindex="-1"></a></span>
+<span id="cb147-10"><a href="regresión-lineal-múltiple-rlm.html#cb147-10" tabindex="-1"></a>df_rlm <span class="sc">%&gt;%</span></span>
+<span id="cb147-11"><a href="regresión-lineal-múltiple-rlm.html#cb147-11" tabindex="-1"></a>  <span class="fu">ggpairs</span>(</span>
+<span id="cb147-12"><a href="regresión-lineal-múltiple-rlm.html#cb147-12" tabindex="-1"></a>    <span class="at">columns =</span> <span class="fu">names</span>(labs_cols),</span>
+<span id="cb147-13"><a href="regresión-lineal-múltiple-rlm.html#cb147-13" tabindex="-1"></a>    <span class="at">columnLabels =</span> labs_cols,</span>
+<span id="cb147-14"><a href="regresión-lineal-múltiple-rlm.html#cb147-14" tabindex="-1"></a>    <span class="at">diag  =</span> <span class="fu">list</span>(<span class="at">continuous =</span> <span class="st">&quot;densityDiag&quot;</span>),</span>
+<span id="cb147-15"><a href="regresión-lineal-múltiple-rlm.html#cb147-15" tabindex="-1"></a>    <span class="at">upper =</span> <span class="fu">list</span>(<span class="at">continuous =</span> GGally<span class="sc">::</span><span class="fu">wrap</span>(<span class="st">&quot;cor&quot;</span>, <span class="at">method =</span> <span class="st">&quot;pearson&quot;</span>, <span class="at">stars =</span> <span class="cn">TRUE</span>, <span class="at">size =</span> <span class="fl">3.5</span>)),</span>
+<span id="cb147-16"><a href="regresión-lineal-múltiple-rlm.html#cb147-16" tabindex="-1"></a>    <span class="at">lower =</span> <span class="fu">list</span>(<span class="at">continuous =</span> GGally<span class="sc">::</span><span class="fu">wrap</span>(<span class="st">&quot;smooth&quot;</span>, <span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">se =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb147-17"><a href="regresión-lineal-múltiple-rlm.html#cb147-17" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb147-18"><a href="regresión-lineal-múltiple-rlm.html#cb147-18" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb147-19"><a href="regresión-lineal-múltiple-rlm.html#cb147-19" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Relaciones entre la carga de calefacción y las variables del edificio&quot;</span>,</span>
+<span id="cb147-20"><a href="regresión-lineal-múltiple-rlm.html#cb147-20" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">&quot;Diagonal: densidades • Superior: correlación (★ p-valor) • Inferior: ajuste lineal&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/rlm_ggpairs-1.png" alt="" width="1056" style="display: block; margin: auto;" /></p>
+<p><strong>Interpretación:</strong> la carga de calefacción se relaciona con casi todas las variables de forma del edificio. El problema es que <strong>esas variables también están muy relacionadas entre sí</strong> (compacidad con superficie −0.99, techo con altura −0.97), así que en el modelo múltiple tendrán que “repartirse” el efecto. El área de vidrio, en cambio, casi no se relaciona con las demás predictoras, lo que la hace muy útil para el modelo.</p>
+<div class="sourceCode" id="cb148"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb148-1"><a href="regresión-lineal-múltiple-rlm.html#cb148-1" tabindex="-1"></a><span class="fu">scatterplot3d</span>(</span>
+<span id="cb148-2"><a href="regresión-lineal-múltiple-rlm.html#cb148-2" tabindex="-1"></a>  <span class="at">x =</span> df_rlm<span class="sc">$</span>compacidad,</span>
+<span id="cb148-3"><a href="regresión-lineal-múltiple-rlm.html#cb148-3" tabindex="-1"></a>  <span class="at">y =</span> df_rlm<span class="sc">$</span>area_vidrio,</span>
+<span id="cb148-4"><a href="regresión-lineal-múltiple-rlm.html#cb148-4" tabindex="-1"></a>  <span class="at">z =</span> df_rlm<span class="sc">$</span>carga_calef,</span>
+<span id="cb148-5"><a href="regresión-lineal-múltiple-rlm.html#cb148-5" tabindex="-1"></a>  <span class="at">pch =</span> <span class="dv">16</span>,</span>
+<span id="cb148-6"><a href="regresión-lineal-múltiple-rlm.html#cb148-6" tabindex="-1"></a>  <span class="at">color =</span> <span class="st">&quot;steelblue&quot;</span>,</span>
+<span id="cb148-7"><a href="regresión-lineal-múltiple-rlm.html#cb148-7" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;h&quot;</span>,</span>
+<span id="cb148-8"><a href="regresión-lineal-múltiple-rlm.html#cb148-8" tabindex="-1"></a>  <span class="at">highlight.3d =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb148-9"><a href="regresión-lineal-múltiple-rlm.html#cb148-9" tabindex="-1"></a>  <span class="at">angle =</span> <span class="dv">55</span>,</span>
+<span id="cb148-10"><a href="regresión-lineal-múltiple-rlm.html#cb148-10" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Compacidad relativa&quot;</span>,</span>
+<span id="cb148-11"><a href="regresión-lineal-múltiple-rlm.html#cb148-11" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Área acristalada&quot;</span>,</span>
+<span id="cb148-12"><a href="regresión-lineal-múltiple-rlm.html#cb148-12" tabindex="-1"></a>  <span class="at">zlab =</span> <span class="st">&quot;Carga de calefacción (kWh/m²)&quot;</span>,</span>
+<span id="cb148-13"><a href="regresión-lineal-múltiple-rlm.html#cb148-13" tabindex="-1"></a>  <span class="at">cex.lab =</span> <span class="fl">1.1</span></span>
+<span id="cb148-14"><a href="regresión-lineal-múltiple-rlm.html#cb148-14" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/rlm_3d-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb149-1"><a href="regresión-lineal-múltiple-rlm.html#cb149-1" tabindex="-1"></a><span class="fu">plot_ly</span>(</span>
+<span id="cb149-2"><a href="regresión-lineal-múltiple-rlm.html#cb149-2" tabindex="-1"></a>  <span class="at">data =</span> df_rlm,</span>
+<span id="cb149-3"><a href="regresión-lineal-múltiple-rlm.html#cb149-3" tabindex="-1"></a>  <span class="at">x =</span> <span class="sc">~</span>compacidad,</span>
+<span id="cb149-4"><a href="regresión-lineal-múltiple-rlm.html#cb149-4" tabindex="-1"></a>  <span class="at">y =</span> <span class="sc">~</span>area_vidrio,</span>
+<span id="cb149-5"><a href="regresión-lineal-múltiple-rlm.html#cb149-5" tabindex="-1"></a>  <span class="at">z =</span> <span class="sc">~</span>carga_calef,</span>
+<span id="cb149-6"><a href="regresión-lineal-múltiple-rlm.html#cb149-6" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">&quot;scatter3d&quot;</span>,</span>
+<span id="cb149-7"><a href="regresión-lineal-múltiple-rlm.html#cb149-7" tabindex="-1"></a>  <span class="at">mode =</span> <span class="st">&quot;markers&quot;</span>,</span>
+<span id="cb149-8"><a href="regresión-lineal-múltiple-rlm.html#cb149-8" tabindex="-1"></a>  <span class="at">marker =</span> <span class="fu">list</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="sc">~</span>carga_calef, <span class="at">colorscale =</span> <span class="st">&quot;Reds&quot;</span>, <span class="at">showscale =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb149-9"><a href="regresión-lineal-múltiple-rlm.html#cb149-9" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb149-10"><a href="regresión-lineal-múltiple-rlm.html#cb149-10" tabindex="-1"></a>  <span class="fu">layout</span>(</span>
+<span id="cb149-11"><a href="regresión-lineal-múltiple-rlm.html#cb149-11" tabindex="-1"></a>    <span class="at">scene =</span> <span class="fu">list</span>(</span>
+<span id="cb149-12"><a href="regresión-lineal-múltiple-rlm.html#cb149-12" tabindex="-1"></a>      <span class="at">xaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">&quot;Compacidad&quot;</span>),</span>
+<span id="cb149-13"><a href="regresión-lineal-múltiple-rlm.html#cb149-13" tabindex="-1"></a>      <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">&quot;Área acristalada&quot;</span>),</span>
+<span id="cb149-14"><a href="regresión-lineal-múltiple-rlm.html#cb149-14" tabindex="-1"></a>      <span class="at">zaxis =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="st">&quot;Carga de calefacción&quot;</span>)</span>
+<span id="cb149-15"><a href="regresión-lineal-múltiple-rlm.html#cb149-15" tabindex="-1"></a>    ),</span>
+<span id="cb149-16"><a href="regresión-lineal-múltiple-rlm.html#cb149-16" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Gráfico 3D interactivo: compacidad, vidrio y carga de calefacción&quot;</span></span>
+<span id="cb149-17"><a href="regresión-lineal-múltiple-rlm.html#cb149-17" tabindex="-1"></a>  )</span></code></pre></div>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-c527add4e2a16bcfccbd" style="width:768px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-c527add4e2a16bcfccbd">{"x":{"visdat":{"1410340a3af2":["function () ","plotlyVisDat"]},"cur_data":"1410340a3af2","attrs":{"1410340a3af2":{"x":{},"y":{},"z":{},"mode":"markers","marker":{"size":3,"color":{},"colorscale":"Reds","showscale":true},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter3d"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"scene":{"xaxis":{"title":"Compacidad"},"yaxis":{"title":"Área acristalada"},"zaxis":{"title":"Carga de calefacción"}},"title":"Gráfico 3D interactivo: compacidad, vidrio y carga de calefacción","hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[0.97999999999999998,0.97999999999999998,0.97999999999999998,0.97999999999999998,0.90000000000000002,0.90000000000000002,0.90000000000000002,0.90000000000000002,0.85999999999999999,0.85999999999999999,0.85999999999999999,0.85999999999999999,0.81999999999999995,0.81999999999999995,0.81999999999999995,0.81999999999999995,0.79000000000000004,0.79000000000000004,0.79000000000000004,0.79000000000000004,0.76000000000000001,0.76000000000000001,0.76000000000000001,0.76000000000000001,0.73999999999999999,0.73999999999999999,0.73999999999999999,0.73999999999999999,0.70999999999999996,0.70999999999999996,0.70999999999999996,0.70999999999999996,0.68999999999999995,0.68999999999999995,0.68999999999999995,0.68999999999999995,0.66000000000000003,0.66000000000000003,0.66000000000000003,0.66000000000000003,0.64000000000000001,0.64000000000000001,0.64000000000000001,0.64000000000000001,0.62,0.62,0.62,0.62,0.97999999999999998,0.97999999999999998,0.97999999999999998,0.97999999999999998,0.90000000000000002,0.90000000000000002,0.90000000000000002,0.90000000000000002,0.85999999999999999,0.85999999999999999,0.85999999999999999,0.85999999999999999,0.81999999999999995,0.81999999999999995,0.81999999999999995,0.81999999999999995,0.79000000000000004,0.79000000000000004,0.79000000000000004,0.79000000000000004,0.76000000000000001,0.76000000000000001,0.76000000000000001,0.76000000000000001,0.73999999999999999,0.73999999999999999,0.73999999999999999,0.73999999999999999,0.70999999999999996,0.70999999999999996,0.70999999999999996,0.70999999999999996,0.68999999999999995,0.68999999999999995,0.68999999999999995,0.68999999999999995,0.66000000000000003,0.66000000000000003,0.66000000000000003,0.66000000000000003,0.64000000000000001,0.64000000000000001,0.64000000000000001,0.64000000000000001,0.62,0.62,0.62,0.62,0.97999999999999998,0.97999999999999998,0.97999999999999998,0.97999999999999998,0.90000000000000002,0.90000000000000002,0.90000000000000002,0.90000000000000002,0.85999999999999999,0.85999999999999999,0.85999999999999999,0.85999999999999999,0.81999999999999995,0.81999999999999995,0.81999999999999995,0.81999999999999995,0.79000000000000004,0.79000000000000004,0.79000000000000004,0.79000000000000004,0.76000000000000001,0.76000000000000001,0.76000000000000001,0.76000000000000001,0.73999999999999999,0.73999999999999999,0.73999999999999999,0.73999999999999999,0.70999999999999996,0.70999999999999996,0.70999999999999996,0.70999999999999996,0.68999999999999995,0.68999999999999995,0.68999999999999995,0.68999999999999995,0.66000000000000003,0.66000000000000003,0.66000000000000003,0.66000000000000003,0.64000000000000001,0.64000000000000001,0.64000000000000001,0.64000000000000001,0.62,0.62,0.62,0.62,0.97999999999999998,0.97999999999999998,0.97999999999999998,0.97999999999999998,0.90000000000000002,0.90000000000000002,0.90000000000000002,0.90000000000000002,0.85999999999999999,0.85999999999999999,0.85999999999999999,0.85999999999999999,0.81999999999999995,0.81999999999999995,0.81999999999999995,0.81999999999999995,0.79000000000000004,0.79000000000000004,0.79000000000000004,0.79000000000000004,0.76000000000000001,0.76000000000000001,0.76000000000000001,0.76000000000000001,0.73999999999999999,0.73999999999999999,0.73999999999999999,0.73999999999999999,0.70999999999999996,0.70999999999999996,0.70999999999999996,0.70999999999999996,0.68999999999999995,0.68999999999999995,0.68999999999999995,0.68999999999999995,0.66000000000000003,0.66000000000000003,0.66000000000000003,0.66000000000000003,0.64000000000000001,0.64000000000000001,0.64000000000000001,0.64000000000000001,0.62,0.62,0.62,0.62,0.97999999999999998,0.97999999999999998,0.97999999999999998,0.97999999999999998,0.90000000000000002,0.90000000000000002,0.90000000000000002,0.90000000000000002,0.85999999999999999,0.85999999999999999,0.85999999999999999,0.85999999999999999,0.81999999999999995,0.81999999999999995,0.81999999999999995,0.81999999999999995,0.79000000000000004,0.79000000000000004,0.79000000000000004,0.79000000000000004,0.76000000000000001,0.76000000000000001,0.76000000000000001,0.76000000000000001,0.73999999999999999,0.73999999999999999,0.73999999999999999,0.73999999999999999,0.70999999999999996,0.70999999999999996,0.70999999999999996,0.70999999999999996,0.68999999999999995,0.68999999999999995,0.68999999999999995,0.68999999999999995,0.66000000000000003,0.66000000000000003,0.66000000000000003,0.66000000000000003,0.64000000000000001,0.64000000000000001,0.64000000000000001,0.64000000000000001,0.62,0.62,0.62,0.62,0.97999999999999998,0.97999999999999998,0.97999999999999998,0.97999999999999998,0.90000000000000002,0.90000000000000002,0.90000000000000002,0.90000000000000002,0.85999999999999999,0.85999999999999999,0.85999999999999999,0.85999999999999999,0.81999999999999995,0.81999999999999995,0.81999999999999995,0.81999999999999995,0.79000000000000004,0.79000000000000004,0.79000000000000004,0.79000000000000004,0.76000000000000001,0.76000000000000001,0.76000000000000001,0.76000000000000001,0.73999999999999999,0.73999999999999999,0.73999999999999999,0.73999999999999999,0.70999999999999996,0.70999999999999996,0.70999999999999996,0.70999999999999996,0.68999999999999995,0.68999999999999995,0.68999999999999995,0.68999999999999995,0.66000000000000003,0.66000000000000003,0.66000000000000003,0.66000000000000003,0.64000000000000001,0.64000000000000001,0.64000000000000001,0.64000000000000001,0.62,0.62,0.62,0.62,0.97999999999999998,0.97999999999999998,0.97999999999999998,0.97999999999999998,0.90000000000000002,0.90000000000000002,0.90000000000000002,0.90000000000000002,0.85999999999999999,0.85999999999999999,0.85999999999999999,0.85999999999999999,0.81999999999999995,0.81999999999999995,0.81999999999999995,0.81999999999999995,0.79000000000000004,0.79000000000000004,0.79000000000000004,0.79000000000000004,0.76000000000000001,0.76000000000000001,0.76000000000000001,0.76000000000000001,0.73999999999999999,0.73999999999999999,0.73999999999999999,0.73999999999999999,0.70999999999999996,0.70999999999999996,0.70999999999999996,0.70999999999999996,0.68999999999999995,0.68999999999999995,0.68999999999999995,0.68999999999999995,0.66000000000000003,0.66000000000000003,0.66000000000000003,0.66000000000000003,0.64000000000000001,0.64000000000000001,0.64000000000000001,0.64000000000000001,0.62,0.62,0.62,0.62,0.97999999999999998,0.97999999999999998,0.97999999999999998,0.97999999999999998,0.90000000000000002,0.90000000000000002,0.90000000000000002,0.90000000000000002,0.85999999999999999,0.85999999999999999,0.85999999999999999,0.85999999999999999,0.81999999999999995,0.81999999999999995,0.81999999999999995,0.81999999999999995,0.79000000000000004,0.79000000000000004,0.79000000000000004,0.79000000000000004,0.76000000000000001,0.76000000000000001,0.76000000000000001,0.76000000000000001,0.73999999999999999,0.73999999999999999,0.73999999999999999,0.73999999999999999,0.70999999999999996,0.70999999999999996,0.70999999999999996,0.70999999999999996,0.68999999999999995,0.68999999999999995,0.68999999999999995,0.68999999999999995,0.66000000000000003,0.66000000000000003,0.66000000000000003,0.66000000000000003,0.64000000000000001,0.64000000000000001,0.64000000000000001,0.64000000000000001,0.62,0.62,0.62,0.62,0.97999999999999998,0.97999999999999998,0.97999999999999998,0.97999999999999998,0.90000000000000002,0.90000000000000002,0.90000000000000002,0.90000000000000002,0.85999999999999999,0.85999999999999999,0.85999999999999999,0.85999999999999999,0.81999999999999995,0.81999999999999995,0.81999999999999995,0.81999999999999995,0.79000000000000004,0.79000000000000004,0.79000000000000004,0.79000000000000004,0.76000000000000001,0.76000000000000001,0.76000000000000001,0.76000000000000001,0.73999999999999999,0.73999999999999999,0.73999999999999999,0.73999999999999999,0.70999999999999996,0.70999999999999996,0.70999999999999996,0.70999999999999996,0.68999999999999995,0.68999999999999995,0.68999999999999995,0.68999999999999995,0.66000000000000003,0.66000000000000003,0.66000000000000003,0.66000000000000003,0.64000000000000001,0.64000000000000001,0.64000000000000001,0.64000000000000001,0.62,0.62,0.62,0.62,0.97999999999999998,0.97999999999999998,0.97999999999999998,0.97999999999999998,0.90000000000000002,0.90000000000000002,0.90000000000000002,0.90000000000000002,0.85999999999999999,0.85999999999999999,0.85999999999999999,0.85999999999999999,0.81999999999999995,0.81999999999999995,0.81999999999999995,0.81999999999999995,0.79000000000000004,0.79000000000000004,0.79000000000000004,0.79000000000000004,0.76000000000000001,0.76000000000000001,0.76000000000000001,0.76000000000000001,0.73999999999999999,0.73999999999999999,0.73999999999999999,0.73999999999999999,0.70999999999999996,0.70999999999999996,0.70999999999999996,0.70999999999999996,0.68999999999999995,0.68999999999999995,0.68999999999999995,0.68999999999999995,0.66000000000000003,0.66000000000000003,0.66000000000000003,0.66000000000000003,0.64000000000000001,0.64000000000000001,0.64000000000000001,0.64000000000000001,0.62,0.62,0.62,0.62,0.97999999999999998,0.97999999999999998,0.97999999999999998,0.97999999999999998,0.90000000000000002,0.90000000000000002,0.90000000000000002,0.90000000000000002,0.85999999999999999,0.85999999999999999,0.85999999999999999,0.85999999999999999,0.81999999999999995,0.81999999999999995,0.81999999999999995,0.81999999999999995,0.79000000000000004,0.79000000000000004,0.79000000000000004,0.79000000000000004,0.76000000000000001,0.76000000000000001,0.76000000000000001,0.76000000000000001,0.73999999999999999,0.73999999999999999,0.73999999999999999,0.73999999999999999,0.70999999999999996,0.70999999999999996,0.70999999999999996,0.70999999999999996,0.68999999999999995,0.68999999999999995,0.68999999999999995,0.68999999999999995,0.66000000000000003,0.66000000000000003,0.66000000000000003,0.66000000000000003,0.64000000000000001,0.64000000000000001,0.64000000000000001,0.64000000000000001,0.62,0.62,0.62,0.62,0.97999999999999998,0.97999999999999998,0.97999999999999998,0.97999999999999998,0.90000000000000002,0.90000000000000002,0.90000000000000002,0.90000000000000002,0.85999999999999999,0.85999999999999999,0.85999999999999999,0.85999999999999999,0.81999999999999995,0.81999999999999995,0.81999999999999995,0.81999999999999995,0.79000000000000004,0.79000000000000004,0.79000000000000004,0.79000000000000004,0.76000000000000001,0.76000000000000001,0.76000000000000001,0.76000000000000001,0.73999999999999999,0.73999999999999999,0.73999999999999999,0.73999999999999999,0.70999999999999996,0.70999999999999996,0.70999999999999996,0.70999999999999996,0.68999999999999995,0.68999999999999995,0.68999999999999995,0.68999999999999995,0.66000000000000003,0.66000000000000003,0.66000000000000003,0.66000000000000003,0.64000000000000001,0.64000000000000001,0.64000000000000001,0.64000000000000001,0.62,0.62,0.62,0.62,0.97999999999999998,0.97999999999999998,0.97999999999999998,0.97999999999999998,0.90000000000000002,0.90000000000000002,0.90000000000000002,0.90000000000000002,0.85999999999999999,0.85999999999999999,0.85999999999999999,0.85999999999999999,0.81999999999999995,0.81999999999999995,0.81999999999999995,0.81999999999999995,0.79000000000000004,0.79000000000000004,0.79000000000000004,0.79000000000000004,0.76000000000000001,0.76000000000000001,0.76000000000000001,0.76000000000000001,0.73999999999999999,0.73999999999999999,0.73999999999999999,0.73999999999999999,0.70999999999999996,0.70999999999999996,0.70999999999999996,0.70999999999999996,0.68999999999999995,0.68999999999999995,0.68999999999999995,0.68999999999999995,0.66000000000000003,0.66000000000000003,0.66000000000000003,0.66000000000000003,0.64000000000000001,0.64000000000000001,0.64000000000000001,0.64000000000000001,0.62,0.62,0.62,0.62,0.97999999999999998,0.97999999999999998,0.97999999999999998,0.97999999999999998,0.90000000000000002,0.90000000000000002,0.90000000000000002,0.90000000000000002,0.85999999999999999,0.85999999999999999,0.85999999999999999,0.85999999999999999,0.81999999999999995,0.81999999999999995,0.81999999999999995,0.81999999999999995,0.79000000000000004,0.79000000000000004,0.79000000000000004,0.79000000000000004,0.76000000000000001,0.76000000000000001,0.76000000000000001,0.76000000000000001,0.73999999999999999,0.73999999999999999,0.73999999999999999,0.73999999999999999,0.70999999999999996,0.70999999999999996,0.70999999999999996,0.70999999999999996,0.68999999999999995,0.68999999999999995,0.68999999999999995,0.68999999999999995,0.66000000000000003,0.66000000000000003,0.66000000000000003,0.66000000000000003,0.64000000000000001,0.64000000000000001,0.64000000000000001,0.64000000000000001,0.62,0.62,0.62,0.62,0.97999999999999998,0.97999999999999998,0.97999999999999998,0.97999999999999998,0.90000000000000002,0.90000000000000002,0.90000000000000002,0.90000000000000002,0.85999999999999999,0.85999999999999999,0.85999999999999999,0.85999999999999999,0.81999999999999995,0.81999999999999995,0.81999999999999995,0.81999999999999995,0.79000000000000004,0.79000000000000004,0.79000000000000004,0.79000000000000004,0.76000000000000001,0.76000000000000001,0.76000000000000001,0.76000000000000001,0.73999999999999999,0.73999999999999999,0.73999999999999999,0.73999999999999999,0.70999999999999996,0.70999999999999996,0.70999999999999996,0.70999999999999996,0.68999999999999995,0.68999999999999995,0.68999999999999995,0.68999999999999995,0.66000000000000003,0.66000000000000003,0.66000000000000003,0.66000000000000003,0.64000000000000001,0.64000000000000001,0.64000000000000001,0.64000000000000001,0.62,0.62,0.62,0.62,0.97999999999999998,0.97999999999999998,0.97999999999999998,0.97999999999999998,0.90000000000000002,0.90000000000000002,0.90000000000000002,0.90000000000000002,0.85999999999999999,0.85999999999999999,0.85999999999999999,0.85999999999999999,0.81999999999999995,0.81999999999999995,0.81999999999999995,0.81999999999999995,0.79000000000000004,0.79000000000000004,0.79000000000000004,0.79000000000000004,0.76000000000000001,0.76000000000000001,0.76000000000000001,0.76000000000000001,0.73999999999999999,0.73999999999999999,0.73999999999999999,0.73999999999999999,0.70999999999999996,0.70999999999999996,0.70999999999999996,0.70999999999999996,0.68999999999999995,0.68999999999999995,0.68999999999999995,0.68999999999999995,0.66000000000000003,0.66000000000000003,0.66000000000000003,0.66000000000000003,0.64000000000000001,0.64000000000000001,0.64000000000000001,0.64000000000000001,0.62,0.62,0.62,0.62],"y":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.10000000000000001,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002,0.40000000000000002],"z":[15.550000000000001,15.550000000000001,15.550000000000001,15.550000000000001,20.84,21.460000000000001,20.710000000000001,19.68,19.5,19.949999999999999,19.34,18.309999999999999,17.050000000000001,17.41,16.949999999999999,15.98,28.52,29.899999999999999,29.629999999999999,28.75,24.77,23.93,24.77,23.93,6.0700000000000003,6.0499999999999998,6.0099999999999998,6.04,6.3700000000000001,6.4000000000000004,6.3659999999999997,6.4000000000000004,6.8499999999999996,6.79,6.7699999999999996,6.8099999999999996,7.1799999999999997,7.0999999999999996,7.0999999999999996,7.0999999999999996,10.85,10.539999999999999,10.77,10.56,8.5999999999999996,8.4900000000000002,8.4499999999999993,8.5,24.579999999999998,24.629999999999999,24.629999999999999,24.59,29.030000000000001,29.870000000000001,29.140000000000001,28.09,26.280000000000001,26.91,26.370000000000001,25.27,23.530000000000001,24.030000000000001,23.539999999999999,22.579999999999998,35.560000000000002,37.119999999999997,36.899999999999999,35.939999999999998,32.960000000000001,32.119999999999997,32.939999999999998,32.210000000000001,10.359999999999999,10.43,10.359999999999999,10.390000000000001,10.710000000000001,10.800000000000001,10.699999999999999,10.75,11.109999999999999,11.130000000000001,11.09,11.16,11.68,11.69,11.699999999999999,11.69,15.41,15.199999999999999,15.42,15.210000000000001,12.960000000000001,12.970000000000001,12.93,13.02,24.289999999999999,24.309999999999999,24.129999999999999,24.25,28.879999999999999,29.68,28.829999999999998,27.899999999999999,26.48,27.02,26.329999999999998,25.359999999999999,23.75,24.23,23.670000000000002,22.789999999999999,35.649999999999999,37.259999999999998,36.969999999999999,36.030000000000001,33.159999999999997,32.399999999999999,33.119999999999997,32.409999999999997,10.42,10.460000000000001,10.32,10.449999999999999,10.640000000000001,10.720000000000001,10.550000000000001,10.68,11.449999999999999,11.460000000000001,11.32,11.49,11.449999999999999,11.42,11.33,11.43,15.41,15.18,15.34,15.19,12.880000000000001,13,12.970000000000001,13.039999999999999,24.280000000000001,24.399999999999999,24.109999999999999,24.350000000000001,28.07,29.010000000000002,29.620000000000001,29.050000000000001,25.41,26.469999999999999,26.890000000000001,26.460000000000001,22.93,23.84,24.170000000000002,23.870000000000001,35.780000000000001,35.479999999999997,36.969999999999999,36.700000000000003,32.520000000000003,33.280000000000001,32.329999999999998,33.240000000000002,10.390000000000001,10.34,10.35,10.380000000000001,10.77,10.68,10.68,10.699999999999999,11.220000000000001,11.16,11.1,11.140000000000001,11.59,11.6,11.529999999999999,11.609999999999999,15.16,15.359999999999999,15.119999999999999,15.359999999999999,12.68,12.630000000000001,12.710000000000001,12.73,24.379999999999999,24.23,24.039999999999999,24.32,29.059999999999999,28.050000000000001,28.859999999999999,29.789999999999999,26.440000000000001,25.370000000000001,26.329999999999998,27.030000000000001,23.800000000000001,22.800000000000001,23.59,24.239999999999998,36.859999999999999,35.890000000000001,35.450000000000003,37.100000000000001,33.079999999999998,32.380000000000003,33.090000000000003,32.310000000000002,10.08,10.15,10.07,10.140000000000001,10.66,10.68,10.529999999999999,10.720000000000001,11.18,11.220000000000001,11.07,11.199999999999999,11.44,11.42,11.33,11.43,15.4,15.19,15.32,15.16,12.85,13.039999999999999,13,13,24.350000000000001,24.329999999999998,24.030000000000001,24.260000000000002,29.829999999999998,29.079999999999998,28.030000000000001,29.02,27.030000000000001,26.449999999999999,25.359999999999999,26.449999999999999,24.370000000000001,23.890000000000001,22.890000000000001,23.859999999999999,37.030000000000001,36.710000000000001,36.770000000000003,35.479999999999997,32.310000000000002,33.210000000000001,32.460000000000001,33.270000000000003,10.470000000000001,10.369999999999999,10.34,10.390000000000001,10.779999999999999,10.699999999999999,10.67,13.69,11.210000000000001,11.140000000000001,11.109999999999999,11.16,11.380000000000001,11.34,11.220000000000001,11.34,15.16,15.369999999999999,15.119999999999999,15.359999999999999,12.59,12.74,12.800000000000001,12.619999999999999,28.149999999999999,28.149999999999999,28.370000000000001,28.41,32.68,33.479999999999997,32.840000000000003,32,29.539999999999999,30.050000000000001,29.600000000000001,28.66,26.84,27.27,26.969999999999999,26.190000000000001,38.670000000000002,40.030000000000001,39.859999999999999,39.039999999999999,36.960000000000001,36.130000000000003,36.909999999999997,36.43,12.43,12.5,12.41,12.449999999999999,12.57,12.65,12.57,12.630000000000001,12.779999999999999,12.93,12.73,12.720000000000001,13.17,13.18,13.17,13.18,17.5,17.350000000000001,17.52,17.370000000000001,15.09,15.119999999999999,15.08,15.16,28.670000000000002,28.57,28.18,28.600000000000001,32.460000000000001,33.270000000000003,32.329999999999998,31.66,29.34,29.870000000000001,29.27,28.399999999999999,25.739999999999998,25.98,25.379999999999999,24.940000000000001,38.57,40.189999999999998,39.969999999999999,38.979999999999997,36.950000000000003,36.280000000000001,36.859999999999999,36.450000000000003,12.35,12.449999999999999,12.16,12.300000000000001,12.33,12.289999999999999,12.199999999999999,12.49,12.85,12.869999999999999,12.73,12.949999999999999,13.050000000000001,12.93,12.77,13,17.140000000000001,16.84,17.02,17.109999999999999,14.34,14.66,14.6,14.6,28.670000000000002,28.559999999999999,28.170000000000002,28.629999999999999,31.629999999999999,32.399999999999999,32.68,32.289999999999999,28.399999999999999,29.399999999999999,29.43,29.07,24.699999999999999,25.48,25.370000000000001,25.170000000000002,39.039999999999999,38.350000000000001,39.810000000000002,39.829999999999998,35.990000000000002,36.590000000000003,35.640000000000001,36.520000000000003,11.800000000000001,12.029999999999999,11.98,11.69,12.41,12.279999999999999,12.1,12.19,12.34,12.460000000000001,12.31,12.119999999999999,12.970000000000001,13.01,12.74,12.84,16.829999999999998,16.93,16.66,16.859999999999999,13.91,14.34,13.949999999999999,13.99,28.699999999999999,28.550000000000001,28.149999999999999,28.620000000000001,32.670000000000002,31.690000000000001,32.07,33.280000000000001,29.469999999999999,28.420000000000002,29.079999999999998,29.879999999999999,25.66,24.960000000000001,25.43,26,40,38.840000000000003,38.329999999999998,40.119999999999997,36.950000000000003,36.450000000000003,36.810000000000002,36.259999999999998,12.32,12.300000000000001,12.18,12.43,12.359999999999999,12.49,12.17,12.279999999999999,12.91,12.949999999999999,12.67,12.859999999999999,12.949999999999999,13,12.859999999999999,12.92,16.989999999999998,16.690000000000001,16.559999999999999,16.620000000000001,14.33,14.609999999999999,14.609999999999999,14.65,28.690000000000001,28.579999999999998,28.149999999999999,28.609999999999999,33.130000000000003,32.310000000000002,31.530000000000001,32.460000000000001,29.710000000000001,29.09,28.309999999999999,29.390000000000001,25.699999999999999,25.170000000000002,24.600000000000001,25.489999999999998,39.890000000000001,39.829999999999998,39.009999999999998,38.649999999999999,35.689999999999998,36.640000000000001,36.060000000000002,36.700000000000003,12.119999999999999,11.67,11.640000000000001,12.02,12.27,12.19,12.25,12.27,12.470000000000001,12.119999999999999,12.18,12.470000000000001,12.93,12.82,12.779999999999999,13.02,16.73,16.859999999999999,16.760000000000002,16.920000000000002,13.68,13.99,14.16,13.859999999999999,32.259999999999998,32.259999999999998,32.490000000000002,32.530000000000001,36.469999999999999,37.240000000000002,36.659999999999997,35.960000000000001,31.890000000000001,32.390000000000001,32.090000000000003,31.289999999999999,29.219999999999999,29.91,29.530000000000001,28.649999999999999,41.399999999999999,42.619999999999997,42.5,41.670000000000002,40.780000000000001,39.969999999999999,40.710000000000001,40.43,14.52,14.609999999999999,14.5,14.550000000000001,14.51,14.6,14.5,14.58,14.51,14.699999999999999,14.42,14.42,15.23,15.23,15.23,15.23,19.52,19.359999999999999,19.48,19.420000000000002,15.09,17.170000000000002,17.140000000000001,17.140000000000001,32.82,32.710000000000001,32.240000000000002,32.719999999999999,35.840000000000003,36.57,36.060000000000002,35.689999999999998,32.479999999999997,32.740000000000002,32.130000000000003,31.640000000000001,28.949999999999999,29.489999999999998,28.640000000000001,28.010000000000002,41.640000000000001,43.100000000000001,42.740000000000002,41.920000000000002,40.780000000000001,40.149999999999999,40.57,40.420000000000002,14.539999999999999,14.449999999999999,14.18,14.5,14.699999999999999,14.66,14.4,14.710000000000001,14.75,14.710000000000001,14.33,14.619999999999999,15.34,15.289999999999999,15.09,15.300000000000001,19.199999999999999,18.879999999999999,18.899999999999999,19.120000000000001,16.760000000000002,17.23,17.260000000000002,17.149999999999999,32.82,32.689999999999998,32.229999999999997,32.75,34.240000000000002,34.950000000000003,35.049999999999997,34.289999999999999,31.280000000000001,32.119999999999997,32.049999999999997,31.84,28.670000000000002,29.670000000000002,29.469999999999999,28.91,41.259999999999998,41.299999999999997,42.490000000000002,42.079999999999998,39.32,39.840000000000003,38.890000000000001,39.68,13.970000000000001,14.220000000000001,14.1,13.779999999999999,14.07,14.029999999999999,13.94,13.859999999999999,14.32,14.56,14.33,14.08,15.16,15.18,14.720000000000001,14.9,18.48,18.710000000000001,18.48,18.460000000000001,16.469999999999999,16.350000000000001,16.550000000000001,16.739999999999998,32.850000000000001,32.670000000000002,32.210000000000001,32.740000000000002,36.450000000000003,35.729999999999997,35.399999999999999,36.57,32.380000000000003,31.66,32.149999999999999,32.75,28.93,28.050000000000001,28.640000000000001,29.52,42.770000000000003,41.729999999999997,41.32,42.960000000000001,40.68,40.399999999999999,40.600000000000001,40.109999999999999,14.369999999999999,14.48,14.32,14.44,14.6,14.699999999999999,14.470000000000001,14.66,14.539999999999999,14.619999999999999,14.529999999999999,14.710000000000001,15.34,15.289999999999999,15.09,15.300000000000001,19.059999999999999,19.129999999999999,19,18.84,16.440000000000001,16.899999999999999,16.940000000000001,16.77,32.840000000000003,32.719999999999999,32.210000000000001,32.729999999999997,35.670000000000002,35.009999999999998,34.719999999999999,35.240000000000002,32.310000000000002,31.809999999999999,31.120000000000001,32.060000000000002,30,29.5,29.059999999999999,29.920000000000002,42.109999999999999,41.960000000000001,41.090000000000003,40.789999999999999,38.82,39.719999999999999,39.310000000000002,39.859999999999999,14.41,14.19,14.17,14.390000000000001,12.43,12.630000000000001,12.76,12.42,14.119999999999999,14.279999999999999,14.369999999999999,14.210000000000001,14.960000000000001,14.92,14.92,15.16,17.690000000000001,18.190000000000001,18.16,17.879999999999999,16.539999999999999,16.440000000000001,16.48,16.640000000000001],"mode":"markers","marker":{"color":[15.550000000000001,15.550000000000001,15.550000000000001,15.550000000000001,20.84,21.460000000000001,20.710000000000001,19.68,19.5,19.949999999999999,19.34,18.309999999999999,17.050000000000001,17.41,16.949999999999999,15.98,28.52,29.899999999999999,29.629999999999999,28.75,24.77,23.93,24.77,23.93,6.0700000000000003,6.0499999999999998,6.0099999999999998,6.04,6.3700000000000001,6.4000000000000004,6.3659999999999997,6.4000000000000004,6.8499999999999996,6.79,6.7699999999999996,6.8099999999999996,7.1799999999999997,7.0999999999999996,7.0999999999999996,7.0999999999999996,10.85,10.539999999999999,10.77,10.56,8.5999999999999996,8.4900000000000002,8.4499999999999993,8.5,24.579999999999998,24.629999999999999,24.629999999999999,24.59,29.030000000000001,29.870000000000001,29.140000000000001,28.09,26.280000000000001,26.91,26.370000000000001,25.27,23.530000000000001,24.030000000000001,23.539999999999999,22.579999999999998,35.560000000000002,37.119999999999997,36.899999999999999,35.939999999999998,32.960000000000001,32.119999999999997,32.939999999999998,32.210000000000001,10.359999999999999,10.43,10.359999999999999,10.390000000000001,10.710000000000001,10.800000000000001,10.699999999999999,10.75,11.109999999999999,11.130000000000001,11.09,11.16,11.68,11.69,11.699999999999999,11.69,15.41,15.199999999999999,15.42,15.210000000000001,12.960000000000001,12.970000000000001,12.93,13.02,24.289999999999999,24.309999999999999,24.129999999999999,24.25,28.879999999999999,29.68,28.829999999999998,27.899999999999999,26.48,27.02,26.329999999999998,25.359999999999999,23.75,24.23,23.670000000000002,22.789999999999999,35.649999999999999,37.259999999999998,36.969999999999999,36.030000000000001,33.159999999999997,32.399999999999999,33.119999999999997,32.409999999999997,10.42,10.460000000000001,10.32,10.449999999999999,10.640000000000001,10.720000000000001,10.550000000000001,10.68,11.449999999999999,11.460000000000001,11.32,11.49,11.449999999999999,11.42,11.33,11.43,15.41,15.18,15.34,15.19,12.880000000000001,13,12.970000000000001,13.039999999999999,24.280000000000001,24.399999999999999,24.109999999999999,24.350000000000001,28.07,29.010000000000002,29.620000000000001,29.050000000000001,25.41,26.469999999999999,26.890000000000001,26.460000000000001,22.93,23.84,24.170000000000002,23.870000000000001,35.780000000000001,35.479999999999997,36.969999999999999,36.700000000000003,32.520000000000003,33.280000000000001,32.329999999999998,33.240000000000002,10.390000000000001,10.34,10.35,10.380000000000001,10.77,10.68,10.68,10.699999999999999,11.220000000000001,11.16,11.1,11.140000000000001,11.59,11.6,11.529999999999999,11.609999999999999,15.16,15.359999999999999,15.119999999999999,15.359999999999999,12.68,12.630000000000001,12.710000000000001,12.73,24.379999999999999,24.23,24.039999999999999,24.32,29.059999999999999,28.050000000000001,28.859999999999999,29.789999999999999,26.440000000000001,25.370000000000001,26.329999999999998,27.030000000000001,23.800000000000001,22.800000000000001,23.59,24.239999999999998,36.859999999999999,35.890000000000001,35.450000000000003,37.100000000000001,33.079999999999998,32.380000000000003,33.090000000000003,32.310000000000002,10.08,10.15,10.07,10.140000000000001,10.66,10.68,10.529999999999999,10.720000000000001,11.18,11.220000000000001,11.07,11.199999999999999,11.44,11.42,11.33,11.43,15.4,15.19,15.32,15.16,12.85,13.039999999999999,13,13,24.350000000000001,24.329999999999998,24.030000000000001,24.260000000000002,29.829999999999998,29.079999999999998,28.030000000000001,29.02,27.030000000000001,26.449999999999999,25.359999999999999,26.449999999999999,24.370000000000001,23.890000000000001,22.890000000000001,23.859999999999999,37.030000000000001,36.710000000000001,36.770000000000003,35.479999999999997,32.310000000000002,33.210000000000001,32.460000000000001,33.270000000000003,10.470000000000001,10.369999999999999,10.34,10.390000000000001,10.779999999999999,10.699999999999999,10.67,13.69,11.210000000000001,11.140000000000001,11.109999999999999,11.16,11.380000000000001,11.34,11.220000000000001,11.34,15.16,15.369999999999999,15.119999999999999,15.359999999999999,12.59,12.74,12.800000000000001,12.619999999999999,28.149999999999999,28.149999999999999,28.370000000000001,28.41,32.68,33.479999999999997,32.840000000000003,32,29.539999999999999,30.050000000000001,29.600000000000001,28.66,26.84,27.27,26.969999999999999,26.190000000000001,38.670000000000002,40.030000000000001,39.859999999999999,39.039999999999999,36.960000000000001,36.130000000000003,36.909999999999997,36.43,12.43,12.5,12.41,12.449999999999999,12.57,12.65,12.57,12.630000000000001,12.779999999999999,12.93,12.73,12.720000000000001,13.17,13.18,13.17,13.18,17.5,17.350000000000001,17.52,17.370000000000001,15.09,15.119999999999999,15.08,15.16,28.670000000000002,28.57,28.18,28.600000000000001,32.460000000000001,33.270000000000003,32.329999999999998,31.66,29.34,29.870000000000001,29.27,28.399999999999999,25.739999999999998,25.98,25.379999999999999,24.940000000000001,38.57,40.189999999999998,39.969999999999999,38.979999999999997,36.950000000000003,36.280000000000001,36.859999999999999,36.450000000000003,12.35,12.449999999999999,12.16,12.300000000000001,12.33,12.289999999999999,12.199999999999999,12.49,12.85,12.869999999999999,12.73,12.949999999999999,13.050000000000001,12.93,12.77,13,17.140000000000001,16.84,17.02,17.109999999999999,14.34,14.66,14.6,14.6,28.670000000000002,28.559999999999999,28.170000000000002,28.629999999999999,31.629999999999999,32.399999999999999,32.68,32.289999999999999,28.399999999999999,29.399999999999999,29.43,29.07,24.699999999999999,25.48,25.370000000000001,25.170000000000002,39.039999999999999,38.350000000000001,39.810000000000002,39.829999999999998,35.990000000000002,36.590000000000003,35.640000000000001,36.520000000000003,11.800000000000001,12.029999999999999,11.98,11.69,12.41,12.279999999999999,12.1,12.19,12.34,12.460000000000001,12.31,12.119999999999999,12.970000000000001,13.01,12.74,12.84,16.829999999999998,16.93,16.66,16.859999999999999,13.91,14.34,13.949999999999999,13.99,28.699999999999999,28.550000000000001,28.149999999999999,28.620000000000001,32.670000000000002,31.690000000000001,32.07,33.280000000000001,29.469999999999999,28.420000000000002,29.079999999999998,29.879999999999999,25.66,24.960000000000001,25.43,26,40,38.840000000000003,38.329999999999998,40.119999999999997,36.950000000000003,36.450000000000003,36.810000000000002,36.259999999999998,12.32,12.300000000000001,12.18,12.43,12.359999999999999,12.49,12.17,12.279999999999999,12.91,12.949999999999999,12.67,12.859999999999999,12.949999999999999,13,12.859999999999999,12.92,16.989999999999998,16.690000000000001,16.559999999999999,16.620000000000001,14.33,14.609999999999999,14.609999999999999,14.65,28.690000000000001,28.579999999999998,28.149999999999999,28.609999999999999,33.130000000000003,32.310000000000002,31.530000000000001,32.460000000000001,29.710000000000001,29.09,28.309999999999999,29.390000000000001,25.699999999999999,25.170000000000002,24.600000000000001,25.489999999999998,39.890000000000001,39.829999999999998,39.009999999999998,38.649999999999999,35.689999999999998,36.640000000000001,36.060000000000002,36.700000000000003,12.119999999999999,11.67,11.640000000000001,12.02,12.27,12.19,12.25,12.27,12.470000000000001,12.119999999999999,12.18,12.470000000000001,12.93,12.82,12.779999999999999,13.02,16.73,16.859999999999999,16.760000000000002,16.920000000000002,13.68,13.99,14.16,13.859999999999999,32.259999999999998,32.259999999999998,32.490000000000002,32.530000000000001,36.469999999999999,37.240000000000002,36.659999999999997,35.960000000000001,31.890000000000001,32.390000000000001,32.090000000000003,31.289999999999999,29.219999999999999,29.91,29.530000000000001,28.649999999999999,41.399999999999999,42.619999999999997,42.5,41.670000000000002,40.780000000000001,39.969999999999999,40.710000000000001,40.43,14.52,14.609999999999999,14.5,14.550000000000001,14.51,14.6,14.5,14.58,14.51,14.699999999999999,14.42,14.42,15.23,15.23,15.23,15.23,19.52,19.359999999999999,19.48,19.420000000000002,15.09,17.170000000000002,17.140000000000001,17.140000000000001,32.82,32.710000000000001,32.240000000000002,32.719999999999999,35.840000000000003,36.57,36.060000000000002,35.689999999999998,32.479999999999997,32.740000000000002,32.130000000000003,31.640000000000001,28.949999999999999,29.489999999999998,28.640000000000001,28.010000000000002,41.640000000000001,43.100000000000001,42.740000000000002,41.920000000000002,40.780000000000001,40.149999999999999,40.57,40.420000000000002,14.539999999999999,14.449999999999999,14.18,14.5,14.699999999999999,14.66,14.4,14.710000000000001,14.75,14.710000000000001,14.33,14.619999999999999,15.34,15.289999999999999,15.09,15.300000000000001,19.199999999999999,18.879999999999999,18.899999999999999,19.120000000000001,16.760000000000002,17.23,17.260000000000002,17.149999999999999,32.82,32.689999999999998,32.229999999999997,32.75,34.240000000000002,34.950000000000003,35.049999999999997,34.289999999999999,31.280000000000001,32.119999999999997,32.049999999999997,31.84,28.670000000000002,29.670000000000002,29.469999999999999,28.91,41.259999999999998,41.299999999999997,42.490000000000002,42.079999999999998,39.32,39.840000000000003,38.890000000000001,39.68,13.970000000000001,14.220000000000001,14.1,13.779999999999999,14.07,14.029999999999999,13.94,13.859999999999999,14.32,14.56,14.33,14.08,15.16,15.18,14.720000000000001,14.9,18.48,18.710000000000001,18.48,18.460000000000001,16.469999999999999,16.350000000000001,16.550000000000001,16.739999999999998,32.850000000000001,32.670000000000002,32.210000000000001,32.740000000000002,36.450000000000003,35.729999999999997,35.399999999999999,36.57,32.380000000000003,31.66,32.149999999999999,32.75,28.93,28.050000000000001,28.640000000000001,29.52,42.770000000000003,41.729999999999997,41.32,42.960000000000001,40.68,40.399999999999999,40.600000000000001,40.109999999999999,14.369999999999999,14.48,14.32,14.44,14.6,14.699999999999999,14.470000000000001,14.66,14.539999999999999,14.619999999999999,14.529999999999999,14.710000000000001,15.34,15.289999999999999,15.09,15.300000000000001,19.059999999999999,19.129999999999999,19,18.84,16.440000000000001,16.899999999999999,16.940000000000001,16.77,32.840000000000003,32.719999999999999,32.210000000000001,32.729999999999997,35.670000000000002,35.009999999999998,34.719999999999999,35.240000000000002,32.310000000000002,31.809999999999999,31.120000000000001,32.060000000000002,30,29.5,29.059999999999999,29.920000000000002,42.109999999999999,41.960000000000001,41.090000000000003,40.789999999999999,38.82,39.719999999999999,39.310000000000002,39.859999999999999,14.41,14.19,14.17,14.390000000000001,12.43,12.630000000000001,12.76,12.42,14.119999999999999,14.279999999999999,14.369999999999999,14.210000000000001,14.960000000000001,14.92,14.92,15.16,17.690000000000001,18.190000000000001,18.16,17.879999999999999,16.539999999999999,16.440000000000001,16.48,16.640000000000001],"size":3,"colorscale":"Reds","showscale":true,"line":{"color":"rgba(31,119,180,1)"}},"type":"scatter3d","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"line":{"color":"rgba(31,119,180,1)"},"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<p><strong>Interpretación:</strong> en el espacio tridimensional se ve que la carga sube con la compacidad y también, aunque menos, con la proporción de vidrio. Los puntos más rojos (cargas altas) se concentran donde la compacidad y el vidrio son altos a la vez.</p>
+</div>
+<div id="ajuste-del-modelo-con-todas-las-variables" class="section level2 hasAnchor" number="9.2">
+<h2><span class="header-section-number">9.2</span> Ajuste del modelo con todas las variables<a href="regresión-lineal-múltiple-rlm.html#ajuste-del-modelo-con-todas-las-variables" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb150-1"><a href="regresión-lineal-múltiple-rlm.html#cb150-1" tabindex="-1"></a>modelo_todo <span class="ot">&lt;-</span> <span class="fu">lm</span>(carga_calef <span class="sc">~</span> compacidad <span class="sc">+</span> area_superficie <span class="sc">+</span> area_muros <span class="sc">+</span> area_techo <span class="sc">+</span></span>
+<span id="cb150-2"><a href="regresión-lineal-múltiple-rlm.html#cb150-2" tabindex="-1"></a>                    altura <span class="sc">+</span> orientacion <span class="sc">+</span> area_vidrio <span class="sc">+</span> dist_vidrio,</span>
+<span id="cb150-3"><a href="regresión-lineal-múltiple-rlm.html#cb150-3" tabindex="-1"></a>                  <span class="at">data =</span> df_rlm)</span>
+<span id="cb150-4"><a href="regresión-lineal-múltiple-rlm.html#cb150-4" tabindex="-1"></a><span class="fu">summary</span>(modelo_todo)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = carga_calef ~ compacidad + area_superficie + area_muros + 
+##     area_techo + altura + orientacion + area_vidrio + dist_vidrio, 
+##     data = df_rlm)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -7.1237 -1.4299 -0.2555  1.2972  7.4342 
+## 
+## Coefficients: (1 not defined because of singularities)
+##                   Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)      81.161469  18.189282   4.462 9.36e-06 ***
+## compacidad      -64.773432   9.832563  -6.588 8.38e-11 ***
+## area_superficie  -0.087289   0.016317  -5.350 1.17e-07 ***
+## area_muros        0.060813   0.006353   9.573  &lt; 2e-16 ***
+## area_techo              NA         NA      NA       NA    
+## altura            4.169954   0.322982  12.911  &lt; 2e-16 ***
+## orientacion3      0.067812   0.286185   0.237    0.813    
+## orientacion4     -0.052990   0.286185  -0.185    0.853    
+## orientacion5     -0.037500   0.286185  -0.131    0.896    
+## area_vidrio      16.848333   0.853238  19.746  &lt; 2e-16 ***
+## dist_vidrio1      4.527653   0.513717   8.814  &lt; 2e-16 ***
+## dist_vidrio2      4.435986   0.513717   8.635  &lt; 2e-16 ***
+## dist_vidrio3      4.183000   0.513717   8.143 1.60e-15 ***
+## dist_vidrio4      4.388208   0.513717   8.542  &lt; 2e-16 ***
+## dist_vidrio5      4.182444   0.513717   8.142 1.61e-15 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.804 on 754 degrees of freedom
+## Multiple R-squared:  0.9241, Adjusted R-squared:  0.9228 
+## F-statistic:   706 on 13 and 754 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p><strong>Interpretación:</strong> el resumen avisa <em>“1 not defined because of singularities”</em>, y el coeficiente de <code>area_techo</code> sale como <code>NA</code>. Esto pasa porque <strong>el área de superficie es exactamente la suma del área de muros más dos veces el área del techo</strong> (piso + techo):</p>
+<div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb152-1"><a href="regresión-lineal-múltiple-rlm.html#cb152-1" tabindex="-1"></a><span class="fu">with</span>(df_rlm, <span class="fu">all.equal</span>(area_superficie, area_muros <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> area_techo))</span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<p>Si una variable es una combinación exacta de otras, no aporta información nueva y R no puede separar su efecto. Por eso <strong>quitamos <code>area_superficie</code></strong>: su información ya está contenida en los muros y el techo.</p>
+<div class="sourceCode" id="cb154"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb154-1"><a href="regresión-lineal-múltiple-rlm.html#cb154-1" tabindex="-1"></a>modelo_rlm <span class="ot">&lt;-</span> <span class="fu">lm</span>(carga_calef <span class="sc">~</span> compacidad <span class="sc">+</span> area_muros <span class="sc">+</span> area_techo <span class="sc">+</span> altura <span class="sc">+</span></span>
+<span id="cb154-2"><a href="regresión-lineal-múltiple-rlm.html#cb154-2" tabindex="-1"></a>                   orientacion <span class="sc">+</span> area_vidrio <span class="sc">+</span> dist_vidrio,</span>
+<span id="cb154-3"><a href="regresión-lineal-múltiple-rlm.html#cb154-3" tabindex="-1"></a>                 <span class="at">data =</span> df_rlm)</span>
+<span id="cb154-4"><a href="regresión-lineal-múltiple-rlm.html#cb154-4" tabindex="-1"></a><span class="fu">summary</span>(modelo_rlm)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = carga_calef ~ compacidad + area_muros + area_techo + 
+##     altura + orientacion + area_vidrio + dist_vidrio, data = df_rlm)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -7.1237 -1.4299 -0.2555  1.2972  7.4342 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   81.16147   18.18928   4.462 9.36e-06 ***
+## compacidad   -64.77343    9.83256  -6.588 8.38e-11 ***
+## area_muros    -0.02648    0.01221  -2.169   0.0304 *  
+## area_techo    -0.17458    0.03263  -5.350 1.17e-07 ***
+## altura         4.16995    0.32298  12.911  &lt; 2e-16 ***
+## orientacion3   0.06781    0.28618   0.237   0.8128    
+## orientacion4  -0.05299    0.28618  -0.185   0.8532    
+## orientacion5  -0.03750    0.28618  -0.131   0.8958    
+## area_vidrio   16.84833    0.85324  19.746  &lt; 2e-16 ***
+## dist_vidrio1   4.52765    0.51372   8.814  &lt; 2e-16 ***
+## dist_vidrio2   4.43599    0.51372   8.635  &lt; 2e-16 ***
+## dist_vidrio3   4.18300    0.51372   8.143 1.60e-15 ***
+## dist_vidrio4   4.38821    0.51372   8.542  &lt; 2e-16 ***
+## dist_vidrio5   4.18244    0.51372   8.142 1.61e-15 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.804 on 754 degrees of freedom
+## Multiple R-squared:  0.9241, Adjusted R-squared:  0.9228 
+## F-statistic:   706 on 13 and 754 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p><strong>Interpretación de los coeficientes</strong> (cada efecto se lee <em>manteniendo constantes las demás variables</em>):</p>
+<ul>
+<li><strong>Altura (4.17):</strong> cada metro adicional de altura aumenta la carga en 4.17 kWh/m². Pasar de un piso (3.5 m) a dos pisos (7 m) suma unos <strong>14.6 kWh/m²</strong>. Es uno de los efectos más fuertes (t = 12.9).</li>
+<li><strong>Área de vidrio (16.85):</strong> como la variable es una proporción, conviene leerla en pasos de 10 puntos porcentuales: cada <strong>10 % más de fachada en vidrio suma unos 1.68 kWh/m²</strong> de calefacción. Es el efecto con el estadístico t más alto (19.7).</li>
+<li><strong>Distribución del vidrio (≈ 4.2 a 4.5):</strong> frente a la categoría 0 (sin vidrio), cualquier distribución de ventanas suma entre 4.18 y 4.53 kWh/m², y las cinco categorías se parecen mucho. Como la categoría 0 coincide con los edificios sin ventanas, este coeficiente mide sobre todo el efecto de <strong>tener o no tener ventanas</strong>, más allá de cuánta área ocupan.</li>
+<li><strong>Compacidad (−64.77):</strong> con lo demás fijo, un aumento de 0.1 en la compacidad <strong>reduce</strong> la carga en unos 6.5 kWh/m².</li>
+<li><strong>Área de techo (−0.175):</strong> cada m² más de techo reduce la carga en 0.17 kWh/m².</li>
+<li><strong>Área de muros (−0.026):</strong> su efecto es pequeño y apenas significativo (p = 0.03). Su signo es <strong>negativo</strong>, aunque su correlación con la carga era positiva (0.456). Ese cambio de signo es una señal típica de <strong>multicolinealidad</strong>: al estar tan ligada a la compacidad y al techo, su coeficiente pierde una lectura física clara.</li>
+<li><strong>Orientación (3, 4 y 5 frente a 2):</strong> ningún coeficiente es significativo (p &gt; 0.8). Como ya vimos en Kruskal-Wallis y en la tabla de contingencia, <strong>la orientación no influye</strong>.</li>
+</ul>
+</div>
+<div id="prueba-de-significancia-global" class="section level2 hasAnchor" number="9.3">
+<h2><span class="header-section-number">9.3</span> Prueba de significancia global<a href="regresión-lineal-múltiple-rlm.html#prueba-de-significancia-global" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: <span class="math inline">\(\beta_1 = \beta_2 = \dots = \beta_k = 0\)</span> (ninguna variable sirve para explicar la carga).</li>
+<li><span class="math inline">\(H_1\)</span>: al menos un <span class="math inline">\(\beta_j \neq 0\)</span>.</li>
+</ul>
+<div class="sourceCode" id="cb156"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb156-1"><a href="regresión-lineal-múltiple-rlm.html#cb156-1" tabindex="-1"></a><span class="fu">summary</span>(modelo_rlm)<span class="sc">$</span>fstatistic</span></code></pre></div>
+<pre><code>##    value    numdf    dendf 
+## 705.9909  13.0000 754.0000</code></pre>
+<p><strong>Interpretación:</strong> con F = 706 (13 y 754 grados de libertad) y un p-valor prácticamente cero, <strong>se rechaza <span class="math inline">\(H_0\)</span></strong>. El modelo, en conjunto, explica la carga de calefacción mucho mejor que el promedio.</p>
+</div>
+<div id="pruebas-individuales-e-intervalos-de-confianza" class="section level2 hasAnchor" number="9.4">
+<h2><span class="header-section-number">9.4</span> Pruebas individuales e intervalos de confianza<a href="regresión-lineal-múltiple-rlm.html#pruebas-individuales-e-intervalos-de-confianza" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb158"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb158-1"><a href="regresión-lineal-múltiple-rlm.html#cb158-1" tabindex="-1"></a><span class="fu">summary</span>(modelo_rlm)<span class="sc">$</span>coefficients</span></code></pre></div>
+<pre><code>##                  Estimate  Std. Error    t value     Pr(&gt;|t|)
+## (Intercept)   81.16146886 18.18928221  4.4620490 9.356213e-06
+## compacidad   -64.77343189  9.83256270 -6.5876449 8.383264e-11
+## area_muros    -0.02647614  0.01220623 -2.1690678 3.038938e-02
+## area_techo    -0.17457874  0.03263456 -5.3495044 1.170703e-07
+## altura         4.16995371  0.32298221 12.9107843 1.349528e-34
+## orientacion3   0.06781250  0.28618460  0.2369537 8.127571e-01
+## orientacion4  -0.05298958  0.28618460 -0.1851588 8.531543e-01
+## orientacion5  -0.03750000  0.28618460 -0.1310343 8.957831e-01
+## area_vidrio   16.84833333  0.85323762 19.7463555 2.816825e-70
+## dist_vidrio1   4.52765278  0.51371707  8.8135143 8.287164e-18
+## dist_vidrio2   4.43598611  0.51371707  8.6350763 3.470133e-17
+## dist_vidrio3   4.18300000  0.51371707  8.1426143 1.599122e-15
+## dist_vidrio4   4.38820833  0.51371707  8.5420722 7.252690e-17
+## dist_vidrio5   4.18244444  0.51371707  8.1415329 1.612308e-15</code></pre>
+<div class="sourceCode" id="cb160"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb160-1"><a href="regresión-lineal-múltiple-rlm.html#cb160-1" tabindex="-1"></a><span class="fu">confint.default</span>(modelo_rlm)</span></code></pre></div>
+<pre><code>##                     2.5 %        97.5 %
+## (Intercept)   45.51113083 116.811806894
+## compacidad   -84.04490066 -45.501963119
+## area_muros    -0.05039992  -0.002552369
+## area_techo    -0.23854130  -0.110616170
+## altura         3.53692020   4.802987218
+## orientacion3  -0.49309900   0.628724003
+## orientacion4  -0.61390109   0.507921920
+## orientacion5  -0.59841150   0.523411503
+## area_vidrio   15.17601833  18.520648333
+## dist_vidrio1   3.52078582   5.534519740
+## dist_vidrio2   3.42911915   5.442853073
+## dist_vidrio3   3.17613304   5.189866962
+## dist_vidrio4   3.38134137   5.395075295
+## dist_vidrio5   3.17557748   5.189311406</code></pre>
+<p><strong>Interpretación:</strong> todas las variables tienen intervalos que <strong>no contienen el cero</strong> (son significativas), excepto los tres coeficientes de orientación, cuyos intervalos van de valores negativos a positivos (por ejemplo, de −0.49 a 0.63 para la orientación 3). Algunos ejemplos en palabras:</p>
+<ul>
+<li>Con un 95 % de confianza, cada metro más de altura aumenta la carga <strong>entre 3.54 y 4.80 kWh/m²</strong>.</li>
+<li>El efecto del área de vidrio está <strong>entre 15.18 y 18.52</strong>, es decir, <strong>entre 1.5 y 1.9 kWh/m² por cada 10 %</strong> de vidrio adicional.</li>
+<li>El área de muros tiene un intervalo muy cercano a cero (−0.050 a −0.003): su efecto es real, pero pequeño.</li>
+</ul>
+</div>
+<div id="coeficiente-de-determinación-r²-y-r²-ajustado" class="section level2 hasAnchor" number="9.5">
+<h2><span class="header-section-number">9.5</span> Coeficiente de determinación R² y R² ajustado<a href="regresión-lineal-múltiple-rlm.html#coeficiente-de-determinaci%C3%B3n-r%C2%B2-y-r%C2%B2-ajustado" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb162"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb162-1"><a href="regresión-lineal-múltiple-rlm.html#cb162-1" tabindex="-1"></a><span class="fu">summary</span>(modelo_rlm)<span class="sc">$</span>r.squared</span></code></pre></div>
+<pre><code>## [1] 0.9240829</code></pre>
+<div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb164-1"><a href="regresión-lineal-múltiple-rlm.html#cb164-1" tabindex="-1"></a><span class="fu">summary</span>(modelo_rlm)<span class="sc">$</span>adj.r.squared</span></code></pre></div>
+<pre><code>## [1] 0.9227739</code></pre>
+<div class="sourceCode" id="cb166"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb166-1"><a href="regresión-lineal-múltiple-rlm.html#cb166-1" tabindex="-1"></a><span class="fu">summary</span>(modelo_rlm)<span class="sc">$</span>sigma</span></code></pre></div>
+<pre><code>## [1] 2.804025</code></pre>
+<p><strong>Interpretación:</strong> el modelo explica el <strong>92.4 % de la variación</strong> en la carga de calefacción (R² ajustado = 0.923). Es un salto enorme frente al 74 % de la regresión simple. Además, el error típico de predicción bajó de 5.12 a <strong>2.80 kWh/m²</strong>, casi la mitad. Que el R² y el R² ajustado sean casi iguales indica que el modelo no está “inflado” por meter variables de más.</p>
+</div>
+<div id="inferencia-para-la-respuesta" class="section level2 hasAnchor" number="9.6">
+<h2><span class="header-section-number">9.6</span> Inferencia para la respuesta<a href="regresión-lineal-múltiple-rlm.html#inferencia-para-la-respuesta" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Tomemos un edificio con las características de uno real de la base: compacidad 0.76, 416.5 m² de muros, 122.5 m² de techo, dos pisos (7 m), orientación norte (2), 25 % de vidrio distribuido hacia el este (3).</p>
+<div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb168-1"><a href="regresión-lineal-múltiple-rlm.html#cb168-1" tabindex="-1"></a>dato_nuevo <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb168-2"><a href="regresión-lineal-múltiple-rlm.html#cb168-2" tabindex="-1"></a>  <span class="at">compacidad  =</span> <span class="fl">0.76</span>,</span>
+<span id="cb168-3"><a href="regresión-lineal-múltiple-rlm.html#cb168-3" tabindex="-1"></a>  <span class="at">area_muros  =</span> <span class="fl">416.5</span>,</span>
+<span id="cb168-4"><a href="regresión-lineal-múltiple-rlm.html#cb168-4" tabindex="-1"></a>  <span class="at">area_techo  =</span> <span class="fl">122.5</span>,</span>
+<span id="cb168-5"><a href="regresión-lineal-múltiple-rlm.html#cb168-5" tabindex="-1"></a>  <span class="at">altura      =</span> <span class="dv">7</span>,</span>
+<span id="cb168-6"><a href="regresión-lineal-múltiple-rlm.html#cb168-6" tabindex="-1"></a>  <span class="at">orientacion =</span> <span class="fu">factor</span>(<span class="dv">2</span>, <span class="at">levels =</span> <span class="fu">levels</span>(df_rlm<span class="sc">$</span>orientacion)),</span>
+<span id="cb168-7"><a href="regresión-lineal-múltiple-rlm.html#cb168-7" tabindex="-1"></a>  <span class="at">area_vidrio =</span> <span class="fl">0.25</span>,</span>
+<span id="cb168-8"><a href="regresión-lineal-múltiple-rlm.html#cb168-8" tabindex="-1"></a>  <span class="at">dist_vidrio =</span> <span class="fu">factor</span>(<span class="dv">3</span>, <span class="at">levels =</span> <span class="fu">levels</span>(df_rlm<span class="sc">$</span>dist_vidrio))</span>
+<span id="cb168-9"><a href="regresión-lineal-múltiple-rlm.html#cb168-9" tabindex="-1"></a>)</span>
+<span id="cb168-10"><a href="regresión-lineal-múltiple-rlm.html#cb168-10" tabindex="-1"></a></span>
+<span id="cb168-11"><a href="regresión-lineal-múltiple-rlm.html#cb168-11" tabindex="-1"></a><span class="fu">predict</span>(modelo_rlm, <span class="at">newdata =</span> dato_nuevo)</span></code></pre></div>
+<pre><code>##        1 
+## 37.10521</code></pre>
+<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb170-1"><a href="regresión-lineal-múltiple-rlm.html#cb170-1" tabindex="-1"></a><span class="fu">predict</span>(modelo_rlm, <span class="at">newdata =</span> dato_nuevo, <span class="at">interval =</span> <span class="st">&quot;confidence&quot;</span>)</span></code></pre></div>
+<pre><code>##        fit      lwr      upr
+## 1 37.10521 36.26627 37.94415</code></pre>
+<div class="sourceCode" id="cb172"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb172-1"><a href="regresión-lineal-múltiple-rlm.html#cb172-1" tabindex="-1"></a><span class="fu">predict</span>(modelo_rlm, <span class="at">newdata =</span> dato_nuevo, <span class="at">interval =</span> <span class="st">&quot;prediction&quot;</span>)</span></code></pre></div>
+<pre><code>##        fit      lwr     upr
+## 1 37.10521 31.53702 42.6734</code></pre>
+<p><strong>Interpretación:</strong> para un edificio con estas características, el modelo estima una carga de calefacción de <strong>37.11 kWh/m²</strong>.</p>
+<ul>
+<li>Con un 95 % de confianza, la carga <strong>media</strong> de todos los edificios con este diseño está entre <strong>36.27 y 37.94 kWh/m²</strong>.</li>
+<li>Si construimos <strong>un</strong> edificio así, su carga estará entre <strong>31.54 y 42.67 kWh/m²</strong>.</li>
+</ul>
+<p>En la base, el edificio real con estas características (orientación norte) tiene una carga de <strong>35.99 kWh/m²</strong>. Cae dentro del intervalo de predicción, aunque el modelo lo sobreestima en poco más de 1 kWh/m². Comparado con la RLS, el intervalo de predicción pasó de unos 20 a unos 11 kWh/m² de ancho: <strong>el modelo múltiple predice mucho mejor</strong>.</p>
+</div>
+<div id="análisis-de-residuales-y-validación-de-supuestos-1" class="section level2 hasAnchor" number="9.7">
+<h2><span class="header-section-number">9.7</span> Análisis de residuales y validación de supuestos<a href="regresión-lineal-múltiple-rlm.html#an%C3%A1lisis-de-residuales-y-validaci%C3%B3n-de-supuestos-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb174"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb174-1"><a href="regresión-lineal-múltiple-rlm.html#cb174-1" tabindex="-1"></a><span class="co"># Independencia</span></span>
+<span id="cb174-2"><a href="regresión-lineal-múltiple-rlm.html#cb174-2" tabindex="-1"></a>car<span class="sc">:::</span><span class="fu">durbinWatsonTest</span>(modelo_rlm)</span></code></pre></div>
+<pre><code>##  lag Autocorrelation D-W Statistic p-value
+##    1       0.6371652     0.7221218       0
+##  Alternative hypothesis: rho != 0</code></pre>
+<div class="sourceCode" id="cb176"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb176-1"><a href="regresión-lineal-múltiple-rlm.html#cb176-1" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">residuals</span>(modelo_rlm)</span>
+<span id="cb176-2"><a href="regresión-lineal-múltiple-rlm.html#cb176-2" tabindex="-1"></a><span class="fu">acf</span>(r, <span class="at">las =</span> <span class="dv">1</span>, <span class="at">main =</span> <span class="st">&quot;&quot;</span>, <span class="at">lag.max =</span> <span class="dv">80</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/rlm_dw-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p><strong>Interpretación:</strong> el estadístico de Durbin-Watson mejoró (de 0.31 a <strong>0.72</strong>), pero sigue lejos de 2 y el p-valor es prácticamente cero: <strong>persiste la autocorrelación</strong>. Como en la RLS, se debe sobre todo al orden del archivo: las cuatro orientaciones de un mismo edificio van en filas seguidas y tienen residuos casi iguales, porque la orientación no cambia la carga.</p>
+<div class="sourceCode" id="cb177"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb177-1"><a href="regresión-lineal-múltiple-rlm.html#cb177-1" tabindex="-1"></a><span class="co"># Normalidad</span></span>
+<span id="cb177-2"><a href="regresión-lineal-múltiple-rlm.html#cb177-2" tabindex="-1"></a><span class="fu">shapiro.test</span>(r)</span></code></pre></div>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  r
+## W = 0.94813, p-value = 8.988e-16</code></pre>
+<div class="sourceCode" id="cb179"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb179-1"><a href="regresión-lineal-múltiple-rlm.html#cb179-1" tabindex="-1"></a>car<span class="sc">:::</span><span class="fu">qqPlot</span>(r, <span class="at">las =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/rlm_normalidad-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<pre><code>## [1] 692 594</code></pre>
+<p><strong>Interpretación:</strong> con W = 0.948 y p &lt; 0.001, <strong>los residuos no son normales</strong>. El Q-Q plot muestra que las colas se separan de la recta. Con 768 observaciones, las pruebas sobre los coeficientes siguen siendo bastante confiables, pero esto es una limitación que hay que reportar.</p>
+<div class="sourceCode" id="cb181"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb181-1"><a href="regresión-lineal-múltiple-rlm.html#cb181-1" tabindex="-1"></a><span class="co"># Media cero</span></span>
+<span id="cb181-2"><a href="regresión-lineal-múltiple-rlm.html#cb181-2" tabindex="-1"></a><span class="fu">t.test</span>(r, <span class="at">mu =</span> <span class="dv">0</span>)</span></code></pre></div>
+<pre><code>## 
+##  One Sample t-test
+## 
+## data:  r
+## t = 5.0725e-16, df = 767, p-value = 1
+## alternative hypothesis: true mean is not equal to 0
+## 95 percent confidence interval:
+##  -0.1969351  0.1969351
+## sample estimates:
+##    mean of x 
+## 5.088776e-17</code></pre>
+<p><strong>Interpretación:</strong> p = 1, así que <strong>la media de los errores es cero</strong>. Este supuesto se cumple.</p>
+<div class="sourceCode" id="cb183"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb183-1"><a href="regresión-lineal-múltiple-rlm.html#cb183-1" tabindex="-1"></a><span class="co"># Varianza constante</span></span>
+<span id="cb183-2"><a href="regresión-lineal-múltiple-rlm.html#cb183-2" tabindex="-1"></a>lmtest<span class="sc">:::</span><span class="fu">bptest</span>(modelo_rlm)</span></code></pre></div>
+<pre><code>## 
+##  studentized Breusch-Pagan test
+## 
+## data:  modelo_rlm
+## BP = 377.62, df = 13, p-value &lt; 2.2e-16</code></pre>
+<p><strong>Interpretación:</strong> con BP = 377.6 y p-valor prácticamente cero, <strong>hay heterocedasticidad</strong>: el tamaño de los errores cambia según el tipo de edificio.</p>
+<div class="sourceCode" id="cb185"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb185-1"><a href="regresión-lineal-múltiple-rlm.html#cb185-1" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb185-2"><a href="regresión-lineal-múltiple-rlm.html#cb185-2" tabindex="-1"></a><span class="fu">plot</span>(modelo_rlm, <span class="at">las =</span> <span class="dv">1</span>, <span class="at">col =</span> <span class="st">&#39;darkseagreen&#39;</span>, <span class="at">which =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)</span>
+<span id="cb185-3"><a href="regresión-lineal-múltiple-rlm.html#cb185-3" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/rlm_graficos_diag-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p><strong>Interpretación:</strong> en <em>Residuals vs Fitted</em> los residuos no forman una nube pareja: hay grupos de puntos y la línea roja no es completamente plana, lo que sugiere que alguna relación no es del todo lineal. En el Q-Q se ve la falta de normalidad en las colas. <em>Scale-Location</em> confirma que la dispersión cambia a lo largo de los valores ajustados. <strong>El modelo predice muy bien, pero no cumple todos los supuestos clásicos.</strong></p>
+</div>
+<div id="identificación-de-outliers" class="section level2 hasAnchor" number="9.8">
+<h2><span class="header-section-number">9.8</span> Identificación de outliers<a href="regresión-lineal-múltiple-rlm.html#identificaci%C3%B3n-de-outliers" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb186"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb186-1"><a href="regresión-lineal-múltiple-rlm.html#cb186-1" tabindex="-1"></a>r_est <span class="ot">&lt;-</span> <span class="fu">rstudent</span>(modelo_rlm)</span>
+<span id="cb186-2"><a href="regresión-lineal-múltiple-rlm.html#cb186-2" tabindex="-1"></a><span class="fu">which</span>(r_est <span class="sc">&lt;</span> <span class="sc">-</span><span class="dv">3</span> <span class="sc">|</span> r_est <span class="sc">&gt;</span> <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## named integer(0)</code></pre>
+<div class="sourceCode" id="cb188"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb188-1"><a href="regresión-lineal-múltiple-rlm.html#cb188-1" tabindex="-1"></a><span class="fu">outlierTest</span>(modelo_rlm, <span class="at">n.max =</span> <span class="dv">5</span>)</span></code></pre></div>
+<pre><code>## No Studentized residuals with Bonferroni p &lt; 0.05
+## Largest |rstudent|:
+##     rstudent unadjusted p-value Bonferroni p
+## 692 2.684929          0.0074141           NA</code></pre>
+<div class="sourceCode" id="cb190"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb190-1"><a href="regresión-lineal-múltiple-rlm.html#cb190-1" tabindex="-1"></a><span class="fu">influenceIndexPlot</span>(modelo_rlm, <span class="at">vars =</span> <span class="st">&quot;Bonf&quot;</span>, <span class="at">las =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/rlm_bonferroni-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p><strong>Interpretación:</strong> <strong>ningún residuo estudentizado supera ±3</strong> (el más grande ronda 2.7), y la prueba de Bonferroni no encuentra ningún outlier significativo. R lo dice con el mensaje <em>“No Studentized residuals with Bonferroni p &lt; 0.05”</em>, y el p de Bonferroni del residuo más grande sale como <code>NA</code> porque supera 1. En la gráfica de índices, todos los p-valores están arriba, cerca de 1. <strong>No hay edificios atípicos</strong> que el modelo explique mal de forma exagerada.</p>
+</div>
+<div id="identificación-de-observaciones-influenciales" class="section level2 hasAnchor" number="9.9">
+<h2><span class="header-section-number">9.9</span> Identificación de observaciones influenciales<a href="regresión-lineal-múltiple-rlm.html#identificaci%C3%B3n-de-observaciones-influenciales" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb191"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb191-1"><a href="regresión-lineal-múltiple-rlm.html#cb191-1" tabindex="-1"></a><span class="co"># 1) Distancia de Cook</span></span>
+<span id="cb191-2"><a href="regresión-lineal-múltiple-rlm.html#cb191-2" tabindex="-1"></a>Di <span class="ot">&lt;-</span> <span class="fu">cooks.distance</span>(modelo_rlm)</span>
+<span id="cb191-3"><a href="regresión-lineal-múltiple-rlm.html#cb191-3" tabindex="-1"></a></span>
+<span id="cb191-4"><a href="regresión-lineal-múltiple-rlm.html#cb191-4" tabindex="-1"></a><span class="co"># 2) Umbral</span></span>
+<span id="cb191-5"><a href="regresión-lineal-múltiple-rlm.html#cb191-5" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nobs</span>(modelo_rlm)</span>
+<span id="cb191-6"><a href="regresión-lineal-múltiple-rlm.html#cb191-6" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">coef</span>(modelo_rlm))</span>
+<span id="cb191-7"><a href="regresión-lineal-múltiple-rlm.html#cb191-7" tabindex="-1"></a>umbral <span class="ot">&lt;-</span> <span class="dv">4</span><span class="sc">/</span>(n <span class="sc">-</span> p <span class="sc">-</span> <span class="dv">2</span>)</span>
+<span id="cb191-8"><a href="regresión-lineal-múltiple-rlm.html#cb191-8" tabindex="-1"></a></span>
+<span id="cb191-9"><a href="regresión-lineal-múltiple-rlm.html#cb191-9" tabindex="-1"></a><span class="co"># 3) Índices por encima del umbral</span></span>
+<span id="cb191-10"><a href="regresión-lineal-múltiple-rlm.html#cb191-10" tabindex="-1"></a>infl_idx <span class="ot">&lt;-</span> <span class="fu">which</span>(Di <span class="sc">&gt;</span> umbral)</span>
+<span id="cb191-11"><a href="regresión-lineal-múltiple-rlm.html#cb191-11" tabindex="-1"></a><span class="fu">length</span>(infl_idx)</span></code></pre></div>
+<pre><code>## [1] 70</code></pre>
+<div class="sourceCode" id="cb193"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb193-1"><a href="regresión-lineal-múltiple-rlm.html#cb193-1" tabindex="-1"></a><span class="co"># 4) Tabla ordenada</span></span>
+<span id="cb193-2"><a href="regresión-lineal-múltiple-rlm.html#cb193-2" tabindex="-1"></a>ord <span class="ot">&lt;-</span> <span class="fu">order</span>(Di, <span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb193-3"><a href="regresión-lineal-múltiple-rlm.html#cb193-3" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb193-4"><a href="regresión-lineal-múltiple-rlm.html#cb193-4" tabindex="-1"></a>  <span class="at">idx =</span> ord,</span>
+<span id="cb193-5"><a href="regresión-lineal-múltiple-rlm.html#cb193-5" tabindex="-1"></a>  <span class="at">cooks_distance =</span> Di[ord],</span>
+<span id="cb193-6"><a href="regresión-lineal-múltiple-rlm.html#cb193-6" tabindex="-1"></a>  <span class="at">supera_umbral  =</span> Di[ord] <span class="sc">&gt;</span> umbral</span>
+<span id="cb193-7"><a href="regresión-lineal-múltiple-rlm.html#cb193-7" tabindex="-1"></a>)</span>
+<span id="cb193-8"><a href="regresión-lineal-múltiple-rlm.html#cb193-8" tabindex="-1"></a><span class="fu">head</span>(tab, <span class="dv">10</span>)</span></code></pre></div>
+<pre><code>##     idx cooks_distance supera_umbral
+## 16   16    0.013926391          TRUE
+## 15   15    0.010339773          TRUE
+## 13   13    0.010182002          TRUE
+## 14   14    0.009228595          TRUE
+## 692 692    0.008773564          TRUE
+## 594 594    0.008742693          TRUE
+## 22   22    0.008547540          TRUE
+## 689 689    0.008244807          TRUE
+## 643 643    0.008194997          TRUE
+## 595 595    0.008188187          TRUE</code></pre>
+<div class="sourceCode" id="cb195"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb195-1"><a href="regresión-lineal-múltiple-rlm.html#cb195-1" tabindex="-1"></a><span class="fu">plot</span>(Di, <span class="at">type =</span> <span class="st">&quot;h&quot;</span>,</span>
+<span id="cb195-2"><a href="regresión-lineal-múltiple-rlm.html#cb195-2" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">&quot;Cook&#39;s distance (D_i)&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;Índice&quot;</span>,</span>
+<span id="cb195-3"><a href="regresión-lineal-múltiple-rlm.html#cb195-3" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;Distancia de Cook (línea = umbral)&quot;</span>)</span>
+<span id="cb195-4"><a href="regresión-lineal-múltiple-rlm.html#cb195-4" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> umbral, <span class="at">lty =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/rlm_cook_graf-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb196"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb196-1"><a href="regresión-lineal-múltiple-rlm.html#cb196-1" tabindex="-1"></a><span class="fu">influenceIndexPlot</span>(modelo_rlm, <span class="at">vars =</span> <span class="st">&quot;Cook&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/rlm_cook_graf-2.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p><strong>Interpretación:</strong> con el umbral 4/(n − p − 2) ≈ 0.0053, unas <strong>70 observaciones</strong> quedan marcadas como influyentes, entre ellas las 13 a 16 y la 22. Sin embargo, la distancia de Cook más grande ronda apenas <strong>0.014</strong>, muy lejos de 1. Con 768 datos el umbral es tan bajo que marca muchas observaciones, pero <strong>ninguna tiene por sí sola el peso suficiente para cambiar el modelo</strong>. No hay razones para eliminar edificios.</p>
+</div>
+<div id="análisis-de-multicolinealidad" class="section level2 hasAnchor" number="9.10">
+<h2><span class="header-section-number">9.10</span> Análisis de multicolinealidad<a href="regresión-lineal-múltiple-rlm.html#an%C3%A1lisis-de-multicolinealidad" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb197"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb197-1"><a href="regresión-lineal-múltiple-rlm.html#cb197-1" tabindex="-1"></a><span class="fu">kappa</span>(modelo_rlm)</span></code></pre></div>
+<pre><code>## [1] 59168.14</code></pre>
+<p><strong>Interpretación:</strong> el número de condición es κ ≈ 59 168, <strong>muchísimo mayor que 30</strong>. Hay multicolinealidad severa.</p>
+<div class="sourceCode" id="cb199"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb199-1"><a href="regresión-lineal-múltiple-rlm.html#cb199-1" tabindex="-1"></a>car<span class="sc">:::</span><span class="fu">vif</span>(modelo_rlm)</span></code></pre></div>
+<pre><code>##                   GVIF Df GVIF^(1/(2*Df))
+## compacidad  105.524054  1       10.272490
+## area_muros   27.662740  1        5.259538
+## area_techo  211.938336  1       14.558102
+## altura       31.205474  1        5.586186
+## orientacion   1.000000  3        1.000000
+## area_vidrio   1.260417  1        1.122683
+## dist_vidrio   1.260417  5        1.023414</code></pre>
+<p><strong>Interpretación:</strong> como hay factores, R muestra el <strong>GVIF</strong> (la versión generalizada del VIF). Los valores problemáticos son el <strong>área de techo (≈ 212)</strong>, la <strong>compacidad (≈ 106)</strong>, la <strong>altura (≈ 31)</strong> y el <strong>área de muros (≈ 28)</strong>, todos muy por encima de 10. La orientación, el área de vidrio y su distribución tienen valores cercanos a 1, sin problema. En palabras simples: las cuatro variables de forma del edificio <strong>cuentan casi la misma historia</strong>. Un edificio de un piso tiene, a la vez, más techo, menos altura y otra compacidad. Por eso sus coeficientes individuales son inestables (como el cambio de signo del área de muros), aunque <strong>el modelo en conjunto predice muy bien</strong>.</p>
+<div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb201-1"><a href="regresión-lineal-múltiple-rlm.html#cb201-1" tabindex="-1"></a><span class="fu">mctest</span>(modelo_rlm, <span class="at">type =</span> <span class="st">&quot;b&quot;</span>)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## omcdiag(mod = mod, Inter = Inter, detr = detr, red = red, conf = conf, 
+##     theil = theil, cn = cn)
+## 
+## 
+## Overall Multicollinearity Diagnostics
+## 
+##                        MC Results detection
+## Determinant |X&#39;X|:         0.0000         1
+## Farrar Chi-Square:      7734.3377         1
+## Red Indicator:             0.2110         0
+## Sum of Lambda Inverse:   401.7264         1
+## Theil&#39;s Method:           -2.2380         0
+## Condition Number:        559.8007         1
+## 
+## 1 --&gt; COLLINEARITY is detected by the test 
+## 0 --&gt; COLLINEARITY is not detected by the test
+## 
+## 
+## ===================================
+## 
+## Call:
+## imcdiag(mod = mod, method = method, corr = FALSE, vif = vif, 
+##     tol = tol, conf = conf, cvif = cvif, ind1 = ind1, ind2 = ind2, 
+##     leamer = leamer, all = all)
+## 
+## 
+## All Individual Multicollinearity Diagnostics Result
+## 
+##                   VIF    TOL         Wi         Fi Leamer     CVIF Klein   IND1
+## compacidad   105.5241 0.0095  6576.3051  7183.6532 0.0973  -6.6482     1 0.0002
+## area_muros    27.6627 0.0361  1677.5307  1832.4574 0.1901  -1.7428     1 0.0006
+## area_techo   211.9383 0.0047 13271.5370 14497.2165 0.0687 -13.3525     1 0.0001
+## altura        31.2055 0.0320  1900.4278  2075.9399 0.1790  -1.9660     1 0.0005
+## orientacion3   1.5000 0.6667    31.4583    34.3636 0.8165  -0.0945     0 0.0106
+## orientacion4   1.5000 0.6667    31.4583    34.3636 0.8165  -0.0945     0 0.0106
+## orientacion5   1.5000 0.6667    31.4583    34.3636 0.8165  -0.0945     0 0.0106
+## area_vidrio    1.2604 0.7934    16.3845    17.8977 0.8907  -0.0794     0 0.0126
+## dist_vidrio1   3.9271 0.2546   184.1623   201.1705 0.5046  -0.2474     0 0.0040
+## dist_vidrio2   3.9271 0.2546   184.1623   201.1705 0.5046  -0.2474     0 0.0040
+## dist_vidrio3   3.9271 0.2546   184.1623   201.1705 0.5046  -0.2474     0 0.0040
+## dist_vidrio4   3.9271 0.2546   184.1623   201.1705 0.5046  -0.2474     0 0.0040
+## dist_vidrio5   3.9271 0.2546   184.1623   201.1705 0.5046  -0.2474     0 0.0040
+##                IND2
+## compacidad   1.4548
+## area_muros   1.4157
+## area_techo   1.4618
+## altura       1.4217
+## orientacion3 0.4896
+## orientacion4 0.4896
+## orientacion5 0.4896
+## area_vidrio  0.3035
+## dist_vidrio1 1.0948
+## dist_vidrio2 1.0948
+## dist_vidrio3 1.0948
+## dist_vidrio4 1.0948
+## dist_vidrio5 1.0948
+## 
+## 1 --&gt; COLLINEARITY is detected by the test 
+## 0 --&gt; COLLINEARITY is not detected by the test
+## 
+## orientacion3 , orientacion4 , orientacion5 , coefficient(s) are non-significant may be due to multicollinearity
+## 
+## R-square of y on all x: 0.9241 
+## 
+## * use method argument to check which regressors may be the reason of collinearity
+## ===================================</code></pre>
+<p><strong>Interpretación:</strong> las pruebas globales e individuales de <code>mctest</code> confirman lo anterior: <strong>se detecta colinealidad</strong>. En la parte individual, las variables marcadas con 1 son las de forma del edificio (compacidad, muros, techo y altura), las mismas que tenían VIF altos.</p>
+</div>
+<div id="modelos-con-variables-cualitativas-variables-dummy" class="section level2 hasAnchor" number="9.11">
+<h2><span class="header-section-number">9.11</span> Modelos con variables cualitativas (variables dummy)<a href="regresión-lineal-múltiple-rlm.html#modelos-con-variables-cualitativas-variables-dummy" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><code>orientacion</code> y <code>dist_vidrio</code> entraron al modelo como factores. R las convierte en variables dummy (0/1) y toma la primera categoría como referencia. Veamos cómo queda la matriz de diseño para la orientación:</p>
+<div class="sourceCode" id="cb203"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb203-1"><a href="regresión-lineal-múltiple-rlm.html#cb203-1" tabindex="-1"></a>matriz <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> orientacion, <span class="at">data =</span> df_rlm)</span>
+<span id="cb203-2"><a href="regresión-lineal-múltiple-rlm.html#cb203-2" tabindex="-1"></a><span class="fu">head</span>(matriz)</span></code></pre></div>
+<pre><code>##   (Intercept) orientacion3 orientacion4 orientacion5
+## 1           1            0            0            0
+## 2           1            1            0            0
+## 3           1            0            1            0
+## 4           1            0            0            1
+## 5           1            0            0            0
+## 6           1            1            0            0</code></pre>
+<p><strong>Interpretación:</strong> la orientación 2 (norte) es la <strong>categoría de referencia</strong> (filas con ceros en las tres dummies). Cada coeficiente de orientación en el modelo mide cuánto cambia la carga frente al norte.</p>
+<div class="sourceCode" id="cb205"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb205-1"><a href="regresión-lineal-múltiple-rlm.html#cb205-1" tabindex="-1"></a>mdl_orient <span class="ot">&lt;-</span> <span class="fu">lm</span>(carga_calef <span class="sc">~</span> orientacion, <span class="at">data =</span> df_rlm)</span>
+<span id="cb205-2"><a href="regresión-lineal-múltiple-rlm.html#cb205-2" tabindex="-1"></a><span class="fu">summary</span>(mdl_orient)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = carga_calef ~ orientacion, data = df_rlm)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -16.331  -9.341  -3.310   9.370  20.719 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  22.31286    0.72962  30.582   &lt;2e-16 ***
+## orientacion3  0.06781    1.03184   0.066    0.948    
+## orientacion4 -0.05299    1.03184  -0.051    0.959    
+## orientacion5 -0.03750    1.03184  -0.036    0.971    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 10.11 on 764 degrees of freedom
+## Multiple R-squared:  2.135e-05,  Adjusted R-squared:  -0.003905 
+## F-statistic: 0.005438 on 3 and 764 DF,  p-value: 0.9994</code></pre>
+<p><strong>Interpretación:</strong> el intercepto (22.31) es la carga media de los edificios orientados al norte, y las otras orientaciones difieren de ella en menos de 0.07 kWh/m². Ningún coeficiente es significativo, el R² es prácticamente <strong>0</strong> y la prueba F global da p = 0.999. <strong>La orientación sola no explica nada de la carga de calefacción.</strong> En cambio, las dummies de <code>dist_vidrio</code> sí resultaron significativas en el modelo múltiple: tener ventanas (con cualquier distribución) suma unos 4.2 a 4.5 kWh/m² frente a no tenerlas.</p>
+</div>
+<div id="selección-de-variables" class="section level2 hasAnchor" number="9.12">
+<h2><span class="header-section-number">9.12</span> Selección de variables<a href="regresión-lineal-múltiple-rlm.html#selecci%C3%B3n-de-variables" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="método-de-todas-las-regresiones-posibles" class="section level3 hasAnchor" number="9.12.1">
+<h3><span class="header-section-number">9.12.1</span> Método de todas las regresiones posibles<a href="regresión-lineal-múltiple-rlm.html#m%C3%A9todo-de-todas-las-regresiones-posibles" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb207"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb207-1"><a href="regresión-lineal-múltiple-rlm.html#cb207-1" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="fu">ols_step_all_possible</span>(modelo_rlm)</span>
+<span id="cb207-2"><a href="regresión-lineal-múltiple-rlm.html#cb207-2" tabindex="-1"></a>results <span class="ot">&lt;-</span> k<span class="sc">$</span>result</span>
+<span id="cb207-3"><a href="regresión-lineal-múltiple-rlm.html#cb207-3" tabindex="-1"></a><span class="fu">nrow</span>(results)</span></code></pre></div>
+<pre><code>## [1] 127</code></pre>
+<p><strong>Interpretación:</strong> con 7 variables candidatas, se evaluaron <strong>127 modelos posibles</strong>.</p>
+<div class="sourceCode" id="cb209"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb209-1"><a href="regresión-lineal-múltiple-rlm.html#cb209-1" tabindex="-1"></a><span class="co"># mejor modelo basado en el R^2_{adj}</span></span>
+<span id="cb209-2"><a href="regresión-lineal-múltiple-rlm.html#cb209-2" tabindex="-1"></a>results[<span class="fu">which.max</span>(results<span class="sc">$</span>adjr), ]</span></code></pre></div>
+<pre><code>##     mindex n                                                      predictors
+## 122    120 6 compacidad area_muros area_techo altura area_vidrio dist_vidrio
+##       rsquare      adjr     rmse   predrsq       cp      aic    sbic      sbc
+## 122 0.9240615 0.9230584 2.798857 0.9219093 8.212062 3773.278 1594.19 3829.004
+##         msep      fpe        apc       hsp
+## 122 7.947553 7.945799 0.07814542 0.0103619</code></pre>
+<div class="sourceCode" id="cb211"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb211-1"><a href="regresión-lineal-múltiple-rlm.html#cb211-1" tabindex="-1"></a><span class="co"># mejor modelo basado en el Cp</span></span>
+<span id="cb211-2"><a href="regresión-lineal-múltiple-rlm.html#cb211-2" tabindex="-1"></a>results[<span class="fu">which.min</span>(<span class="fu">with</span>(results, (cp <span class="sc">-</span> n)<span class="sc">^</span><span class="dv">2</span>)), ]</span></code></pre></div>
+<pre><code>##     mindex n                                                      predictors
+## 122    120 6 compacidad area_muros area_techo altura area_vidrio dist_vidrio
+##       rsquare      adjr     rmse   predrsq       cp      aic    sbic      sbc
+## 122 0.9240615 0.9230584 2.798857 0.9219093 8.212062 3773.278 1594.19 3829.004
+##         msep      fpe        apc       hsp
+## 122 7.947553 7.945799 0.07814542 0.0103619</code></pre>
+<div class="sourceCode" id="cb213"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb213-1"><a href="regresión-lineal-múltiple-rlm.html#cb213-1" tabindex="-1"></a><span class="co"># mejor modelo basado en el AIC</span></span>
+<span id="cb213-2"><a href="regresión-lineal-múltiple-rlm.html#cb213-2" tabindex="-1"></a>results[<span class="fu">which.min</span>(results<span class="sc">$</span>aic), ]</span></code></pre></div>
+<pre><code>##     mindex n                                                      predictors
+## 122    120 6 compacidad area_muros area_techo altura area_vidrio dist_vidrio
+##       rsquare      adjr     rmse   predrsq       cp      aic    sbic      sbc
+## 122 0.9240615 0.9230584 2.798857 0.9219093 8.212062 3773.278 1594.19 3829.004
+##         msep      fpe        apc       hsp
+## 122 7.947553 7.945799 0.07814542 0.0103619</code></pre>
+<p><strong>Interpretación:</strong> con el R² ajustado y con el AIC, el modelo elegido es el mismo: <strong>compacidad area_muros area_techo altura area_vidrio dist_vidrio</strong>. Es decir, <strong>el mejor modelo es el que deja por fuera la orientación</strong>: tiene el R² ajustado más alto (≈ 0.923) y el AIC más bajo (≈ 3773). Con el criterio de Cp, el modelo elegido es <strong>compacidad area_muros area_techo altura area_vidrio dist_vidrio</strong>, que coincide con los dos anteriores.</p>
+<div class="sourceCode" id="cb215"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb215-1"><a href="regresión-lineal-múltiple-rlm.html#cb215-1" tabindex="-1"></a><span class="fu">ggplot</span>(results, <span class="fu">aes</span>(<span class="at">x =</span> adjr, <span class="at">y =</span> aic)) <span class="sc">+</span></span>
+<span id="cb215-2"><a href="regresión-lineal-múltiple-rlm.html#cb215-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb215-3"><a href="regresión-lineal-múltiple-rlm.html#cb215-3" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb215-4"><a href="regresión-lineal-múltiple-rlm.html#cb215-4" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="fu">expression</span>(R<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> <span class="st">&quot; ajustado&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb215-5"><a href="regresión-lineal-múltiple-rlm.html#cb215-5" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;AIC&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/rlm_graf_seleccion-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb216"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb216-1"><a href="regresión-lineal-múltiple-rlm.html#cb216-1" tabindex="-1"></a><span class="co"># selección de modelos competitivos</span></span>
+<span id="cb216-2"><a href="regresión-lineal-múltiple-rlm.html#cb216-2" tabindex="-1"></a><span class="fu">subset</span>(results, aic <span class="sc">&lt;</span> <span class="dv">3800</span> <span class="sc">&amp;</span> adjr <span class="sc">&gt;</span> <span class="fl">0.92</span>, <span class="at">select =</span> n<span class="sc">:</span>aic)</span></code></pre></div>
+<pre><code>##     n
+## 111 5
+## 107 5
+## 122 6
+## 125 6
+## 127 7
+##                                                                      predictors
+## 111                        compacidad area_techo altura area_vidrio dist_vidrio
+## 107                        compacidad area_muros altura area_vidrio dist_vidrio
+## 122             compacidad area_muros area_techo altura area_vidrio dist_vidrio
+## 125            compacidad area_techo altura orientacion area_vidrio dist_vidrio
+## 127 compacidad area_muros area_techo altura orientacion area_vidrio dist_vidrio
+##       rsquare      adjr     rmse   predrsq        cp      aic
+## 111 0.9235878 0.9226805 2.805720 0.9214867 10.916917 3776.054
+## 107 0.9211802 0.9202443 2.849580 0.9190249 34.829260 3799.879
+## 122 0.9240615 0.9230584 2.798857 0.9219093  8.212062 3773.278
+## 125 0.9236091 0.9223950 2.810896 0.9208834 16.704855 3781.840
+## 127 0.9240829 0.9227739 2.804025 0.9213090 14.000000 3779.062</code></pre>
+<p><strong>Interpretación:</strong> en la esquina inferior derecha del gráfico (R² ajustado alto y AIC bajo) quedan pocos modelos competitivos. Todos incluyen <strong>compacidad, altura, área de vidrio y distribución del vidrio</strong>, que son las variables que no pueden faltar. Los que agregan la orientación nunca mejoran al que no la tiene.</p>
+</div>
+<div id="selección-secuencial" class="section level3 hasAnchor" number="9.12.2">
+<h3><span class="header-section-number">9.12.2</span> Selección secuencial<a href="regresión-lineal-múltiple-rlm.html#selecci%C3%B3n-secuencial" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb218"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb218-1"><a href="regresión-lineal-múltiple-rlm.html#cb218-1" tabindex="-1"></a><span class="co"># método forward</span></span>
+<span id="cb218-2"><a href="regresión-lineal-múltiple-rlm.html#cb218-2" tabindex="-1"></a>modelo_null <span class="ot">&lt;-</span> <span class="fu">lm</span>(carga_calef <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> df_rlm)</span>
+<span id="cb218-3"><a href="regresión-lineal-múltiple-rlm.html#cb218-3" tabindex="-1"></a>modelo_full <span class="ot">&lt;-</span> <span class="fu">lm</span>(carga_calef <span class="sc">~</span> compacidad <span class="sc">+</span> area_muros <span class="sc">+</span> area_techo <span class="sc">+</span> altura <span class="sc">+</span></span>
+<span id="cb218-4"><a href="regresión-lineal-múltiple-rlm.html#cb218-4" tabindex="-1"></a>                    orientacion <span class="sc">+</span> area_vidrio <span class="sc">+</span> dist_vidrio, <span class="at">data =</span> df_rlm)</span>
+<span id="cb218-5"><a href="regresión-lineal-múltiple-rlm.html#cb218-5" tabindex="-1"></a></span>
+<span id="cb218-6"><a href="regresión-lineal-múltiple-rlm.html#cb218-6" tabindex="-1"></a>sel_forward <span class="ot">&lt;-</span> <span class="fu">stepAIC</span>(modelo_null,</span>
+<span id="cb218-7"><a href="regresión-lineal-múltiple-rlm.html#cb218-7" tabindex="-1"></a>                       <span class="at">scope =</span> <span class="fu">list</span>(<span class="at">lower =</span> modelo_null,</span>
+<span id="cb218-8"><a href="regresión-lineal-múltiple-rlm.html#cb218-8" tabindex="-1"></a>                                    <span class="at">upper =</span> modelo_full),</span>
+<span id="cb218-9"><a href="regresión-lineal-múltiple-rlm.html#cb218-9" tabindex="-1"></a>                       <span class="at">direction =</span> <span class="st">&quot;forward&quot;</span>, <span class="at">trace =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb218-10"><a href="regresión-lineal-múltiple-rlm.html#cb218-10" tabindex="-1"></a><span class="fu">summary</span>(sel_forward)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = carga_calef ~ altura + area_vidrio + area_muros + 
+##     dist_vidrio + compacidad + area_techo, data = df_rlm)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -7.155 -1.421 -0.255  1.306  7.495 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   81.15580   18.15491   4.470 9.01e-06 ***
+## altura         4.16995    0.32239  12.935  &lt; 2e-16 ***
+## area_vidrio   16.84833    0.85166  19.783  &lt; 2e-16 ***
+## area_muros    -0.02648    0.01218  -2.173   0.0301 *  
+## dist_vidrio1   4.52765    0.51277   8.830  &lt; 2e-16 ***
+## dist_vidrio2   4.43599    0.51277   8.651  &lt; 2e-16 ***
+## dist_vidrio3   4.18300    0.51277   8.158 1.42e-15 ***
+## dist_vidrio4   4.38821    0.51277   8.558  &lt; 2e-16 ***
+## dist_vidrio5   4.18244    0.51277   8.157 1.43e-15 ***
+## compacidad   -64.77343    9.81444  -6.600 7.74e-11 ***
+## area_techo    -0.17458    0.03257  -5.359 1.11e-07 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.799 on 757 degrees of freedom
+## Multiple R-squared:  0.9241, Adjusted R-squared:  0.9231 
+## F-statistic: 921.2 on 10 and 757 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode" id="cb220"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb220-1"><a href="regresión-lineal-múltiple-rlm.html#cb220-1" tabindex="-1"></a><span class="co"># método backward</span></span>
+<span id="cb220-2"><a href="regresión-lineal-múltiple-rlm.html#cb220-2" tabindex="-1"></a>sel_backward <span class="ot">&lt;-</span> <span class="fu">stepAIC</span>(modelo_full, <span class="at">direction =</span> <span class="st">&quot;backward&quot;</span>,</span>
+<span id="cb220-3"><a href="regresión-lineal-múltiple-rlm.html#cb220-3" tabindex="-1"></a>                        <span class="at">trace =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb220-4"><a href="regresión-lineal-múltiple-rlm.html#cb220-4" tabindex="-1"></a><span class="fu">summary</span>(sel_backward)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = carga_calef ~ compacidad + area_muros + area_techo + 
+##     altura + area_vidrio + dist_vidrio, data = df_rlm)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -7.155 -1.421 -0.255  1.306  7.495 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   81.15580   18.15491   4.470 9.01e-06 ***
+## compacidad   -64.77343    9.81444  -6.600 7.74e-11 ***
+## area_muros    -0.02648    0.01218  -2.173   0.0301 *  
+## area_techo    -0.17458    0.03257  -5.359 1.11e-07 ***
+## altura         4.16995    0.32239  12.935  &lt; 2e-16 ***
+## area_vidrio   16.84833    0.85166  19.783  &lt; 2e-16 ***
+## dist_vidrio1   4.52765    0.51277   8.830  &lt; 2e-16 ***
+## dist_vidrio2   4.43599    0.51277   8.651  &lt; 2e-16 ***
+## dist_vidrio3   4.18300    0.51277   8.158 1.42e-15 ***
+## dist_vidrio4   4.38821    0.51277   8.558  &lt; 2e-16 ***
+## dist_vidrio5   4.18244    0.51277   8.157 1.43e-15 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.799 on 757 degrees of freedom
+## Multiple R-squared:  0.9241, Adjusted R-squared:  0.9231 
+## F-statistic: 921.2 on 10 and 757 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode" id="cb222"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb222-1"><a href="regresión-lineal-múltiple-rlm.html#cb222-1" tabindex="-1"></a><span class="co"># método stepwise (ambas direcciones)</span></span>
+<span id="cb222-2"><a href="regresión-lineal-múltiple-rlm.html#cb222-2" tabindex="-1"></a>sel_both <span class="ot">&lt;-</span> <span class="fu">stepAIC</span>(modelo_null, <span class="at">scope =</span> <span class="fu">list</span>(<span class="at">lower =</span> modelo_null,</span>
+<span id="cb222-3"><a href="regresión-lineal-múltiple-rlm.html#cb222-3" tabindex="-1"></a>                                              <span class="at">upper =</span> modelo_full),</span>
+<span id="cb222-4"><a href="regresión-lineal-múltiple-rlm.html#cb222-4" tabindex="-1"></a>                    <span class="at">direction =</span> <span class="st">&quot;both&quot;</span>, <span class="at">trace =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb222-5"><a href="regresión-lineal-múltiple-rlm.html#cb222-5" tabindex="-1"></a><span class="fu">summary</span>(sel_both)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = carga_calef ~ altura + area_vidrio + area_muros + 
+##     dist_vidrio + compacidad + area_techo, data = df_rlm)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -7.155 -1.421 -0.255  1.306  7.495 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   81.15580   18.15491   4.470 9.01e-06 ***
+## altura         4.16995    0.32239  12.935  &lt; 2e-16 ***
+## area_vidrio   16.84833    0.85166  19.783  &lt; 2e-16 ***
+## area_muros    -0.02648    0.01218  -2.173   0.0301 *  
+## dist_vidrio1   4.52765    0.51277   8.830  &lt; 2e-16 ***
+## dist_vidrio2   4.43599    0.51277   8.651  &lt; 2e-16 ***
+## dist_vidrio3   4.18300    0.51277   8.158 1.42e-15 ***
+## dist_vidrio4   4.38821    0.51277   8.558  &lt; 2e-16 ***
+## dist_vidrio5   4.18244    0.51277   8.157 1.43e-15 ***
+## compacidad   -64.77343    9.81444  -6.600 7.74e-11 ***
+## area_techo    -0.17458    0.03257  -5.359 1.11e-07 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.799 on 757 degrees of freedom
+## Multiple R-squared:  0.9241, Adjusted R-squared:  0.9231 
+## F-statistic: 921.2 on 10 and 757 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p><strong>Interpretación:</strong> los tres métodos secuenciales <strong>llegan al mismo modelo</strong>. <em>Forward</em> va agregando variables en este orden de importancia: altura, área de vidrio, área de muros, distribución del vidrio, compacidad y área de techo. <em>Backward</em> parte del modelo completo y solo saca la orientación. <em>Stepwise</em> coincide con forward. Que todos los métodos coincidan, incluido el de todas las regresiones posibles, da <strong>mucha confianza</strong> en que este es el modelo adecuado.</p>
+</div>
+<div id="comparación-de-modelos-con-la-prueba-f-parcial" class="section level3 hasAnchor" number="9.12.3">
+<h3><span class="header-section-number">9.12.3</span> Comparación de modelos con la prueba F parcial<a href="regresión-lineal-múltiple-rlm.html#comparaci%C3%B3n-de-modelos-con-la-prueba-f-parcial" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>¿Perdemos algo al quitar la orientación?</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: los coeficientes de la orientación son todos cero (el modelo reducido es suficiente).</li>
+<li><span class="math inline">\(H_1\)</span>: al menos uno es distinto de cero.</li>
+</ul>
+<div class="sourceCode" id="cb224"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb224-1"><a href="regresión-lineal-múltiple-rlm.html#cb224-1" tabindex="-1"></a>modelo_final <span class="ot">&lt;-</span> <span class="fu">lm</span>(carga_calef <span class="sc">~</span> compacidad <span class="sc">+</span> area_muros <span class="sc">+</span> area_techo <span class="sc">+</span> altura <span class="sc">+</span></span>
+<span id="cb224-2"><a href="regresión-lineal-múltiple-rlm.html#cb224-2" tabindex="-1"></a>                     area_vidrio <span class="sc">+</span> dist_vidrio, <span class="at">data =</span> df_rlm)</span>
+<span id="cb224-3"><a href="regresión-lineal-múltiple-rlm.html#cb224-3" tabindex="-1"></a></span>
+<span id="cb224-4"><a href="regresión-lineal-múltiple-rlm.html#cb224-4" tabindex="-1"></a><span class="fu">anova</span>(modelo_rlm, modelo_final)</span></code></pre></div>
+<pre><code>## Analysis of Variance Table
+## 
+## Model 1: carga_calef ~ compacidad + area_muros + area_techo + altura + 
+##     orientacion + area_vidrio + dist_vidrio
+## Model 2: carga_calef ~ compacidad + area_muros + area_techo + altura + 
+##     area_vidrio + dist_vidrio
+##   Res.Df    RSS Df Sum of Sq      F Pr(&gt;F)
+## 1    754 5928.4                           
+## 2    757 5930.0 -3   -1.6674 0.0707 0.9756</code></pre>
+<p><strong>Interpretación:</strong> con F = 0.07 y p = 0.976, <strong>no se rechaza <span class="math inline">\(H_0\)</span></strong>: quitar la orientación no empeora el modelo en nada. Es preferible el modelo más sencillo.</p>
+<p>¿Y si también quitamos el área de muros, que era la menos significativa?</p>
+<div class="sourceCode" id="cb226"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb226-1"><a href="regresión-lineal-múltiple-rlm.html#cb226-1" tabindex="-1"></a>modelo_sin_muros <span class="ot">&lt;-</span> <span class="fu">lm</span>(carga_calef <span class="sc">~</span> compacidad <span class="sc">+</span> area_techo <span class="sc">+</span> altura <span class="sc">+</span></span>
+<span id="cb226-2"><a href="regresión-lineal-múltiple-rlm.html#cb226-2" tabindex="-1"></a>                         area_vidrio <span class="sc">+</span> dist_vidrio, <span class="at">data =</span> df_rlm)</span>
+<span id="cb226-3"><a href="regresión-lineal-múltiple-rlm.html#cb226-3" tabindex="-1"></a></span>
+<span id="cb226-4"><a href="regresión-lineal-múltiple-rlm.html#cb226-4" tabindex="-1"></a><span class="fu">anova</span>(modelo_final, modelo_sin_muros)</span></code></pre></div>
+<pre><code>## Analysis of Variance Table
+## 
+## Model 1: carga_calef ~ compacidad + area_muros + area_techo + altura + 
+##     area_vidrio + dist_vidrio
+## Model 2: carga_calef ~ compacidad + area_techo + altura + area_vidrio + 
+##     dist_vidrio
+##   Res.Df  RSS Df Sum of Sq      F  Pr(&gt;F)  
+## 1    757 5930                              
+## 2    758 5967 -1   -36.992 4.7222 0.03008 *
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p><strong>Interpretación:</strong> aquí el p-valor es 0.030 (&lt; 0.05), así que <strong>el área de muros sí aporta</strong> y conviene dejarla. Quitarla empeoraría el ajuste de forma significativa, aunque leve.</p>
+</div>
+</div>
+<div id="modelo-final" class="section level2 hasAnchor" number="9.13">
+<h2><span class="header-section-number">9.13</span> Modelo final<a href="regresión-lineal-múltiple-rlm.html#modelo-final" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb228"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb228-1"><a href="regresión-lineal-múltiple-rlm.html#cb228-1" tabindex="-1"></a><span class="fu">summary</span>(modelo_final)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = carga_calef ~ compacidad + area_muros + area_techo + 
+##     altura + area_vidrio + dist_vidrio, data = df_rlm)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -7.155 -1.421 -0.255  1.306  7.495 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   81.15580   18.15491   4.470 9.01e-06 ***
+## compacidad   -64.77343    9.81444  -6.600 7.74e-11 ***
+## area_muros    -0.02648    0.01218  -2.173   0.0301 *  
+## area_techo    -0.17458    0.03257  -5.359 1.11e-07 ***
+## altura         4.16995    0.32239  12.935  &lt; 2e-16 ***
+## area_vidrio   16.84833    0.85166  19.783  &lt; 2e-16 ***
+## dist_vidrio1   4.52765    0.51277   8.830  &lt; 2e-16 ***
+## dist_vidrio2   4.43599    0.51277   8.651  &lt; 2e-16 ***
+## dist_vidrio3   4.18300    0.51277   8.158 1.42e-15 ***
+## dist_vidrio4   4.38821    0.51277   8.558  &lt; 2e-16 ***
+## dist_vidrio5   4.18244    0.51277   8.157 1.43e-15 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.799 on 757 degrees of freedom
+## Multiple R-squared:  0.9241, Adjusted R-squared:  0.9231 
+## F-statistic: 921.2 on 10 and 757 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p><strong>Interpretación:</strong> el modelo final es:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\widehat{\text{Carga}} = \; &amp; 81.16 - 64.77\,\text{Compacidad} - 0.026\,\text{Muros} - 0.175\,\text{Techo} \\
+&amp; + 4.17\,\text{Altura} + 16.85\,\text{Vidrio} \\
+&amp; + 4.53\,D_1 + 4.44\,D_2 + 4.18\,D_3 + 4.39\,D_4 + 4.18\,D_5
+\end{aligned}
+\]</span></p>
+<p>donde <span class="math inline">\(D_1, \dots, D_5\)</span> son las dummies de la distribución del vidrio (la referencia es 0 = sin vidrio).</p>
+<ul>
+<li>Todas las variables son significativas al 5 %.</li>
+<li>Explica el <strong>92.4 % de la variabilidad</strong> (R² ajustado = 0.9231, ligeramente mayor que el del modelo con orientación).</li>
+<li>El error estándar residual es de <strong>2.80 kWh/m²</strong>.</li>
+<li>Es globalmente significativo (F = 921.2 con 10 y 757 g.l., p-valor prácticamente cero).</li>
+</ul>
+<p>Los coeficientes son los mismos del modelo anterior (la orientación no estaba “robando” efecto a nadie), solo cambia ligeramente el intercepto.</p>
+<div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb230-1"><a href="regresión-lineal-múltiple-rlm.html#cb230-1" tabindex="-1"></a>dato_nuevo_final <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb230-2"><a href="regresión-lineal-múltiple-rlm.html#cb230-2" tabindex="-1"></a>  <span class="at">compacidad  =</span> <span class="fl">0.76</span>,</span>
+<span id="cb230-3"><a href="regresión-lineal-múltiple-rlm.html#cb230-3" tabindex="-1"></a>  <span class="at">area_muros  =</span> <span class="fl">416.5</span>,</span>
+<span id="cb230-4"><a href="regresión-lineal-múltiple-rlm.html#cb230-4" tabindex="-1"></a>  <span class="at">area_techo  =</span> <span class="fl">122.5</span>,</span>
+<span id="cb230-5"><a href="regresión-lineal-múltiple-rlm.html#cb230-5" tabindex="-1"></a>  <span class="at">altura      =</span> <span class="dv">7</span>,</span>
+<span id="cb230-6"><a href="regresión-lineal-múltiple-rlm.html#cb230-6" tabindex="-1"></a>  <span class="at">area_vidrio =</span> <span class="fl">0.25</span>,</span>
+<span id="cb230-7"><a href="regresión-lineal-múltiple-rlm.html#cb230-7" tabindex="-1"></a>  <span class="at">dist_vidrio =</span> <span class="fu">factor</span>(<span class="dv">3</span>, <span class="at">levels =</span> <span class="fu">levels</span>(df_rlm<span class="sc">$</span>dist_vidrio))</span>
+<span id="cb230-8"><a href="regresión-lineal-múltiple-rlm.html#cb230-8" tabindex="-1"></a>)</span>
+<span id="cb230-9"><a href="regresión-lineal-múltiple-rlm.html#cb230-9" tabindex="-1"></a></span>
+<span id="cb230-10"><a href="regresión-lineal-múltiple-rlm.html#cb230-10" tabindex="-1"></a><span class="fu">predict</span>(modelo_final, <span class="at">newdata =</span> dato_nuevo_final, <span class="at">interval =</span> <span class="st">&quot;confidence&quot;</span>)</span></code></pre></div>
+<pre><code>##        fit      lwr      upr
+## 1 37.09954 36.33581 37.86327</code></pre>
+<div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb232-1"><a href="regresión-lineal-múltiple-rlm.html#cb232-1" tabindex="-1"></a><span class="fu">predict</span>(modelo_final, <span class="at">newdata =</span> dato_nuevo_final, <span class="at">interval =</span> <span class="st">&quot;prediction&quot;</span>)</span></code></pre></div>
+<pre><code>##        fit      lwr      upr
+## 1 37.09954 31.55227 42.64681</code></pre>
+<p><strong>Interpretación:</strong> para el mismo edificio de antes, el modelo final estima <strong>37.10 kWh/m²</strong>, con un intervalo de confianza para la media de <strong>(36.34, 37.86)</strong> y un intervalo de predicción de <strong>(31.55, 42.65)</strong>. Ahora la predicción ya no depende de la orientación, lo cual es coherente: en la base, las cuatro versiones de este edificio (una por orientación) tienen cargas reales entre 35.64 y 36.59 kWh/m², todas dentro del intervalo de predicción.</p>
+<div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb234-1"><a href="regresión-lineal-múltiple-rlm.html#cb234-1" tabindex="-1"></a>car<span class="sc">:::</span><span class="fu">durbinWatsonTest</span>(modelo_final)</span></code></pre></div>
+<pre><code>##  lag Autocorrelation D-W Statistic p-value
+##    1       0.6369084      0.722627       0
+##  Alternative hypothesis: rho != 0</code></pre>
+<div class="sourceCode" id="cb236"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb236-1"><a href="regresión-lineal-múltiple-rlm.html#cb236-1" tabindex="-1"></a><span class="fu">shapiro.test</span>(<span class="fu">residuals</span>(modelo_final))</span></code></pre></div>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  residuals(modelo_final)
+## W = 0.94828, p-value = 9.507e-16</code></pre>
+<div class="sourceCode" id="cb238"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb238-1"><a href="regresión-lineal-múltiple-rlm.html#cb238-1" tabindex="-1"></a>lmtest<span class="sc">:::</span><span class="fu">bptest</span>(modelo_final)</span></code></pre></div>
+<pre><code>## 
+##  studentized Breusch-Pagan test
+## 
+## data:  modelo_final
+## BP = 377.45, df = 10, p-value &lt; 2.2e-16</code></pre>
+<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb240-1"><a href="regresión-lineal-múltiple-rlm.html#cb240-1" tabindex="-1"></a>car<span class="sc">:::</span><span class="fu">vif</span>(modelo_final)</span></code></pre></div>
+<pre><code>##                   GVIF Df GVIF^(1/(2*Df))
+## compacidad  105.524054  1       10.272490
+## area_muros   27.662740  1        5.259538
+## area_techo  211.938336  1       14.558102
+## altura       31.205474  1        5.586186
+## area_vidrio   1.260417  1        1.122683
+## dist_vidrio   1.260417  5        1.023414</code></pre>
+<p><strong>Interpretación:</strong> el modelo final hereda las mismas limitaciones del modelo completo. Hay autocorrelación por el orden del archivo (DW ≈ 0.72), los residuos no son normales (p &lt; 0.001), hay heterocedasticidad (p &lt; 0.001) y hay multicolinealidad fuerte entre las variables de forma (GVIF de techo ≈ 212 y de compacidad ≈ 106). Ninguna de estas fallas afecta la <strong>capacidad predictiva</strong> del modelo, que es muy buena. Lo que sí afectan es la <strong>precisión de los errores estándar</strong> y, por tanto, de los intervalos.</p>
+<p><strong>Una alternativa para tener en cuenta:</strong> igual que en la RLS, probamos transformar la respuesta.</p>
+<div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb242-1"><a href="regresión-lineal-múltiple-rlm.html#cb242-1" tabindex="-1"></a>modelo_final_log <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">log</span>(carga_calef) <span class="sc">~</span> compacidad <span class="sc">+</span> area_muros <span class="sc">+</span> area_techo <span class="sc">+</span> altura <span class="sc">+</span></span>
+<span id="cb242-2"><a href="regresión-lineal-múltiple-rlm.html#cb242-2" tabindex="-1"></a>                         area_vidrio <span class="sc">+</span> dist_vidrio, <span class="at">data =</span> df_rlm)</span>
+<span id="cb242-3"><a href="regresión-lineal-múltiple-rlm.html#cb242-3" tabindex="-1"></a><span class="fu">summary</span>(modelo_final_log)<span class="sc">$</span>r.squared</span></code></pre></div>
+<pre><code>## [1] 0.9550705</code></pre>
+<div class="sourceCode" id="cb244"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb244-1"><a href="regresión-lineal-múltiple-rlm.html#cb244-1" tabindex="-1"></a><span class="fu">shapiro.test</span>(<span class="fu">residuals</span>(modelo_final_log))</span></code></pre></div>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  residuals(modelo_final_log)
+## W = 0.97421, p-value = 2.15e-10</code></pre>
+<p><strong>Interpretación:</strong> con el logaritmo de la carga, el R² sube a <strong>0.955</strong> y los residuos se acercan más a la normalidad (W pasa de 0.948 a 0.974), aunque todavía no la cumplen. Si el objetivo fuera únicamente predecir, esta versión sería una buena candidata. Para interpretar los efectos en kWh/m², el modelo sin transformar es más directo.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="regresión-lineal-simple-rls.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="conclusiones.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/rstudio/bookdown-demo/edit/master/01-Trabajo.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

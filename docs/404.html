@@ -4,23 +4,23 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Page not found | Ejercicios de Regresión Lineal</title>
-  <meta name="description" content="Page not found | Ejercicios de Regresión Lineal" />
+  <title>Page not found | Análisis estadístico de la eficiencia energética en edificios</title>
+  <meta name="description" content="Page not found | Análisis estadístico de la eficiencia energética en edificios" />
   <meta name="generator" content="bookdown 0.47 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Page not found | Ejercicios de Regresión Lineal" />
+  <meta property="og:title" content="Page not found | Análisis estadístico de la eficiencia energética en edificios" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Page not found | Ejercicios de Regresión Lineal" />
+  <meta name="twitter:title" content="Page not found | Análisis estadístico de la eficiencia energética en edificios" />
   
   
   
 
-<meta name="author" content="Sergio Cuello y Juanmanuelle Rodríguez" />
+<meta name="author" content="Tu nombre" />
 
 
 
@@ -51,6 +51,14 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.12.1/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.25.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.25.2/plotly-latest.min.js"></script>
 
 
 <style type="text/css">
@@ -139,11 +147,73 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">A Minimal Book Example</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="ejercicio-9-sec.-7.html"><a href="ejercicio-9-sec.-7.html"><i class="fa fa-check"></i><b>1</b> Ejercicio 9 (Sec. 7.4)</a></li>
-<li class="chapter" data-level="2" data-path="ejercicio-10-sec.-7.html"><a href="ejercicio-10-sec.-7.html"><i class="fa fa-check"></i><b>2</b> Ejercicio 10 (Sec. 7.4)</a></li>
-<li class="chapter" data-level="3" data-path="ejercicio-1-sec.-7.html"><a href="ejercicio-1-sec.-7.html"><i class="fa fa-check"></i><b>3</b> Ejercicio 1 (Sec. 7.10)</a></li>
-<li class="chapter" data-level="4" data-path="ejercicio-3-sec.-7.html"><a href="ejercicio-3-sec.-7.html"><i class="fa fa-check"></i><b>4</b> Ejercicio 3 (Sec. 7.10)</a></li>
-<li class="chapter" data-level="5" data-path="ejercicio-13-sec.-7.html"><a href="ejercicio-13-sec.-7.html"><i class="fa fa-check"></i><b>5</b> Ejercicio 13 (Sec. 7.10)</a></li>
+<li class="chapter" data-level="1" data-path="contexto-de-los-datos.html"><a href="contexto-de-los-datos.html"><i class="fa fa-check"></i><b>1</b> Contexto de los datos</a></li>
+<li class="chapter" data-level="2" data-path="librerías.html"><a href="librerías.html"><i class="fa fa-check"></i><b>2</b> Librerías</a></li>
+<li class="chapter" data-level="3" data-path="extracción-transformación-y-carga-etl.html"><a href="extracción-transformación-y-carga-etl.html"><i class="fa fa-check"></i><b>3</b> Extracción, transformación y carga (ETL)</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="extracción-transformación-y-carga-etl.html"><a href="extracción-transformación-y-carga-etl.html#valores-ausentes"><i class="fa fa-check"></i><b>3.1</b> Valores ausentes</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html"><i class="fa fa-check"></i><b>4</b> Análisis exploratorio de datos (EDA)</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#an%C3%A1lisis-de-la-variable-carga_calef-target"><i class="fa fa-check"></i><b>4.1</b> Análisis de la variable <code>carga_calef</code> (target)</a></li>
+<li class="chapter" data-level="4.2" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#an%C3%A1lisis-de-las-variables-caracter%C3%ADsticas-independientes"><i class="fa fa-check"></i><b>4.2</b> Análisis de las variables características (independientes)</a></li>
+<li class="chapter" data-level="4.3" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#variables-categ%C3%B3ricas"><i class="fa fa-check"></i><b>4.3</b> Variables categóricas</a></li>
+<li class="chapter" data-level="4.4" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#an%C3%A1lisis-exploratorio-bivariado"><i class="fa fa-check"></i><b>4.4</b> Análisis exploratorio bivariado</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="estadística-paramétrica-y-no-paramétrica.html"><a href="estadística-paramétrica-y-no-paramétrica.html"><i class="fa fa-check"></i><b>5</b> Estadística paramétrica y no paramétrica</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="estadística-paramétrica-y-no-paramétrica.html"><a href="estadística-paramétrica-y-no-paramétrica.html#comparaci%C3%B3n-de-dos-grupos-independientes-un-piso-vs.-dos-pisos"><i class="fa fa-check"></i><b>5.1</b> Comparación de dos grupos independientes: un piso vs. dos pisos</a></li>
+<li class="chapter" data-level="5.2" data-path="estadística-paramétrica-y-no-paramétrica.html"><a href="estadística-paramétrica-y-no-paramétrica.html#comparaci%C3%B3n-de-dos-grupos-pareados-calefacci%C3%B3n-vs.-refrigeraci%C3%B3n"><i class="fa fa-check"></i><b>5.2</b> Comparación de dos grupos pareados: calefacción vs. refrigeración</a></li>
+<li class="chapter" data-level="5.3" data-path="estadística-paramétrica-y-no-paramétrica.html"><a href="estadística-paramétrica-y-no-paramétrica.html#anova-cambia-la-carga-seg%C3%BAn-la-cantidad-de-ventanas"><i class="fa fa-check"></i><b>5.3</b> ANOVA: ¿cambia la carga según la cantidad de ventanas?</a></li>
+<li class="chapter" data-level="5.4" data-path="estadística-paramétrica-y-no-paramétrica.html"><a href="estadística-paramétrica-y-no-paramétrica.html#kruskal-wallis"><i class="fa fa-check"></i><b>5.4</b> Kruskal-Wallis</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="tablas-de-contingencia.html"><a href="tablas-de-contingencia.html"><i class="fa fa-check"></i><b>6</b> Tablas de contingencia</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="tablas-de-contingencia.html"><a href="tablas-de-contingencia.html#prueba-de-independencia-altura-vs.-nivel-de-carga"><i class="fa fa-check"></i><b>6.1</b> Prueba de independencia: altura vs. nivel de carga</a></li>
+<li class="chapter" data-level="6.2" data-path="tablas-de-contingencia.html"><a href="tablas-de-contingencia.html#prueba-de-homogeneidad-proporci%C3%B3n-de-carga-alta-en-cada-orientaci%C3%B3n"><i class="fa fa-check"></i><b>6.2</b> Prueba de homogeneidad: proporción de carga alta en cada orientación</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="correlación-lineal.html"><a href="correlación-lineal.html"><i class="fa fa-check"></i><b>7</b> Correlación lineal</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="correlación-lineal.html"><a href="correlación-lineal.html#correlaci%C3%B3n-de-pearson"><i class="fa fa-check"></i><b>7.1</b> Correlación de Pearson</a></li>
+<li class="chapter" data-level="7.2" data-path="correlación-lineal.html"><a href="correlación-lineal.html#correlaci%C3%B3n-de-spearman"><i class="fa fa-check"></i><b>7.2</b> Correlación de Spearman</a></li>
+<li class="chapter" data-level="7.3" data-path="correlación-lineal.html"><a href="correlación-lineal.html#correlaci%C3%B3n-de-kendall"><i class="fa fa-check"></i><b>7.3</b> Correlación de Kendall</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html"><i class="fa fa-check"></i><b>8</b> Regresión lineal simple (RLS)</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#estimaci%C3%B3n-del-modelo"><i class="fa fa-check"></i><b>8.1</b> Estimación del modelo</a></li>
+<li class="chapter" data-level="8.2" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#inferencia-sobre-los-coeficientes"><i class="fa fa-check"></i><b>8.2</b> Inferencia sobre los coeficientes</a></li>
+<li class="chapter" data-level="8.3" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#transformaciones-para-mejorar-el-ajuste"><i class="fa fa-check"></i><b>8.3</b> Transformaciones para mejorar el ajuste</a></li>
+<li class="chapter" data-level="8.4" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#an%C3%A1lisis-de-residuales-y-validaci%C3%B3n-de-supuestos"><i class="fa fa-check"></i><b>8.4</b> Análisis de residuales y validación de supuestos</a>
+<ul>
+<li class="chapter" data-level="8.4.1" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#independencia-de-los-errores"><i class="fa fa-check"></i><b>8.4.1</b> Independencia de los errores</a></li>
+<li class="chapter" data-level="8.4.2" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#normalidad-de-los-errores"><i class="fa fa-check"></i><b>8.4.2</b> Normalidad de los errores</a></li>
+<li class="chapter" data-level="8.4.3" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#media-cero-de-los-errores"><i class="fa fa-check"></i><b>8.4.3</b> Media cero de los errores</a></li>
+<li class="chapter" data-level="8.4.4" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#varianza-constante-de-los-errores"><i class="fa fa-check"></i><b>8.4.4</b> Varianza constante de los errores</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#estimaci%C3%B3n-de-la-respuesta-media-e-intervalo-de-predicci%C3%B3n"><i class="fa fa-check"></i><b>8.5</b> Estimación de la respuesta media e intervalo de predicción</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html"><i class="fa fa-check"></i><b>9</b> Regresión lineal múltiple (RLM)</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#preparaci%C3%B3n-de-los-datos-y-exploraci%C3%B3n"><i class="fa fa-check"></i><b>9.1</b> Preparación de los datos y exploración</a></li>
+<li class="chapter" data-level="9.2" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#ajuste-del-modelo-con-todas-las-variables"><i class="fa fa-check"></i><b>9.2</b> Ajuste del modelo con todas las variables</a></li>
+<li class="chapter" data-level="9.3" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#prueba-de-significancia-global"><i class="fa fa-check"></i><b>9.3</b> Prueba de significancia global</a></li>
+<li class="chapter" data-level="9.4" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#pruebas-individuales-e-intervalos-de-confianza"><i class="fa fa-check"></i><b>9.4</b> Pruebas individuales e intervalos de confianza</a></li>
+<li class="chapter" data-level="9.5" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#coeficiente-de-determinaci%C3%B3n-r%C2%B2-y-r%C2%B2-ajustado"><i class="fa fa-check"></i><b>9.5</b> Coeficiente de determinación R² y R² ajustado</a></li>
+<li class="chapter" data-level="9.6" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#inferencia-para-la-respuesta"><i class="fa fa-check"></i><b>9.6</b> Inferencia para la respuesta</a></li>
+<li class="chapter" data-level="9.7" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#an%C3%A1lisis-de-residuales-y-validaci%C3%B3n-de-supuestos-1"><i class="fa fa-check"></i><b>9.7</b> Análisis de residuales y validación de supuestos</a></li>
+<li class="chapter" data-level="9.8" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#identificaci%C3%B3n-de-outliers"><i class="fa fa-check"></i><b>9.8</b> Identificación de outliers</a></li>
+<li class="chapter" data-level="9.9" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#identificaci%C3%B3n-de-observaciones-influenciales"><i class="fa fa-check"></i><b>9.9</b> Identificación de observaciones influenciales</a></li>
+<li class="chapter" data-level="9.10" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#an%C3%A1lisis-de-multicolinealidad"><i class="fa fa-check"></i><b>9.10</b> Análisis de multicolinealidad</a></li>
+<li class="chapter" data-level="9.11" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#modelos-con-variables-cualitativas-variables-dummy"><i class="fa fa-check"></i><b>9.11</b> Modelos con variables cualitativas (variables dummy)</a></li>
+<li class="chapter" data-level="9.12" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#selecci%C3%B3n-de-variables"><i class="fa fa-check"></i><b>9.12</b> Selección de variables</a>
+<ul>
+<li class="chapter" data-level="9.12.1" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#m%C3%A9todo-de-todas-las-regresiones-posibles"><i class="fa fa-check"></i><b>9.12.1</b> Método de todas las regresiones posibles</a></li>
+<li class="chapter" data-level="9.12.2" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#selecci%C3%B3n-secuencial"><i class="fa fa-check"></i><b>9.12.2</b> Selección secuencial</a></li>
+<li class="chapter" data-level="9.12.3" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#comparaci%C3%B3n-de-modelos-con-la-prueba-f-parcial"><i class="fa fa-check"></i><b>9.12.3</b> Comparación de modelos con la prueba F parcial</a></li>
+</ul></li>
+<li class="chapter" data-level="9.13" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#modelo-final"><i class="fa fa-check"></i><b>9.13</b> Modelo final</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="conclusiones.html"><a href="conclusiones.html"><i class="fa fa-check"></i><b>10</b> Conclusiones</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -156,7 +226,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Ejercicios de Regresión Lineal</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Análisis estadístico de la eficiencia energética en edificios</a>
           </h1>
         </div>
 

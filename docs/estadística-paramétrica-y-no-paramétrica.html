@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 5 Estadística paramétrica y no paramétrica | Análisis estadístico de la eficiencia energética en edificios</title>
+  <meta name="description" content="Chapter 5 Estadística paramétrica y no paramétrica | Análisis estadístico de la eficiencia energética en edificios" />
+  <meta name="generator" content="bookdown 0.47 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 5 Estadística paramétrica y no paramétrica | Análisis estadístico de la eficiencia energética en edificios" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 5 Estadística paramétrica y no paramétrica | Análisis estadístico de la eficiencia energética en edificios" />
+  
+  
+  
+
+<meta name="author" content="Tu nombre" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="análisis-exploratorio-de-datos-eda.html"/>
+<link rel="next" href="tablas-de-contingencia.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.12.1/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.25.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.25.2/plotly-latest.min.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="contexto-de-los-datos.html"><a href="contexto-de-los-datos.html"><i class="fa fa-check"></i><b>1</b> Contexto de los datos</a></li>
+<li class="chapter" data-level="2" data-path="librerías.html"><a href="librerías.html"><i class="fa fa-check"></i><b>2</b> Librerías</a></li>
+<li class="chapter" data-level="3" data-path="extracción-transformación-y-carga-etl.html"><a href="extracción-transformación-y-carga-etl.html"><i class="fa fa-check"></i><b>3</b> Extracción, transformación y carga (ETL)</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="extracción-transformación-y-carga-etl.html"><a href="extracción-transformación-y-carga-etl.html#valores-ausentes"><i class="fa fa-check"></i><b>3.1</b> Valores ausentes</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html"><i class="fa fa-check"></i><b>4</b> Análisis exploratorio de datos (EDA)</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#an%C3%A1lisis-de-la-variable-carga_calef-target"><i class="fa fa-check"></i><b>4.1</b> Análisis de la variable <code>carga_calef</code> (target)</a></li>
+<li class="chapter" data-level="4.2" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#an%C3%A1lisis-de-las-variables-caracter%C3%ADsticas-independientes"><i class="fa fa-check"></i><b>4.2</b> Análisis de las variables características (independientes)</a></li>
+<li class="chapter" data-level="4.3" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#variables-categ%C3%B3ricas"><i class="fa fa-check"></i><b>4.3</b> Variables categóricas</a></li>
+<li class="chapter" data-level="4.4" data-path="análisis-exploratorio-de-datos-eda.html"><a href="análisis-exploratorio-de-datos-eda.html#an%C3%A1lisis-exploratorio-bivariado"><i class="fa fa-check"></i><b>4.4</b> Análisis exploratorio bivariado</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="estadística-paramétrica-y-no-paramétrica.html"><a href="estadística-paramétrica-y-no-paramétrica.html"><i class="fa fa-check"></i><b>5</b> Estadística paramétrica y no paramétrica</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="estadística-paramétrica-y-no-paramétrica.html"><a href="estadística-paramétrica-y-no-paramétrica.html#comparaci%C3%B3n-de-dos-grupos-independientes-un-piso-vs.-dos-pisos"><i class="fa fa-check"></i><b>5.1</b> Comparación de dos grupos independientes: un piso vs. dos pisos</a></li>
+<li class="chapter" data-level="5.2" data-path="estadística-paramétrica-y-no-paramétrica.html"><a href="estadística-paramétrica-y-no-paramétrica.html#comparaci%C3%B3n-de-dos-grupos-pareados-calefacci%C3%B3n-vs.-refrigeraci%C3%B3n"><i class="fa fa-check"></i><b>5.2</b> Comparación de dos grupos pareados: calefacción vs. refrigeración</a></li>
+<li class="chapter" data-level="5.3" data-path="estadística-paramétrica-y-no-paramétrica.html"><a href="estadística-paramétrica-y-no-paramétrica.html#anova-cambia-la-carga-seg%C3%BAn-la-cantidad-de-ventanas"><i class="fa fa-check"></i><b>5.3</b> ANOVA: ¿cambia la carga según la cantidad de ventanas?</a></li>
+<li class="chapter" data-level="5.4" data-path="estadística-paramétrica-y-no-paramétrica.html"><a href="estadística-paramétrica-y-no-paramétrica.html#kruskal-wallis"><i class="fa fa-check"></i><b>5.4</b> Kruskal-Wallis</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="tablas-de-contingencia.html"><a href="tablas-de-contingencia.html"><i class="fa fa-check"></i><b>6</b> Tablas de contingencia</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="tablas-de-contingencia.html"><a href="tablas-de-contingencia.html#prueba-de-independencia-altura-vs.-nivel-de-carga"><i class="fa fa-check"></i><b>6.1</b> Prueba de independencia: altura vs. nivel de carga</a></li>
+<li class="chapter" data-level="6.2" data-path="tablas-de-contingencia.html"><a href="tablas-de-contingencia.html#prueba-de-homogeneidad-proporci%C3%B3n-de-carga-alta-en-cada-orientaci%C3%B3n"><i class="fa fa-check"></i><b>6.2</b> Prueba de homogeneidad: proporción de carga alta en cada orientación</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="correlación-lineal.html"><a href="correlación-lineal.html"><i class="fa fa-check"></i><b>7</b> Correlación lineal</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="correlación-lineal.html"><a href="correlación-lineal.html#correlaci%C3%B3n-de-pearson"><i class="fa fa-check"></i><b>7.1</b> Correlación de Pearson</a></li>
+<li class="chapter" data-level="7.2" data-path="correlación-lineal.html"><a href="correlación-lineal.html#correlaci%C3%B3n-de-spearman"><i class="fa fa-check"></i><b>7.2</b> Correlación de Spearman</a></li>
+<li class="chapter" data-level="7.3" data-path="correlación-lineal.html"><a href="correlación-lineal.html#correlaci%C3%B3n-de-kendall"><i class="fa fa-check"></i><b>7.3</b> Correlación de Kendall</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html"><i class="fa fa-check"></i><b>8</b> Regresión lineal simple (RLS)</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#estimaci%C3%B3n-del-modelo"><i class="fa fa-check"></i><b>8.1</b> Estimación del modelo</a></li>
+<li class="chapter" data-level="8.2" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#inferencia-sobre-los-coeficientes"><i class="fa fa-check"></i><b>8.2</b> Inferencia sobre los coeficientes</a></li>
+<li class="chapter" data-level="8.3" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#transformaciones-para-mejorar-el-ajuste"><i class="fa fa-check"></i><b>8.3</b> Transformaciones para mejorar el ajuste</a></li>
+<li class="chapter" data-level="8.4" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#an%C3%A1lisis-de-residuales-y-validaci%C3%B3n-de-supuestos"><i class="fa fa-check"></i><b>8.4</b> Análisis de residuales y validación de supuestos</a>
+<ul>
+<li class="chapter" data-level="8.4.1" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#independencia-de-los-errores"><i class="fa fa-check"></i><b>8.4.1</b> Independencia de los errores</a></li>
+<li class="chapter" data-level="8.4.2" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#normalidad-de-los-errores"><i class="fa fa-check"></i><b>8.4.2</b> Normalidad de los errores</a></li>
+<li class="chapter" data-level="8.4.3" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#media-cero-de-los-errores"><i class="fa fa-check"></i><b>8.4.3</b> Media cero de los errores</a></li>
+<li class="chapter" data-level="8.4.4" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#varianza-constante-de-los-errores"><i class="fa fa-check"></i><b>8.4.4</b> Varianza constante de los errores</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="regresión-lineal-simple-rls.html"><a href="regresión-lineal-simple-rls.html#estimaci%C3%B3n-de-la-respuesta-media-e-intervalo-de-predicci%C3%B3n"><i class="fa fa-check"></i><b>8.5</b> Estimación de la respuesta media e intervalo de predicción</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html"><i class="fa fa-check"></i><b>9</b> Regresión lineal múltiple (RLM)</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#preparaci%C3%B3n-de-los-datos-y-exploraci%C3%B3n"><i class="fa fa-check"></i><b>9.1</b> Preparación de los datos y exploración</a></li>
+<li class="chapter" data-level="9.2" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#ajuste-del-modelo-con-todas-las-variables"><i class="fa fa-check"></i><b>9.2</b> Ajuste del modelo con todas las variables</a></li>
+<li class="chapter" data-level="9.3" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#prueba-de-significancia-global"><i class="fa fa-check"></i><b>9.3</b> Prueba de significancia global</a></li>
+<li class="chapter" data-level="9.4" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#pruebas-individuales-e-intervalos-de-confianza"><i class="fa fa-check"></i><b>9.4</b> Pruebas individuales e intervalos de confianza</a></li>
+<li class="chapter" data-level="9.5" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#coeficiente-de-determinaci%C3%B3n-r%C2%B2-y-r%C2%B2-ajustado"><i class="fa fa-check"></i><b>9.5</b> Coeficiente de determinación R² y R² ajustado</a></li>
+<li class="chapter" data-level="9.6" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#inferencia-para-la-respuesta"><i class="fa fa-check"></i><b>9.6</b> Inferencia para la respuesta</a></li>
+<li class="chapter" data-level="9.7" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#an%C3%A1lisis-de-residuales-y-validaci%C3%B3n-de-supuestos-1"><i class="fa fa-check"></i><b>9.7</b> Análisis de residuales y validación de supuestos</a></li>
+<li class="chapter" data-level="9.8" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#identificaci%C3%B3n-de-outliers"><i class="fa fa-check"></i><b>9.8</b> Identificación de outliers</a></li>
+<li class="chapter" data-level="9.9" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#identificaci%C3%B3n-de-observaciones-influenciales"><i class="fa fa-check"></i><b>9.9</b> Identificación de observaciones influenciales</a></li>
+<li class="chapter" data-level="9.10" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#an%C3%A1lisis-de-multicolinealidad"><i class="fa fa-check"></i><b>9.10</b> Análisis de multicolinealidad</a></li>
+<li class="chapter" data-level="9.11" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#modelos-con-variables-cualitativas-variables-dummy"><i class="fa fa-check"></i><b>9.11</b> Modelos con variables cualitativas (variables dummy)</a></li>
+<li class="chapter" data-level="9.12" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#selecci%C3%B3n-de-variables"><i class="fa fa-check"></i><b>9.12</b> Selección de variables</a>
+<ul>
+<li class="chapter" data-level="9.12.1" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#m%C3%A9todo-de-todas-las-regresiones-posibles"><i class="fa fa-check"></i><b>9.12.1</b> Método de todas las regresiones posibles</a></li>
+<li class="chapter" data-level="9.12.2" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#selecci%C3%B3n-secuencial"><i class="fa fa-check"></i><b>9.12.2</b> Selección secuencial</a></li>
+<li class="chapter" data-level="9.12.3" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#comparaci%C3%B3n-de-modelos-con-la-prueba-f-parcial"><i class="fa fa-check"></i><b>9.12.3</b> Comparación de modelos con la prueba F parcial</a></li>
+</ul></li>
+<li class="chapter" data-level="9.13" data-path="regresión-lineal-múltiple-rlm.html"><a href="regresión-lineal-múltiple-rlm.html#modelo-final"><i class="fa fa-check"></i><b>9.13</b> Modelo final</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="conclusiones.html"><a href="conclusiones.html"><i class="fa fa-check"></i><b>10</b> Conclusiones</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Análisis estadístico de la eficiencia energética en edificios</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="estadística-paramétrica-y-no-paramétrica" class="section level1 hasAnchor" number="5">
+<h1><span class="header-section-number">Chapter 5</span> Estadística paramétrica y no paramétrica<a href="estadística-paramétrica-y-no-paramétrica.html#estad%C3%ADstica-param%C3%A9trica-y-no-param%C3%A9trica" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="comparación-de-dos-grupos-independientes-un-piso-vs.-dos-pisos" class="section level2 hasAnchor" number="5.1">
+<h2><span class="header-section-number">5.1</span> Comparación de dos grupos independientes: un piso vs. dos pisos<a href="estadística-paramétrica-y-no-paramétrica.html#comparaci%C3%B3n-de-dos-grupos-independientes-un-piso-vs.-dos-pisos" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Queremos saber si la carga de calefacción media es distinta según la altura del edificio.</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: la carga media de calefacción es igual en edificios de 3.5 m y de 7 m.</li>
+<li><span class="math inline">\(H_1\)</span>: las cargas medias son diferentes.</li>
+</ul>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="estadística-paramétrica-y-no-paramétrica.html#cb37-1" tabindex="-1"></a>df_alt <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">altura =</span> <span class="fu">factor</span>(altura))</span>
+<span id="cb37-2"><a href="estadística-paramétrica-y-no-paramétrica.html#cb37-2" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="estadística-paramétrica-y-no-paramétrica.html#cb37-3" tabindex="-1"></a>df_alt <span class="sc">%&gt;%</span></span>
+<span id="cb37-4"><a href="estadística-paramétrica-y-no-paramétrica.html#cb37-4" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> altura, <span class="at">y =</span> carga_calef, <span class="at">fill =</span> altura)) <span class="sc">+</span></span>
+<span id="cb37-5"><a href="estadística-paramétrica-y-no-paramétrica.html#cb37-5" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb37-6"><a href="estadística-paramétrica-y-no-paramétrica.html#cb37-6" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Altura (m)&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Carga de calefacción (kWh/m²)&quot;</span>,</span>
+<span id="cb37-7"><a href="estadística-paramétrica-y-no-paramétrica.html#cb37-7" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&quot;Carga de calefacción según la altura del edificio&quot;</span>) <span class="sc">+</span></span>
+<span id="cb37-8"><a href="estadística-paramétrica-y-no-paramétrica.html#cb37-8" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb37-9"><a href="estadística-paramétrica-y-no-paramétrica.html#cb37-9" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/box_altura-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p><strong>Supuesto de normalidad por grupo</strong></p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="estadística-paramétrica-y-no-paramétrica.html#cb38-1" tabindex="-1"></a>df_alt <span class="sc">%&gt;%</span></span>
+<span id="cb38-2"><a href="estadística-paramétrica-y-no-paramétrica.html#cb38-2" tabindex="-1"></a>  <span class="fu">group_by</span>(altura) <span class="sc">%&gt;%</span></span>
+<span id="cb38-3"><a href="estadística-paramétrica-y-no-paramétrica.html#cb38-3" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">estadistico =</span> <span class="fu">shapiro.test</span>(carga_calef)<span class="sc">$</span>statistic,</span>
+<span id="cb38-4"><a href="estadística-paramétrica-y-no-paramétrica.html#cb38-4" tabindex="-1"></a>            <span class="at">p_valor =</span> <span class="fu">shapiro.test</span>(carga_calef)<span class="sc">$</span>p.value)</span></code></pre></div>
+<pre><code>## # A tibble: 2 × 3
+##   altura estadistico    p_valor
+##   &lt;fct&gt;        &lt;dbl&gt;      &lt;dbl&gt;
+## 1 3.5          0.977 0.00000778
+## 2 7            0.981 0.0000483</code></pre>
+<p><strong>Interpretación:</strong> en ambos grupos el p-valor es menor que 0.05, así que <strong>los datos no siguen una distribución normal</strong>. Con 384 edificios por grupo, la prueba t sigue siendo bastante confiable (por el teorema del límite central), pero conviene confirmar con la prueba no paramétrica.</p>
+<p><strong>Supuesto de igualdad de varianzas</strong></p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="estadística-paramétrica-y-no-paramétrica.html#cb40-1" tabindex="-1"></a><span class="fu">leveneTest</span>(carga_calef <span class="sc">~</span> altura, <span class="at">data =</span> df_alt, <span class="at">center =</span> <span class="st">&quot;median&quot;</span>)</span></code></pre></div>
+<pre><code>## Levene&#39;s Test for Homogeneity of Variance (center = &quot;median&quot;)
+##        Df F value    Pr(&gt;F)    
+## group   1  203.86 &lt; 2.2e-16 ***
+##       766                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p><strong>Interpretación:</strong> el p-valor es prácticamente cero, así que <strong>las varianzas no son iguales</strong>. Basta ver el boxplot: los edificios de dos pisos tienen una dispersión mucho mayor (ds = 5.95) que los de un piso (ds = 2.67). Por eso usamos la versión de Welch (<code>var.equal = FALSE</code>).</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="estadística-paramétrica-y-no-paramétrica.html#cb42-1" tabindex="-1"></a>un_piso   <span class="ot">&lt;-</span> df<span class="sc">$</span>carga_calef[df<span class="sc">$</span>altura <span class="sc">==</span> <span class="fl">3.5</span>]</span>
+<span id="cb42-2"><a href="estadística-paramétrica-y-no-paramétrica.html#cb42-2" tabindex="-1"></a>dos_pisos <span class="ot">&lt;-</span> df<span class="sc">$</span>carga_calef[df<span class="sc">$</span>altura <span class="sc">==</span> <span class="dv">7</span>]</span>
+<span id="cb42-3"><a href="estadística-paramétrica-y-no-paramétrica.html#cb42-3" tabindex="-1"></a></span>
+<span id="cb42-4"><a href="estadística-paramétrica-y-no-paramétrica.html#cb42-4" tabindex="-1"></a><span class="fu">t.test</span>(un_piso,</span>
+<span id="cb42-5"><a href="estadística-paramétrica-y-no-paramétrica.html#cb42-5" tabindex="-1"></a>       dos_pisos,</span>
+<span id="cb42-6"><a href="estadística-paramétrica-y-no-paramétrica.html#cb42-6" tabindex="-1"></a>       <span class="at">var.equal =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb42-7"><a href="estadística-paramétrica-y-no-paramétrica.html#cb42-7" tabindex="-1"></a>       <span class="at">paired =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  un_piso and dos_pisos
+## t = -53.857, df = 531.21, p-value &lt; 2.2e-16
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -18.59165 -17.28311
+## sample estimates:
+## mean of x mean of y 
+##  13.33851  31.27589</code></pre>
+<p><strong>Interpretación:</strong> con t = −53.86 y un p-valor prácticamente cero, <strong>se rechaza <span class="math inline">\(H_0\)</span></strong>. Los edificios de dos pisos necesitan, en promedio, unos <strong>17.94 kWh/m² más</strong> de calefacción que los de un piso.</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="estadística-paramétrica-y-no-paramétrica.html#cb44-1" tabindex="-1"></a>d_alt <span class="ot">&lt;-</span> <span class="fu">cohen.d</span>(un_piso,</span>
+<span id="cb44-2"><a href="estadística-paramétrica-y-no-paramétrica.html#cb44-2" tabindex="-1"></a>                 dos_pisos,</span>
+<span id="cb44-3"><a href="estadística-paramétrica-y-no-paramétrica.html#cb44-3" tabindex="-1"></a>                 <span class="at">paired =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb44-4"><a href="estadística-paramétrica-y-no-paramétrica.html#cb44-4" tabindex="-1"></a>d_alt</span></code></pre></div>
+<pre><code>## 
+## Cohen&#39;s d
+## 
+## d estimate: -3.886803 (large)
+## 95 percent confidence interval:
+##     lower     upper 
+## -4.127579 -3.646027</code></pre>
+<p><strong>Interpretación:</strong> el tamaño del efecto es enorme (d ≈ -3.89, magnitud <em>large</em>). Las medias están separadas por casi cuatro desviaciones estándar, así que la diferencia no solo es estadísticamente significativa, sino que <strong>en la práctica es gigantesca</strong>.</p>
+<p><strong>Confirmación no paramétrica (Wilcoxon / Mann-Whitney)</strong></p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="estadística-paramétrica-y-no-paramétrica.html#cb46-1" tabindex="-1"></a>df_alt <span class="sc">%&gt;%</span></span>
+<span id="cb46-2"><a href="estadística-paramétrica-y-no-paramétrica.html#cb46-2" tabindex="-1"></a>  <span class="fu">wilcox_test</span>(carga_calef <span class="sc">~</span> altura,</span>
+<span id="cb46-3"><a href="estadística-paramétrica-y-no-paramétrica.html#cb46-3" tabindex="-1"></a>              <span class="at">paired =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 1 × 7
+##   .y.         group1 group2    n1    n2 statistic         p
+## * &lt;chr&gt;       &lt;chr&gt;  &lt;chr&gt;  &lt;int&gt; &lt;int&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 carga_calef 3.5    7        384   384       404 9.46e-126</code></pre>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="estadística-paramétrica-y-no-paramétrica.html#cb48-1" tabindex="-1"></a>ef_alt <span class="ot">&lt;-</span> df_alt <span class="sc">%&gt;%</span></span>
+<span id="cb48-2"><a href="estadística-paramétrica-y-no-paramétrica.html#cb48-2" tabindex="-1"></a>  <span class="fu">wilcox_effsize</span>(carga_calef <span class="sc">~</span> altura, <span class="at">paired =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb48-3"><a href="estadística-paramétrica-y-no-paramétrica.html#cb48-3" tabindex="-1"></a>ef_alt</span></code></pre></div>
+<pre><code>## # A tibble: 1 × 7
+##   .y.         group1 group2 effsize    n1    n2 magnitude
+## * &lt;chr&gt;       &lt;chr&gt;  &lt;chr&gt;    &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;ord&gt;    
+## 1 carga_calef 3.5    7        0.861   384   384 large</code></pre>
+<p><strong>Interpretación:</strong> la prueba de rangos llega a la misma conclusión (p-valor prácticamente cero), con un tamaño del efecto r = 0.86, que se considera <strong>grande</strong>. La conclusión no depende del supuesto de normalidad: <strong>la altura cambia muchísimo la carga de calefacción</strong>.</p>
+</div>
+<div id="comparación-de-dos-grupos-pareados-calefacción-vs.-refrigeración" class="section level2 hasAnchor" number="5.2">
+<h2><span class="header-section-number">5.2</span> Comparación de dos grupos pareados: calefacción vs. refrigeración<a href="estadística-paramétrica-y-no-paramétrica.html#comparaci%C3%B3n-de-dos-grupos-pareados-calefacci%C3%B3n-vs.-refrigeraci%C3%B3n" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Cada edificio tiene dos mediciones: su carga de calefacción y su carga de refrigeración. Como son del mismo edificio, son <strong>datos pareados</strong>.</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: la diferencia media entre carga de refrigeración y de calefacción es cero.</li>
+<li><span class="math inline">\(H_1\)</span>: la diferencia media es distinta de cero.</li>
+</ul>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="estadística-paramétrica-y-no-paramétrica.html#cb50-1" tabindex="-1"></a><span class="fu">shapiro.test</span>(df<span class="sc">$</span>carga_calef)</span></code></pre></div>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  df$carga_calef
+## W = 0.9121, p-value &lt; 2.2e-16</code></pre>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="estadística-paramétrica-y-no-paramétrica.html#cb52-1" tabindex="-1"></a><span class="fu">shapiro.test</span>(df<span class="sc">$</span>carga_refri)</span></code></pre></div>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  df$carga_refri
+## W = 0.90904, p-value &lt; 2.2e-16</code></pre>
+<p><strong>Interpretación:</strong> ninguna de las dos cargas es normal (p &lt; 0.001), lo cual cuadra con la forma bimodal que vimos en el EDA.</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="estadística-paramétrica-y-no-paramétrica.html#cb54-1" tabindex="-1"></a><span class="fu">t.test</span>(<span class="at">x =</span> df<span class="sc">$</span>carga_refri,</span>
+<span id="cb54-2"><a href="estadística-paramétrica-y-no-paramétrica.html#cb54-2" tabindex="-1"></a>       <span class="at">y =</span> df<span class="sc">$</span>carga_calef,</span>
+<span id="cb54-3"><a href="estadística-paramétrica-y-no-paramétrica.html#cb54-3" tabindex="-1"></a>       <span class="at">paired =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## 
+##  Paired t-test
+## 
+## data:  df$carga_refri and df$carga_calef
+## t = 28.358, df = 767, p-value &lt; 2.2e-16
+## alternative hypothesis: true mean difference is not equal to 0
+## 95 percent confidence interval:
+##  2.122696 2.438434
+## sample estimates:
+## mean difference 
+##        2.280565</code></pre>
+<p><strong>Interpretación:</strong> con t = 28.36 y p-valor prácticamente cero, <strong>se rechaza <span class="math inline">\(H_0\)</span></strong>. En promedio, un edificio necesita <strong>2.28 kWh/m² más para enfriarse que para calentarse</strong>. El intervalo de confianza no incluye el cero, lo que refuerza la conclusión.</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="estadística-paramétrica-y-no-paramétrica.html#cb56-1" tabindex="-1"></a>d_par <span class="ot">&lt;-</span> <span class="fu">cohen.d</span>(<span class="at">d =</span> df<span class="sc">$</span>carga_refri,</span>
+<span id="cb56-2"><a href="estadística-paramétrica-y-no-paramétrica.html#cb56-2" tabindex="-1"></a>                 <span class="at">f =</span> df<span class="sc">$</span>carga_calef,</span>
+<span id="cb56-3"><a href="estadística-paramétrica-y-no-paramétrica.html#cb56-3" tabindex="-1"></a>                 <span class="at">paired =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb56-4"><a href="estadística-paramétrica-y-no-paramétrica.html#cb56-4" tabindex="-1"></a>d_par</span></code></pre></div>
+<pre><code>## 
+## Cohen&#39;s d
+## 
+## d estimate: 0.2248362 (small)
+## 95 percent confidence interval:
+##     lower     upper 
+## 0.2090892 0.2405833</code></pre>
+<p><strong>Interpretación:</strong> el tamaño del efecto es d ≈ 0.22 (magnitud <em>small</em>). La diferencia de 2.28 kWh/m² parece modesta al lado de lo mucho que varían las cargas entre edificios. Lo que la hace tan clara es que <strong>casi todos los edificios muestran el mismo patrón</strong> (refrigeración algo mayor que calefacción), y por eso la prueba pareada la detecta con mucha seguridad.</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="estadística-paramétrica-y-no-paramétrica.html#cb58-1" tabindex="-1"></a>df_par <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb58-2"><a href="estadística-paramétrica-y-no-paramétrica.html#cb58-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">id =</span> <span class="fu">row_number</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb58-3"><a href="estadística-paramétrica-y-no-paramétrica.html#cb58-3" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(id, carga_calef, carga_refri) <span class="sc">%&gt;%</span></span>
+<span id="cb58-4"><a href="estadística-paramétrica-y-no-paramétrica.html#cb58-4" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(carga_calef, carga_refri),</span>
+<span id="cb58-5"><a href="estadística-paramétrica-y-no-paramétrica.html#cb58-5" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">&quot;tipo_carga&quot;</span>,</span>
+<span id="cb58-6"><a href="estadística-paramétrica-y-no-paramétrica.html#cb58-6" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">&quot;carga&quot;</span>)</span>
+<span id="cb58-7"><a href="estadística-paramétrica-y-no-paramétrica.html#cb58-7" tabindex="-1"></a></span>
+<span id="cb58-8"><a href="estadística-paramétrica-y-no-paramétrica.html#cb58-8" tabindex="-1"></a>df_par <span class="sc">%&gt;%</span></span>
+<span id="cb58-9"><a href="estadística-paramétrica-y-no-paramétrica.html#cb58-9" tabindex="-1"></a>  rstatix<span class="sc">::</span><span class="fu">wilcox_test</span>(carga <span class="sc">~</span> tipo_carga, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 1 × 7
+##   .y.   group1      group2         n1    n2 statistic        p
+## * &lt;chr&gt; &lt;chr&gt;       &lt;chr&gt;       &lt;int&gt; &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 carga carga_calef carga_refri   768   768     22841 2.33e-91</code></pre>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="estadística-paramétrica-y-no-paramétrica.html#cb60-1" tabindex="-1"></a>ef_par <span class="ot">&lt;-</span> df_par <span class="sc">%&gt;%</span></span>
+<span id="cb60-2"><a href="estadística-paramétrica-y-no-paramétrica.html#cb60-2" tabindex="-1"></a>  rstatix<span class="sc">::</span><span class="fu">wilcox_effsize</span>(carga <span class="sc">~</span> tipo_carga, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb60-3"><a href="estadística-paramétrica-y-no-paramétrica.html#cb60-3" tabindex="-1"></a>ef_par</span></code></pre></div>
+<pre><code>## # A tibble: 1 × 7
+##   .y.   group1      group2      effsize    n1    n2 magnitude
+## * &lt;chr&gt; &lt;chr&gt;       &lt;chr&gt;         &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;ord&gt;    
+## 1 carga carga_calef carga_refri   0.732   768   768 large</code></pre>
+<p><strong>Interpretación:</strong> la prueba de rangos con signo confirma la diferencia (p-valor prácticamente cero), con un tamaño del efecto r = 0.73. Es decir, <strong>la refrigeración supera a la calefacción en la gran mayoría de edificios</strong>, de forma consistente.</p>
+</div>
+<div id="anova-cambia-la-carga-según-la-cantidad-de-ventanas" class="section level2 hasAnchor" number="5.3">
+<h2><span class="header-section-number">5.3</span> ANOVA: ¿cambia la carga según la cantidad de ventanas?<a href="estadística-paramétrica-y-no-paramétrica.html#anova-cambia-la-carga-seg%C3%BAn-la-cantidad-de-ventanas" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>La variable <code>area_vidrio</code> tiene cuatro niveles (0 %, 10 %, 25 % y 40 % del área acristalada).</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: la carga media de calefacción es igual en los cuatro niveles de área acristalada.</li>
+<li><span class="math inline">\(H_1\)</span>: al menos un nivel tiene una media diferente.</li>
+</ul>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="estadística-paramétrica-y-no-paramétrica.html#cb62-1" tabindex="-1"></a>df_vid <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">area_vidrio =</span> <span class="fu">factor</span>(area_vidrio))</span>
+<span id="cb62-2"><a href="estadística-paramétrica-y-no-paramétrica.html#cb62-2" tabindex="-1"></a></span>
+<span id="cb62-3"><a href="estadística-paramétrica-y-no-paramétrica.html#cb62-3" tabindex="-1"></a>df_vid <span class="sc">%&gt;%</span></span>
+<span id="cb62-4"><a href="estadística-paramétrica-y-no-paramétrica.html#cb62-4" tabindex="-1"></a>  <span class="fu">group_by</span>(area_vidrio) <span class="sc">%&gt;%</span></span>
+<span id="cb62-5"><a href="estadística-paramétrica-y-no-paramétrica.html#cb62-5" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">length</span>(carga_calef),</span>
+<span id="cb62-6"><a href="estadística-paramétrica-y-no-paramétrica.html#cb62-6" tabindex="-1"></a>            <span class="at">media =</span> <span class="fu">mean</span>(carga_calef),</span>
+<span id="cb62-7"><a href="estadística-paramétrica-y-no-paramétrica.html#cb62-7" tabindex="-1"></a>            <span class="at">ds =</span> <span class="fu">sd</span>(carga_calef))</span></code></pre></div>
+<pre><code>## # A tibble: 4 × 4
+##   area_vidrio     n media    ds
+##   &lt;fct&gt;       &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 0              48  14.3  7.63
+## 2 0.1           240  20.4  9.07
+## 3 0.25          240  22.8  9.87
+## 4 0.4           240  25.4 10.4</code></pre>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="estadística-paramétrica-y-no-paramétrica.html#cb64-1" tabindex="-1"></a>df_vid <span class="sc">%&gt;%</span></span>
+<span id="cb64-2"><a href="estadística-paramétrica-y-no-paramétrica.html#cb64-2" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> area_vidrio, <span class="at">y =</span> carga_calef, <span class="at">fill =</span> area_vidrio)) <span class="sc">+</span></span>
+<span id="cb64-3"><a href="estadística-paramétrica-y-no-paramétrica.html#cb64-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb64-4"><a href="estadística-paramétrica-y-no-paramétrica.html#cb64-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Proporción de área acristalada&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Carga de calefacción (kWh/m²)&quot;</span>,</span>
+<span id="cb64-5"><a href="estadística-paramétrica-y-no-paramétrica.html#cb64-5" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&quot;Carga de calefacción según el área acristalada&quot;</span>) <span class="sc">+</span></span>
+<span id="cb64-6"><a href="estadística-paramétrica-y-no-paramétrica.html#cb64-6" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb64-7"><a href="estadística-paramétrica-y-no-paramétrica.html#cb64-7" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/box_vidrio-1.png" alt="" width="768" style="display: block; margin: auto;" /></p>
+<p><strong>Interpretación:</strong> la carga media sube de forma escalonada a medida que hay más vidrio: <strong>14.29</strong> sin ventanas, <strong>20.36</strong> con 10 %, <strong>22.76</strong> con 25 % y <strong>25.41 kWh/m²</strong> con 40 %. Tiene sentido físico, porque el vidrio aísla peor que un muro y por las ventanas se escapa más calor.</p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="estadística-paramétrica-y-no-paramétrica.html#cb65-1" tabindex="-1"></a>modelo_aov <span class="ot">&lt;-</span> <span class="fu">aov</span>(carga_calef <span class="sc">~</span> area_vidrio, <span class="at">data =</span> df_vid)</span>
+<span id="cb65-2"><a href="estadística-paramétrica-y-no-paramétrica.html#cb65-2" tabindex="-1"></a><span class="fu">summary</span>(modelo_aov)</span></code></pre></div>
+<pre><code>##              Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## area_vidrio   3   6362  2120.7   22.59 5.09e-14 ***
+## Residuals   764  71728    93.9                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p><strong>Interpretación:</strong> con F = 22.59 y p-valor ≈ 5 × 10⁻¹⁴, <strong>se rechaza <span class="math inline">\(H_0\)</span></strong>: la cantidad de ventanas sí cambia la carga de calefacción media. Ahora hay que revisar los supuestos y ver qué grupos difieren entre sí.</p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="estadística-paramétrica-y-no-paramétrica.html#cb67-1" tabindex="-1"></a>df_vid <span class="sc">%&gt;%</span></span>
+<span id="cb67-2"><a href="estadística-paramétrica-y-no-paramétrica.html#cb67-2" tabindex="-1"></a>  <span class="fu">group_by</span>(area_vidrio) <span class="sc">%&gt;%</span></span>
+<span id="cb67-3"><a href="estadística-paramétrica-y-no-paramétrica.html#cb67-3" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">length</span>(carga_calef),</span>
+<span id="cb67-4"><a href="estadística-paramétrica-y-no-paramétrica.html#cb67-4" tabindex="-1"></a>            <span class="at">estsw =</span> <span class="fu">shapiro.test</span>(carga_calef)<span class="sc">$</span>statistic,</span>
+<span id="cb67-5"><a href="estadística-paramétrica-y-no-paramétrica.html#cb67-5" tabindex="-1"></a>            <span class="at">p_sw =</span> <span class="fu">shapiro.test</span>(carga_calef)<span class="sc">$</span>p.value)</span></code></pre></div>
+<pre><code>## # A tibble: 4 × 4
+##   area_vidrio     n estsw     p_sw
+##   &lt;fct&gt;       &lt;int&gt; &lt;dbl&gt;    &lt;dbl&gt;
+## 1 0              48 0.882 1.72e- 4
+## 2 0.1           240 0.865 9.94e-14
+## 3 0.25          240 0.852 2.07e-14
+## 4 0.4           240 0.846 1.04e-14</code></pre>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="estadística-paramétrica-y-no-paramétrica.html#cb69-1" tabindex="-1"></a><span class="fu">leveneTest</span>(carga_calef <span class="sc">~</span> area_vidrio, <span class="at">data =</span> df_vid)</span></code></pre></div>
+<pre><code>## Levene&#39;s Test for Homogeneity of Variance (center = median)
+##        Df F value   Pr(&gt;F)    
+## group   3  11.851 1.36e-07 ***
+##       764                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p><strong>Interpretación:</strong> ningún grupo es normal (todos los p-valores de Shapiro-Wilk son menores que 0.001), y la prueba de Levene también rechaza la igualdad de varianzas (p &lt; 0.001). <strong>Los supuestos del ANOVA no se cumplen</strong>, así que el resultado del ANOVA se toma como orientativo y la conclusión firme la dará Kruskal-Wallis.</p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="estadística-paramétrica-y-no-paramétrica.html#cb71-1" tabindex="-1"></a>resultado_tukey <span class="ot">&lt;-</span> <span class="fu">TukeyHSD</span>(modelo_aov)</span>
+<span id="cb71-2"><a href="estadística-paramétrica-y-no-paramétrica.html#cb71-2" tabindex="-1"></a>resultado_tukey</span></code></pre></div>
+<pre><code>##   Tukey multiple comparisons of means
+##     95% family-wise confidence level
+## 
+## Fit: aov(formula = carga_calef ~ area_vidrio, data = df_vid)
+## 
+## $area_vidrio
+##               diff       lwr       upr     p adj
+## 0.1-0     6.070792 2.1262865 10.015297 0.0004700
+## 0.25-0    8.470542 4.5260365 12.415047 0.0000003
+## 0.4-0    11.125292 7.1807865 15.069797 0.0000000
+## 0.25-0.1  2.399750 0.1223889  4.677111 0.0343558
+## 0.4-0.1   5.054500 2.7771389  7.331861 0.0000001
+## 0.4-0.25  2.654750 0.3773889  4.932111 0.0147114</code></pre>
+<p><strong>Interpretación:</strong> <strong>todas las parejas de niveles son significativamente diferentes</strong> (p ajustado &lt; 0.05). Las diferencias más grandes son contra los edificios sin ventanas: pasar de 0 % a 40 % de vidrio aumenta la carga media en unos <strong>11.1 kWh/m²</strong>. Incluso los saltos más pequeños (de 10 % a 25 % y de 25 % a 40 %, de unos 2.4 a 2.7 kWh/m²) alcanzan a ser significativos.</p>
+</div>
+<div id="kruskal-wallis" class="section level2 hasAnchor" number="5.4">
+<h2><span class="header-section-number">5.4</span> Kruskal-Wallis<a href="estadística-paramétrica-y-no-paramétrica.html#kruskal-wallis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Como no se cumplen normalidad ni homogeneidad de varianzas, usamos la alternativa no paramétrica.</p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: las distribuciones de la carga de calefacción son iguales en los cuatro niveles de vidrio.</li>
+<li><span class="math inline">\(H_1\)</span>: al menos un nivel difiere.</li>
+</ul>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="estadística-paramétrica-y-no-paramétrica.html#cb73-1" tabindex="-1"></a><span class="fu">kruskal.test</span>(carga_calef <span class="sc">~</span> area_vidrio, <span class="at">data =</span> df_vid)</span></code></pre></div>
+<pre><code>## 
+##  Kruskal-Wallis rank sum test
+## 
+## data:  carga_calef by area_vidrio
+## Kruskal-Wallis chi-squared = 83.336, df = 3, p-value &lt; 2.2e-16</code></pre>
+<p><strong>Interpretación:</strong> con χ² = 83.34 y p-valor prácticamente cero, <strong>se rechaza <span class="math inline">\(H_0\)</span></strong>. La conclusión del ANOVA se mantiene: el área acristalada influye en la carga de calefacción.</p>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="estadística-paramétrica-y-no-paramétrica.html#cb75-1" tabindex="-1"></a><span class="fu">pairwise.wilcox.test</span>(<span class="at">x =</span> df_vid<span class="sc">$</span>carga_calef,</span>
+<span id="cb75-2"><a href="estadística-paramétrica-y-no-paramétrica.html#cb75-2" tabindex="-1"></a>                     <span class="at">g =</span> df_vid<span class="sc">$</span>area_vidrio,</span>
+<span id="cb75-3"><a href="estadística-paramétrica-y-no-paramétrica.html#cb75-3" tabindex="-1"></a>                     <span class="at">exact =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb75-4"><a href="estadística-paramétrica-y-no-paramétrica.html#cb75-4" tabindex="-1"></a>                     <span class="at">p.adjust.method =</span> <span class="st">&quot;bonferroni&quot;</span>)</span></code></pre></div>
+<pre><code>## 
+##  Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+## 
+## data:  df_vid$carga_calef and df_vid$area_vidrio 
+## 
+##      0       0.1     0.25   
+## 0.1  4.3e-05 -       -      
+## 0.25 6.4e-07 6.5e-05 -      
+## 0.4  1.8e-08 1.5e-10 7.0e-06
+## 
+## P value adjustment method: bonferroni</code></pre>
+<p><strong>Interpretación:</strong> con la corrección de Bonferroni, <strong>todas las comparaciones por pares siguen siendo significativas</strong>. Cada aumento en la proporción de vidrio se traduce en una carga de calefacción mayor.</p>
+<p><strong>¿Y la orientación?</strong> Hagamos la misma pregunta con la orientación del edificio:</p>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="estadística-paramétrica-y-no-paramétrica.html#cb77-1" tabindex="-1"></a><span class="fu">kruskal.test</span>(carga_calef <span class="sc">~</span> <span class="fu">factor</span>(orientacion), <span class="at">data =</span> df)</span></code></pre></div>
+<pre><code>## 
+##  Kruskal-Wallis rank sum test
+## 
+## data:  carga_calef by factor(orientacion)
+## Kruskal-Wallis chi-squared = 0.07995, df = 3, p-value = 0.9941</code></pre>
+<p><strong>Interpretación:</strong> aquí ocurre lo contrario: con p = 0.994 <strong>no hay ninguna evidencia</strong> de que la orientación cambie la carga de calefacción. Da igual que el edificio mire al norte, al sur, al este o al oeste. Lo tendremos en cuenta en la regresión.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="análisis-exploratorio-de-datos-eda.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="tablas-de-contingencia.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": {
+    "github": false,
+    "facebook": true,
+    "twitter": true,
+    "linkedin": false,
+    "weibo": false,
+    "instapaper": false,
+    "vk": false,
+    "whatsapp": false,
+    "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+  },
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": "https://github.com/rstudio/bookdown-demo/edit/master/01-Trabajo.Rmd",
+    "text": "Edit"
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
