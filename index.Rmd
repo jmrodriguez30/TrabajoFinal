@@ -10,3 +10,10 @@ documentclass: book
 # Introducción {-}
 
 En este libro digital presentamos el análisis estadístico completo sobre la eficiencia energética en edificios residenciales (*Energy Efficiency*, Tsanas y Xifara, 2012), abarcando desde la limpieza de datos y el análisis exploratorio hasta los modelos de regresión lineal simple y múltiple.
+
+
+## Video explicativo del proyecto {-}
+
+```{r video-sustentacion, echo=FALSE, out.width="100%"}
+knitr::include_url("https://www.youtube.com/embed/oirCcPrIIL0")
+```
